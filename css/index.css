@@ -2269,7 +2269,7 @@ figure.highlight pre .javascript .function {
   -webkit-align-items: center;
   align-items: center;
   overflow: hidden;
-  height: 10em;
+  height: 14em;
 }
 @media screen and (max-width: 768px) {
   #recent-posts > .recent-post-item {
