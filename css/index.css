@@ -2344,6 +2344,7 @@ figure.highlight pre .javascript .function {
   color: var(--text-highlight-color);
   font-size: 1.72em;
   line-height: 1.4;
+  font-weight: bold;
   -webkit-transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;
   -o-transition: all 0.2s ease-in-out;
