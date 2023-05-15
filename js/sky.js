@@ -70,7 +70,7 @@ function render() {
 
 function starForge() {
     var amount = 45000;
-    geometry = new THREE.BufferGeometry(1000, 100, 50);
+    geometry = new THREE.SphereGeometry(1000, 100, 50);
 
     materialOptions = {
         color: new THREE.Color(0xffffff),
@@ -83,12 +83,12 @@ function starForge() {
 
 
     for (var i = 0; i < amount; i++) {
-        var item = new THREE.Vector3(
-        x = Math.random() * 2000 - 1000,
-        y = Math.random() * 2000 - 1000,
-        z = Math.random() * 2000 - 1000,
-        );
-        geometry.vertices.push(item);
+        var item = new THREE.Vector3();
+        item.x = Math.random() * 2000 - 1000;
+        item.y = Math.random() * 2000 - 1000;
+        item.z = Math.random() * 2000 - 1000;
+
+        geometry.vertices.push(item.x, item.y, item.z);
     }
 
     stars = new THREE.PointCloud(geometry, starStuff);
