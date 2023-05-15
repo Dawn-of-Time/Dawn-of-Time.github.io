@@ -1352,7 +1352,7 @@ canvas:not(#ribbon-canvas),
   --tab-button-active-bg: #fff;
   --card-bg: #fff;
   --sidebar-bg: #f6f8fa;
-  --btn-hover-color: #ff7242;
+  --btn-hover-color: #000080;
   --btn-color: #fff;
   --btn-bg: #4169e1;
   --text-bg-hover: rgba(65,105,225,0.7);
@@ -1366,7 +1366,7 @@ canvas:not(#ribbon-canvas),
   --toc-link-color: #666261;
   --card-box-shadow: 0 3px 8px 6px rgba(7,17,27,0.05);
   --card-hover-box-shadow: 0 3px 8px 6px rgba(7,17,27,0.09);
-  --pseudo-hover: #ff7242;
+  --pseudo-hover: #000080;
   --headline-presudo: #a0a0a0;
   --scrollbar-color: #4169e1;
   --default-bg-color: #4169e1;
@@ -2390,7 +2390,7 @@ figure.highlight pre .javascript .function {
   cursor: default;
 }
 #recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap .sticky {
-  color: #ff7242;
+  color: #000080;
 }
 #recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap i {
   margin: 0 4px 0 0;
@@ -3121,7 +3121,7 @@ h1.page-title + .tag-cloud-list {
   color: #4169e1;
 }
 #post-comment .comment-head #comment-switch .second-comment {
-  color: #ff7242;
+  color: #000080;
 }
 #post-comment .comment-head #comment-switch .switch-btn {
   position: relative;
@@ -3155,7 +3155,7 @@ h1.page-title + .tag-cloud-list {
   transition: 0.4s;
 }
 #post-comment .comment-head #comment-switch .switch-btn.move {
-  background-color: #ff7242;
+  background-color: #000080;
 }
 #post-comment .comment-head #comment-switch .switch-btn.move:before {
   -webkit-transform: translateX(20px);
@@ -4902,7 +4902,7 @@ h1.page-title + .tag-cloud-list {
 #waline-wrap {
   --waline-font-size: 1.1em;
   --waline-theme-color: #4169e1;
-  --waline-active-color: #ff7242;
+  --waline-active-color: #000080;
 }
 #waline-wrap .wl-comment-actions > button:not(last-child) {
   padding-right: 4px;
