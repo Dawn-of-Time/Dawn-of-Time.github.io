@@ -70,7 +70,7 @@ function render() {
 
 function starForge() {
     var amount = 45000;
-    geometry = new THREE.SphereGeometry(1000, 100, 50);
+    geometry = new THREE.BufferGeometry(1000, 100, 50);
 
     materialOptions = {
         color: new THREE.Color(0xffffff),
