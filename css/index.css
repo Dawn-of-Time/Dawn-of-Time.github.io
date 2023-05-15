@@ -1659,7 +1659,7 @@ figure.highlight pre .javascript .function {
 #article-container code {
   padding: 2px 4px;
   background: rgba(27,31,35,0.05);
-  color: #000080;
+  color: #9400d3;
 }
 #article-container pre {
   padding: 10px 20px;
@@ -4233,7 +4233,7 @@ h1.page-title + .tag-cloud-list {
 #article-container h6:before {
   position: absolute;
   top: calc(50% - 7px);
-  color: #000080;
+  color: #9400d3;
   content: '\f863';
   line-height: 1;
   -webkit-transition: all 0.2s ease-out;
