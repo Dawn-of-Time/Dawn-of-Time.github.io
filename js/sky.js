@@ -83,10 +83,11 @@ function starForge() {
 
 
     for (var i = 0; i < amount; i++) {
-        var item = new THREE.Vector3();
-        item.x = Math.random() * 2000 - 1000;
-        item.y = Math.random() * 2000 - 1000;
-        item.z = Math.random() * 2000 - 1000;
+        var item = new THREE.Vector3(
+        item.x = Math.random() * 2000 - 1000,
+        item.y = Math.random() * 2000 - 1000,
+        item.z = Math.random() * 2000 - 1000,
+        );
 
         geometry.vertices.push(item);
     }
