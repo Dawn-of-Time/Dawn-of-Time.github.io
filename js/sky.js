@@ -75,7 +75,7 @@ function starForge() {
     materialOptions = {
         color: new THREE.Color(0xffffff),
         size: 1.1,
-        transparency: true,
+        transparent: true,
         opacity: 0.8
     };
 
