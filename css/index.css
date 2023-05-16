@@ -3308,7 +3308,7 @@ h1.page-title + .tag-cloud-list {
   }
 }
 #page-header.post-bg:before {
-  background-color: transparent;
+  background-color: #fff;
 }
 #page-header #post-info {
   position: absolute;
@@ -3348,9 +3348,9 @@ h1.page-title + .tag-cloud-list {
   position: fixed;
   top: -60px;
   z-index: 91;
-  background: transparent;
-  -webkit-box-shadow: transparent;
-  box-shadow: transparent;
+  background: rgba(255,255,255,0.8);
+  -webkit-box-shadow: 0 5px 6px -5px rgba(133,133,133,0.6);
+  box-shadow: 0 5px 6px -5px rgba(133,133,133,0.6);
   -webkit-transition: -webkit-transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
   -moz-transition: -moz-transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
   -o-transition: -o-transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
@@ -3438,7 +3438,7 @@ h1.page-title + .tag-cloud-list {
 #post-info .post-title {
   margin-bottom: 8px;
   color: var(--white);
-  font-weight: normal;
+  font-weight: bold;
   font-size: 2.5em;
   line-height: 1.5;
   -webkit-line-clamp: 3;
