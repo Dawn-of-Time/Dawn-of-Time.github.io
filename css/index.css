@@ -3308,7 +3308,7 @@ h1.page-title + .tag-cloud-list {
   }
 }
 #page-header.post-bg:before {
-  background-color: transparent;
+  background-color: rgba(0,0,0,0.5);
 }
 #page-header #post-info {
   position: absolute;
