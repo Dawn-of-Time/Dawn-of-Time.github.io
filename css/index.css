@@ -3332,7 +3332,7 @@ h1.page-title + .tag-cloud-list {
 #page-header.not-top-img {
   margin-bottom: 10px;
   height: 60px;
-  background: 0;
+  background: transparent;
 }
 #page-header.not-top-img #nav {
   background: rgba(255,255,255,0.8);
