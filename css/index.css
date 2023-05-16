@@ -3308,7 +3308,7 @@ h1.page-title + .tag-cloud-list {
   }
 }
 #page-header.post-bg:before {
-  background-color: rgba(0,0,0,0.5);
+  background-color: transparent;
 }
 #page-header #post-info {
   position: absolute;
@@ -3335,9 +3335,9 @@ h1.page-title + .tag-cloud-list {
   background: transparent;
 }
 #page-header.not-top-img #nav {
-  background: rgba(255,255,255,0.8);
-  -webkit-box-shadow: 0 5px 6px -5px rgba(133,133,133,0.6);
-  box-shadow: 0 5px 6px -5px rgba(133,133,133,0.6);
+  background: transparent;
+  -webkit-box-shadow: transparent;
+  box-shadow: transparent;
 }
 #page-header.not-top-img #nav a,
 #page-header.not-top-img #nav .site-name {
