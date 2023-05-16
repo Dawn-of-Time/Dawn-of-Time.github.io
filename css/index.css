@@ -4271,44 +4271,44 @@ h1.page-title + .tag-cloud-list {
   padding-left: 38px;
 }
 #article-container h3 {
-  padding-left: 30px;
+  padding-left: 32px;
 }
 #article-container h3:before {
+  margin-left: -26px;
+  font-size: 20px;
+}
+#article-container h3:hover {
+  padding-left: 38px;
+}
+#article-container h4 {
+  padding-left: 30px;
+}
+#article-container h4:before {
   margin-left: -24px;
   font-size: 18px;
 }
-#article-container h3:hover {
+#article-container h4:hover {
   padding-left: 36px;
 }
-#article-container h4 {
+#article-container h5 {
   padding-left: 28px;
 }
-#article-container h4:before {
+#article-container h5:before {
   margin-left: -22px;
   font-size: 16px;
 }
-#article-container h4:hover {
+#article-container h5:hover {
   padding-left: 34px;
 }
-#article-container h5 {
+#article-container h6 {
   padding-left: 26px;
 }
-#article-container h5:before {
+#article-container h6:before {
   margin-left: -20px;
   font-size: 14px;
 }
-#article-container h5:hover {
-  padding-left: 32px;
-}
-#article-container h6 {
-  padding-left: 24px;
-}
-#article-container h6:before {
-  margin-left: -18px;
-  font-size: 12px;
-}
 #article-container h6:hover {
-  padding-left: 30px;
+  padding-left: 32px;
 }
 #article-container ol p,
 #article-container ul p {
