@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://blog.dawn-of-time.top/posts/ddd0df44/</loc>
+    <loc>https://blog.dawn-of-time.top/2023/05/09/common/</loc>
     
     <lastmod>2023-05-17</lastmod>
     
@@ -11,27 +11,27 @@
   </url>
   
   <url>
-    <loc>https://blog.dawn-of-time.top/posts/74158de9/</loc>
+    <loc>https://blog.dawn-of-time.top/2023/05/09/update-log/</loc>
     
-    <lastmod>2023-05-16</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.dawn-of-time.top/posts/f8f674bb/</loc>
-    
-    <lastmod>2023-05-16</lastmod>
+    <lastmod>2023-05-17</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://blog.dawn-of-time.top/posts/b74865a7/</loc>
+    <loc>https://blog.dawn-of-time.top/2023/05/16/C-Language-002/</loc>
     
-    <lastmod>2023-05-15</lastmod>
+    <lastmod>2023-05-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.dawn-of-time.top/2023/05/15/C-Language-001/</loc>
+    
+    <lastmod>2023-05-17</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -81,14 +81,14 @@
   </url>
   
   <url>
-    <loc>https://blog.dawn-of-time.top/tags/Update/</loc>
+    <loc>https://blog.dawn-of-time.top/tags/Common/</loc>
     <lastmod>2023-05-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://blog.dawn-of-time.top/tags/Common/</loc>
+    <loc>https://blog.dawn-of-time.top/tags/Update/</loc>
     <lastmod>2023-05-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
