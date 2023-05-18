@@ -1,0 +1,217 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>移位运算符的简单应用 | 晓</title><meta name="author" content="Dawn"><meta name="copyright" content="Dawn"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="C语言中定义了大量的运算符，移位运算符便是其中的一种。从字面含义上讲，移位运算符似乎很难直接应用。本文将介绍移位运算符的含义和实质。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="移位运算符的简单应用">
+<meta property="og:url" content="https://blog.dawn-of-time.top/2023/05/18/C-Language-003/index.html">
+<meta property="og:site_name" content="晓">
+<meta property="og:description" content="C语言中定义了大量的运算符，移位运算符便是其中的一种。从字面含义上讲，移位运算符似乎很难直接应用。本文将介绍移位运算符的含义和实质。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.dawn-of-time.top/img/Origin.jpg">
+<meta property="article:published_time" content="2023-05-18T00:37:04.000Z">
+<meta property="article:modified_time" content="2023-05-18T12:07:39.484Z">
+<meta property="article:author" content="Dawn">
+<meta property="article:tag" content="C">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.dawn-of-time.top/img/Origin.jpg"><link rel="shortcut icon" href="/img/Origin.jpg"><link rel="canonical" href="https://blog.dawn-of-time.top/2023/05/18/C-Language-003/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: {"appId":"QV9BTMVJ9O","apiKey":"1260faa048b682faf45244ff3a82425e","indexName":"Dawn","hits":{"per_page":6},"languages":{"input_placeholder":"搜索文章","hits_empty":"找不到您查询的内容：${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":100,"languages":{"author":"作者: Dawn","link":"链接: ","source":"来源: 晓","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://unpkg.com/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://unpkg.com/flickr-justified-gallery/dist/fjGallery.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '移位运算符的简单应用',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-18 20:07:39'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="preconnect" href="https://jtqdWkjgJ74mqkCGNb46c6lB-MdYXbMMI-dsn.algolia.net" crossorigin /><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" /><link rel="stylesheet" href="https://font.sec.miui.com/font/css?family=MiSans:400,500,700:Chinese_Simplify,Latin&display=swap.css"><link rel="stylesheet" href="/css/icon.css?1"><link rel="stylesheet" href="/css/transpancy.css?2"><style>#article-container.post-content h1:before, h2:before, h3:before, h4:before, h5:before, h6:before  { -webkit-animation: avatar_turn_around 2s linear infinite; -moz-animation: avatar_turn_around 2s linear infinite; -o-animation: avatar_turn_around 2s linear infinite; -ms-animation: avatar_turn_around 2s linear infinite;  animation: avatar_turn_around 2s linear infinite; }</style><script src="https://unpkg.com/three@0.122.0/build/three.js"></script><svg aria-hidden="true" style="position:absolute; overflow:hidden; width:0; height:0"><symbol id="icon-sun" viewBox="0 0 1024 1024"><path d="M960 512l-128 128v192h-192l-128 128-128-128H192v-192l-128-128 128-128V192h192l128-128 128 128h192v192z" fill="#FFD878" p-id="8420"></path><path d="M736 512a224 224 0 1 0-448 0 224 224 0 1 0 448 0z" fill="#FFE4A9" p-id="8421"></path><path d="M512 109.248L626.752 224H800v173.248L914.752 512 800 626.752V800h-173.248L512 914.752 397.248 800H224v-173.248L109.248 512 224 397.248V224h173.248L512 109.248M512 64l-128 128H192v192l-128 128 128 128v192h192l128 128 128-128h192v-192l128-128-128-128V192h-192l-128-128z" fill="#4D5152" p-id="8422"></path><path d="M512 320c105.888 0 192 86.112 192 192s-86.112 192-192 192-192-86.112-192-192 86.112-192 192-192m0-32a224 224 0 1 0 0 448 224 224 0 0 0 0-448z" fill="#4D5152" p-id="8423"></path></symbol><symbol id="icon-moon" viewBox="0 0 1024 1024"><path d="M611.370667 167.082667a445.013333 445.013333 0 0 1-38.4 161.834666 477.824 477.824 0 0 1-244.736 244.394667 445.141333 445.141333 0 0 1-161.109334 38.058667 85.077333 85.077333 0 0 0-65.066666 135.722666A462.08 462.08 0 1 0 747.093333 102.058667a85.077333 85.077333 0 0 0-135.722666 65.024z" fill="#FFB531" p-id="11345"></path><path d="M329.728 274.133333l35.157333-35.157333a21.333333 21.333333 0 1 0-30.165333-30.165333l-35.157333 35.157333-35.114667-35.157333a21.333333 21.333333 0 0 0-30.165333 30.165333l35.114666 35.157333-35.114666 35.157334a21.333333 21.333333 0 1 0 30.165333 30.165333l35.114667-35.157333 35.157333 35.157333a21.333333 21.333333 0 1 0 30.165333-30.165333z" fill="#030835" p-id="11346"></path></symbol></svg><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = 'hidden';
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+
+preloader.initLoading()
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/Origin.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw iconfont icon-shouye_2"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-bianji"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw iconfont icon-fenlei_2"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw iconfont icon-ziyuan"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw iconfont icon-huowu"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw iconfont icon-bangzhu"></i><span> 关于博主</span></a></div></div></div></div><div class="canvas-container" id="canvas"></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"> <!-- header#page-header(class=`${isHomeClass+isFixedClass}` style=bg_img)--><nav id="nav"><span id="blog-info"><a href="/" title="晓"></a></span><div id="menus"></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw iconfont icon-shouye_2"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-bianji"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw iconfont icon-fenlei_2"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw iconfont icon-ziyuan"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw iconfont icon-huowu"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw iconfont icon-bangzhu"></i><span> 关于博主</span></a></div></div><div id="nav-right"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i></a></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">移位运算符的简单应用</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="iconfont icon-fabu"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-18T00:37:04.000Z" title="发表于 2023-05-18 08:37:04">2023-05-18</time><span class="post-meta-separator">|</span><i class="iconfont icon-yushou"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-18T12:07:39.484Z" title="更新于 2023-05-18 20:07:39">2023-05-18</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="iconfont icon-fenlei_2"></i><a class="post-meta-categories" href="/categories/C-Language/">C Language</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="移位运算符的简单应用"><i class="iconfont icon-shuben_3"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="iconfont icon-pinglun_2"></i><span class="post-meta-label">评论数:</span><a href="/2023/05/18/C-Language-003/#post-comment"><span class="waline-comment-count" data-path="/2023/05/18/C-Language-003/"><i class="fa-solid fa-spinner fa-spin"></i></span></a></span></div></div></div><article class="post-content" id="article-container"><h1 id="一、移位运算符的含义"><a href="#一、移位运算符的含义" class="headerlink" title="一、移位运算符的含义"></a>一、移位运算符的含义</h1><p>　　移位运算符包含左移运算符<b><code>&lt;&lt;</code></b>和右移运算符<b><code>&gt;&gt;</code></b>。左移运算符是将一个二进制位的操作数按规定的移动位数向左移动，移出位舍弃，空位补0。右移运算符是将一个二进制位的操作数按规定的移动位数向右移动，移出位舍弃，<b>正数补0，负数补1</b>。它们是这样参与运算的：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">操作数 移位运算符 移位位数</span><br></pre></td></tr></table></figure>
+<p>　　例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">short</span> a = <span class="number">4</span>;</span><br><span class="line">	a &lt;&lt;= <span class="number">2</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>　　变量a被赋值4，换算为二进制数即<code>0000 0000 0000 0100</code>，左移2位后即<code>0000 0000 0001 0000</code>。</p>
+<h1 id="二、移位运算符的实质"><a href="#二、移位运算符的实质" class="headerlink" title="二、移位运算符的实质"></a>二、移位运算符的实质</h1><p>　　移位运算符实际上更改了数值对应的权重。<b>在无1溢出的情况下，设原来的权重是2^x^，移动位数为y（不使得原数完全移出），则权重更改的结果是2^(x±y)^（左移为加，右移为减）</b>。例如上例中数值1的权重是2^2^，移位后更改为2^(2+2)^。对每一位都执行移位的运算（以左移为例），那么在无1溢出的情况下（因而该二进制数的最高位一定为0，所以这里有符号数和无符号数没有区别），对二进制数<b>b<del>15</del>b<del>14</del>…b<del>1</del>b<del>0</del></b>有：</p>
+<blockquote>
+<p>b<del>15</del>b<del>14</del>…b<del>1</del>b<del>0</del> &lt;&lt; y<br>&#x3D; 2^15^b<del>15</del> + 2^14^b<del>14</del> + … + 2^1^b<del>1</del> + 2^0^b<del>0</del> &lt;&lt; y<br>&#x3D; 2^15^b<del>15-y</del> + 2^14^b<del>14-y</del> + … + 2^y^b<del>0</del> + 2^y-1^×0 + … + 2^1^×0 + 2^0^×0<br>&#x3D; 2^y^(2^15-y^b<del>15-y</del> + 2^14-y^b<del>14-y</del> + … + 2^1^b<del>1</del> + 2^0^b<del>0</del>)<br>&#x3D; <b>2^y^</b>b<del>15</del>b<del>14</del>…b<del>1</del>b<del>0</del></p>
+</blockquote>
+<div class="note warning flat"><p>请注意以上计算建立在无1溢出的情况下，亦即b<del>15</del>b<del>14</del>…b<del>15-y+1</del>每一位都为0。</p>
+</div>
+<p>　　因此，<b>在无1溢出的情况下，左移（或右移）运算等价于乘以（或除以）2^y^（y为移动位数，且不使得原数完全移出）。</b></p>
+<p>　　那么在有1溢出的情况下呢？因为左移运算结果具有个体差异性（如正负不确定），因此这里不予讨论。而对于右移运算，它的运算结果的符号总是不变，我们不妨对其进行以下测试：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">short</span> b = <span class="number">5</span>;</span><br><span class="line">	b &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">	<span class="type">short</span> c = <span class="number">-5</span>;</span><br><span class="line">	c &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%hd\n%hd\n&quot;</span>, b, c); <span class="comment">//结果是2 -3</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>　　变量b被赋值5，换算为二进制数，即<code>0000 0000 0000 0101</code>，右移1位后，末位的1被舍弃，即<code>0000 0000 0000 0010</code>，亦即2。换而言之，在除以2以后，右移运算使得不足2的部分被舍弃，也就是余数被舍弃。因此，<b>对于非负数而言，右移运算等价于整除。</b><br>　　变量c被赋值-5，换算为二进制数，即<code>1000 0000 0000 0101</code>，负数在内存中以补码的形式存储（<u><a target="_blank" rel="noopener" href="https://vercel.dawn-of-time.top/2023/05/16/C-Language-002/">为什么？</a></u>），即<code>1111 1111 1111 1011</code>，右移1位后，末位的1被舍弃，即<code>1111 1111 1111 1101</code>，其原码为<code>1000 0000 0000 0011</code>，即-3。因此，<b>对于负数而言，右移运算等价于除法运算并向负无穷处取整。</b></p>
+<div class="note primary flat"><p><b>如果对负数的右移仍存疑，以下推算可能有帮助。</b><br>　　以短整型（16位）为例。对二进制数<b>b<del>15</del>b<del>14</del>…b<del>1</del>b<del>0</del></b>（其中b<del>15</del> &#x3D; 1，且其余位不全为0），记其十进制值<br>　　D &#x3D; -(2^14^b<del>14</del> + 2^13^b<del>13</del> + … + 2^1^b<del>1</del> + 2^0^b<del>0</del>)<br>　　那么它的补码的十进制值为<br>　　d &#x3D; 2^16^ - (-D) &#x3D; 2^16^ + D &#x3D; 2^16^ - (2^14^b<del>14</del> + 2^13^b<del>13</del> + … + 2^1^b<del>1</del> + 2^0^b<del>0</del>)<br>　　记其二进制数为<b>c<del>15</del>c<del>14</del>…c<del>1</del>c<del>0</del></b>（其中c<del>15</del> &#x3D; 1，且其余位不全为1），则<br>　　d &#x3D; -(2^14^c<del>14</del> + 2^13^c<del>13</del> + … + 2^1^c<del>1</del> + 2^0^c<del>0</del>)<br>　　设右移位数为y（不使得原数完全移出），则右移后二进制数变为<b>111…1c<del>14</del>c<del>13</del>…c<del>y+1</del>c<del>y</del></b>，其十进制值<br>　　d<del>0</del> &#x3D; -(<b>2^14^ + 2^13^ + … + 2^14-y+1^</b> + 2^14-y^c<del>14</del> + 2^13-y^c<del>13</del> + … + 2^1^c<del>y+1</del> + 2^0^c<del>y</del>)<br>　　&#x3D; -(<b>2^15^ - 2^15-y^ </b>+ 2^14-y^c<del>14</del> + 2^13-y^c<del>13</del> + … + 2^1^c<del>y+1</del> + 2^0^c<del>y</del>)<br>　　则移位后的原码的十进制值是<br>　　D<del>0</del> &#x3D; 2^16^ - (-d<del>0</del>) &#x3D; 2^16^ + d<del>0</del><br>　　&#x3D; 2^16^ - (2^15^ - 2^15-y^ + 2^14-y^c<del>14</del> + 2^13-y^c<del>13</del> + … + 2^1^c<del>y+1</del> + 2^0^c<del>y</del>)<br>　　&#x3D; 2^16^ - 2^15^ + 2^15-y^ - 2^-y^(2^14^c<del>14</del> + 2^13^c<del>13</del> + … + 2^y+1^c<del>y+1</del> + 2^y^c<del>y</del>)<br>　　&#x3D; 2^15^ + 2^15-y^ + 2^-y^(d + 2^y-1^c<del>y-1</del> + 2^y-2^c<del>y-2</del> + … + 2^1^c<del>1</del> + 2^0^c<del>0</del>)<br>　　如果将二进制数<b>c<del>y-1</del>c<del>y-2</del>…c<del>1</del>c<del>0</del></b>的十进制值记为d<del>1</del>（注意由于该二进制的符号始终为负），那么有<br>　　d<del>1</del> &#x3D; -(2^y-1^c<del>y-1</del> + 2^y-2^c<del>y-2</del> + … + 2^1^c<del>1</del> + 2^0^c<del>0</del>)<br>　　因此<br>　　D<del>0</del> &#x3D; 2^15^ + 2^15-y^ + 2^-y^(d + d<del>1</del>)<br>　　&#x3D; 2^15^ + 2^15-y^ + 2^-y^(2^16^ + D + d<del>1</del>)<br>　　&#x3D; 2^16-y^ + 2^15^ + 2^15-y^ + 2^-y^D + 2^-y^d<del>1</del><br>　　那么<br>　　D &#x3D; 2^y^(D<del>0</del> - 2^16-y^ － 2^15^ - 2^15-y^ + 2^-y^d<del>1</del>)<br>　　所以<br>　　D&#x2F;D<del>0</del> &#x3D; 2^y^ + (-2^16^ - 2^15+y^ - 2^15^ + d<del>1</del>)&#x2F;D<del>0</del><br>　　根据计数可溢出的性质（<u><a target="_blank" rel="noopener" href="https://vercel.dawn-of-time.top/2023/05/16/C-Language-002/">是什么？</a></u>），当d<del>1</del>加或减2^x^（x&gt;y且为整数），其值不改变。因此得移位前后原码的关系<br>　　<b>D&#x2F;D<del>0</del> &#x3D; 2^y^ + d<del>1</del>&#x2F;D<del>0</del></b><br>　　亦即<br>　　<b>D<del>0</del> &#x3D; (D - d<del>1</del>)&#x2F;2^y^</b>（其中，D<del>0</del>是移出后原码，D是移出前原码，d<del>1</del>是移出的原码对应的补码，y是右移位数，且其取值不使得原数完全移出）<br>　　<br><b>检验这个结果</b></p>
+<ul>
+<li>对于-5 &gt;&gt; 1：-5的二进制数是<code>1000 0000 0000 0101</code>，右移1位后，移出的原码是<code>1</code>，对应的补码是<code>1</code>，计算得到移出结果是-3；</li>
+<li>对于-4 &gt;&gt; 2：-11的二进制数是<code>1000 0000 0000 0100</code>，右移2位后，移出的原码是<code>00</code>，对应的补码是<code>00</code>，计算得到的结果是-1；</li>
+<li>对于-11 &gt;&gt; 3：-11的二进制数是<code>1000 0000 0000 1011</code>，右移3位后，移出的原码是<code>011</code>，对应的补码是<code>101</code>，计算得到的结果是-2。</li>
+</ul>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://blog.dawn-of-time.top">Dawn</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://blog.dawn-of-time.top/2023/05/18/C-Language-003/">https://blog.dawn-of-time.top/2023/05/18/C-Language-003/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://blog.dawn-of-time.top" target="_blank">晓</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C/">C</a></div><div class="post_share"><div class="social-share" data-image="/img/Origin.jpg" data-sites="wechat,weibo,qq"></div><link rel="stylesheet" href="https://lib.baomitu.com/social-share.js/1.0.16/css/share.min.css" media="print" onload="this.media='all'"><script src="https://lib.baomitu.com/social-share.js/1.0.16/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/2023/05/16/C-Language-002/" title="C|有符号整型与无符号整型 格式化输出十进制整型"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">C|有符号整型与无符号整型 格式化输出十进制整型</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="waline-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/Origin.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Dawn</div><div class="author-info__description">欢迎来访我的博客。如果您在访问过程中发现任何侵权内容，烦请立即联系我删除。祝您愉快！</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Dawn-of-Time"><i class="fab fa-github"></i><span>Github</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%A7%BB%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6%E7%9A%84%E5%90%AB%E4%B9%89"><span class="toc-text">一、移位运算符的含义</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%A7%BB%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6%E7%9A%84%E5%AE%9E%E8%B4%A8"><span class="toc-text">二、移位运算符的实质</span></a></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Dawn</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://unpkg.com/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script><div class="js-pjax"><script>function loadWaline () {
+  function initWaline () {
+    const waline = Waline.init(Object.assign({
+      el: '#waline-wrap',
+      serverURL: 'https://dawn-of-time.zeabur.app/',
+      pageview: false,
+      dark: 'html[data-theme="dark"]',
+      path: window.location.pathname,
+      comment: true,
+    }, null))
+  }
+
+  const walineCSSLoad = document.getElementById('waline-css')
+
+  if (typeof Waline === 'object') {
+    walineCSSLoad ? initWaline() : getCSS('https://unpkg.com/@waline/client/dist/waline.css','waline-css').then(initWaline)
+  }
+  else {
+    getCSS('https://unpkg.com/@waline/client/dist/waline.css','waline-css').then(() => {
+      getScript('https://unpkg.com/@waline/client/dist/waline.js').then(initWaline)
+    })
+  }
+}
+
+if ('Waline' === 'Waline' || !false) {
+  if (false) btf.loadComment(document.getElementById('waline-wrap'),loadWaline)
+  else setTimeout(loadWaline, 0)
+} else {
+  function loadOtherComment () {
+    loadWaline()
+  }
+}</script></div><canvas id="sky"></canvas><script async data-pjax src="/js/sky.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="algolia-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="search-wrap"><div id="algolia-search-input"></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-info"><div class="algolia-stats"></div><div class="algolia-poweredBy"></div></div></div></div></div><div id="search-mask"></div><script src="https://unpkg.com/algoliasearch/dist/algoliasearch-lite.umd.js"></script><script src="https://unpkg.com/instantsearch.js/dist/instantsearch.production.min.js"></script><script src="/js/search/algolia.js"></script></div></div></body></html>
