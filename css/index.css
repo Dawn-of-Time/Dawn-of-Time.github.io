@@ -3347,7 +3347,7 @@ h1.page-title + .tag-cloud-list {
   transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
 }
 #page-header.nav-fixed #nav #blog-info {
-  color: var(--font-color);
+  color: var(--white);
 }
 #page-header.nav-fixed #nav #blog-info:hover {
   color: #4169e1;
@@ -3394,7 +3394,6 @@ h1.page-title + .tag-cloud-list {
 }
 #page-header.fixed #nav {
   position: fixed;
-  color: var(--white);
 }
 #page-header.fixed + .layout > .aside-content > .sticky_layout {
   top: 70px;
