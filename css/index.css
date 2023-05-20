@@ -3371,7 +3371,6 @@ h1.page-title + .tag-cloud-list {
   -o-transition: all 0.5s;
   -ms-transition: all 0.5s;
   transition: all 0.5s;
-  color: var(--white);
 }
 #page-header.nav-visible:not(.fixed) #nav {
   -webkit-transition: all 0.5s;
@@ -3527,7 +3526,7 @@ h1.page-title + .tag-cloud-list {
   -webkit-flex: 1;
   -ms-flex: 1;
   flex: 1;
-  color: var(--light-grey);
+  color: var(--white);
 }
 #nav #blog-info .site-icon {
   margin-right: 6px;
