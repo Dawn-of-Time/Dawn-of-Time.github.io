@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://blog.dawn-of-time.top/2023/05/15/C-Language-001/</loc>
+    <lastmod>2023-05-20</lastmod>
+  </url>
+  <url>
+    <loc>https://blog.dawn-of-time.top/2023/05/16/C-Language-002/</loc>
+    <lastmod>2023-05-20</lastmod>
+  </url>
+  <url>
     <loc>https://blog.dawn-of-time.top/2023/05/18/C-Language-003/</loc>
-    <lastmod>2023-05-19</lastmod>
+    <lastmod>2023-05-20</lastmod>
   </url>
   <url>
     <loc>https://blog.dawn-of-time.top/2023/05/09/common/</loc>
@@ -10,14 +18,6 @@
   </url>
   <url>
     <loc>https://blog.dawn-of-time.top/2023/05/09/update-log/</loc>
-    <lastmod>2023-05-17</lastmod>
-  </url>
-  <url>
-    <loc>https://blog.dawn-of-time.top/2023/05/16/C-Language-002/</loc>
-    <lastmod>2023-05-17</lastmod>
-  </url>
-  <url>
-    <loc>https://blog.dawn-of-time.top/2023/05/15/C-Language-001/</loc>
     <lastmod>2023-05-17</lastmod>
   </url>
 </urlset> 
