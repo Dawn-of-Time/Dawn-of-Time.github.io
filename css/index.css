@@ -3394,6 +3394,7 @@ h1.page-title + .tag-cloud-list {
 }
 #page-header.fixed #nav {
   position: fixed;
+  color: var(--white);
 }
 #page-header.fixed + .layout > .aside-content > .sticky_layout {
   top: 70px;
