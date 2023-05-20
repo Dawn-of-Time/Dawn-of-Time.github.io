@@ -3327,6 +3327,7 @@ h1.page-title + .tag-cloud-list {
   background: transparent;
   -webkit-box-shadow: 0 5px 6px -5px rgba(133,133,133,0.6);
   box-shadow: 0 5px 6px -5px rgba(133,133,133,0.6);
+  color: var(--white);
 }
 #page-header.not-top-img #nav a,
 #page-header.not-top-img #nav .site-name {
@@ -3394,7 +3395,6 @@ h1.page-title + .tag-cloud-list {
 }
 #page-header.fixed #nav {
   position: fixed;
-  color: var(--white);
 }
 #page-header.fixed + .layout > .aside-content > .sticky_layout {
   top: 70px;
