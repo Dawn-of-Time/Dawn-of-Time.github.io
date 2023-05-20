@@ -3350,7 +3350,7 @@ h1.page-title + .tag-cloud-list {
   color: var(--font-color);
 }
 #page-header.nav-fixed #nav #blog-info:hover {
-  color: #4169e1;
+  color: var(--white);
 }
 #page-header.nav-fixed #nav #blog-info .site-name {
   text-shadow: none;
@@ -3526,7 +3526,7 @@ h1.page-title + .tag-cloud-list {
   -webkit-flex: 1;
   -ms-flex: 1;
   flex: 1;
-  color: var(--white);
+  color: var(--light-grey);
 }
 #nav #blog-info .site-icon {
   margin-right: 6px;
