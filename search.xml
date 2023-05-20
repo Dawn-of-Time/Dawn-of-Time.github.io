@@ -262,6 +262,120 @@
       </tags>
   </entry>
   <entry>
+    <title>BlogBase|创建或修改博客的常用Hexo命令</title>
+    <url>/2023/05/09/common/</url>
+    <content><![CDATA[<h1>一、创建新的博文</h1>
+<blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;Title&quot;</span> //<span class="string">&quot;Title&quot;</span>是新建博文的标题，引号内部内容可以替换</span><br></pre></td></tr></table></figure>
+<p>更多信息: <a href="https://hexo.io/docs/writing.html">https://hexo.io/docs/writing.html</a></p>
+</blockquote>
+<h1>二、运行服务器</h1>
+<blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server //亦或hexo s</span><br></pre></td></tr></table></figure>
+<p>然后访问 <a href="http://localhost:4000/">http://localhost:4000/</a> 在本地预览效果。预览结束后，使用<code>Ctrl+C</code>停止。<br>
+更多信息，请 <a href="https://hexo.io/docs/server.html">单击此处</a> 访问。</p>
+</blockquote>
+<h1>三、部署博文</h1>
+<blockquote>
+<p>博文撰写完毕后或<b>每次修改结束后</b>，都应当执行以下三条命令以部署。以下三条命令又称<b><code>hexo三联</code></b>。</p>
+<h2 id="（一）删除原有的public文件夹">（一）删除原有的public文件夹</h2>
+<blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean //亦或hexo cl</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="（二）生成新的public文件夹">（二）生成新的public文件夹</h2>
+<blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate //亦或hexo g</span><br></pre></td></tr></table></figure>
+<p>更多信息，请 <a href="https://hexo.io/docs/generating.html">单击此处</a> 访问。</p>
+</blockquote>
+<h2 id="（三）部署到远程站点">（三）部署到远程站点</h2>
+<div class="note warning flat"><p>部署到远程站点前，建议运行服务器在本地预览效果。<br>
+当确认无误后，将博文部署到远程站点。</p>
+</div>
+<blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy //亦或hexo d</span><br></pre></td></tr></table></figure>
+<p>更多信息，请 <a href="https://hexo.io/docs/one-command-deployment.html">单击此处</a> 访问。</p>
+</blockquote>
+<div class="note info flat"><p>后两步可以简化为以下代码。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate --deploy //亦或hexo g -d</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy --generate //亦或hexo d -g</span><br></pre></td></tr></table></figure></div>
+</blockquote>
+]]></content>
+      <categories>
+        <category>BlogBase</category>
+      </categories>
+      <tags>
+        <tag>Common</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>BlogBase|博客搭建更新日志</title>
+    <url>/2023/05/09/update-log/</url>
+    <content><![CDATA[<h1>2023-5-10更新日志</h1>
+<blockquote>
+<h2 id="重要更新">重要更新</h2>
+<blockquote>
+<h3 id="新增功能-搜索">新增功能-搜索</h3>
+<blockquote>
+<p>您现在可以单击导航栏的<b><code>放大镜</code></b>按钮唤起搜索弹窗，输入关键词以查找相关博文。</p>
+</blockquote>
+<h3 id="优化功能-评论">优化功能-评论</h3>
+<blockquote>
+<p>为了提供更方便的评论服务，评论系统由Valine变更为Waline。<br>
+您现在可以单击评论栏底部的<b><code>登录</code></b>按钮进入登录页面登录您的账号，以享受个性化的评论服务。您可选用的登录方式包括但不仅限于<b>QQ/微博/Github</b>。</p>
+<div class="note info flat"><p>如果您在昵称处输入了您的QQ账号，您的头像将设置为与QQ相同；<br>
+如果您在邮箱处输入了您的QQ邮箱，您的昵称和头像将设置为与QQ相同；<br>
+如果您采用QQ登录，您的昵称和头像将设置为与QQ相同。</p>
+</div>
+</blockquote>
+</blockquote>
+<h2 id="其它更新">其它更新</h2>
+<blockquote>
+<h3 id="优化感官-加载速率">优化感官-加载速率</h3>
+<blockquote>
+<p>博主注意到博客加载速度过慢致使访问体验降低，所以进一步优化了博客加载速率。加载速率具有地区差异性。<br>
+博主为您提供了以下三个链接，您可以尝试访问其中任意一个，收藏其中加载速率较快的一个。</p>
+<ul>
+<li><a href="https://vercel.dawn-of-time.top/">https://vercel.dawn-of-time.top/</a><b>（推荐）</b></li>
+<li><a href="https://netlify.dawn-of-time.top/">https://netlify.dawn-of-time.top/</a></li>
+<li><a href="https://dawn-of-time.github.io/">https://dawn-of-time.github.io/</a><b>（不推荐）</b></li>
+</ul>
+</blockquote>
+</blockquote>
+</blockquote>
+<hr>
+<h1>2023-5-9更新日志</h1>
+<blockquote>
+<h2 id="重要更新-2">重要更新</h2>
+<blockquote>
+<h3 id="新增功能-评论">新增功能-评论</h3>
+<blockquote>
+<p>评论功能的作用包括但不限于：</p>
+<ul>
+<li>向博主提出疑问、修改建议或者告知侵权内容（如果有）；</li>
+<li>与博主和其他访客交流有关博文内容的学习经验。</li>
+</ul>
+<p><b>评论内容应当遵循至少以下规定：</p>
+<ul>
+<li>一 严禁散布谣言，谎报险情、疫情、警情或者以其他方法故意扰乱公共秩序；</li>
+<li>二 严禁分享除与博文内容相关的第三方链接，包括但不限于广告、刷单、赌博等；</li>
+<li>三 严禁挑衅、辱骂、诋毁、攻击作者和其他访客；</li>
+<li>四 严禁谈论政治话题。</li>
+</ul>
+<p>本规定即日起执行。若有违反者，博主将删除有关评论。<br>
+未尽事宜，后续补充。</b></p>
+</blockquote>
+</blockquote>
+</blockquote>
+]]></content>
+      <categories>
+        <category>BlogBase</category>
+      </categories>
+      <tags>
+        <tag>Update</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C|移位运算符</title>
     <url>/2023/05/18/C-Language-003/</url>
     <content><![CDATA[<h1>一、移位运算符的含义</h1>
@@ -379,120 +493,6 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </categories>
       <tags>
         <tag>C</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>BlogBase|博客搭建更新日志</title>
-    <url>/2023/05/09/update-log/</url>
-    <content><![CDATA[<h1>2023-5-10更新日志</h1>
-<blockquote>
-<h2 id="重要更新">重要更新</h2>
-<blockquote>
-<h3 id="新增功能-搜索">新增功能-搜索</h3>
-<blockquote>
-<p>您现在可以单击导航栏的<b><code>放大镜</code></b>按钮唤起搜索弹窗，输入关键词以查找相关博文。</p>
-</blockquote>
-<h3 id="优化功能-评论">优化功能-评论</h3>
-<blockquote>
-<p>为了提供更方便的评论服务，评论系统由Valine变更为Waline。<br>
-您现在可以单击评论栏底部的<b><code>登录</code></b>按钮进入登录页面登录您的账号，以享受个性化的评论服务。您可选用的登录方式包括但不仅限于<b>QQ/微博/Github</b>。</p>
-<div class="note info flat"><p>如果您在昵称处输入了您的QQ账号，您的头像将设置为与QQ相同；<br>
-如果您在邮箱处输入了您的QQ邮箱，您的昵称和头像将设置为与QQ相同；<br>
-如果您采用QQ登录，您的昵称和头像将设置为与QQ相同。</p>
-</div>
-</blockquote>
-</blockquote>
-<h2 id="其它更新">其它更新</h2>
-<blockquote>
-<h3 id="优化感官-加载速率">优化感官-加载速率</h3>
-<blockquote>
-<p>博主注意到博客加载速度过慢致使访问体验降低，所以进一步优化了博客加载速率。加载速率具有地区差异性。<br>
-博主为您提供了以下三个链接，您可以尝试访问其中任意一个，收藏其中加载速率较快的一个。</p>
-<ul>
-<li><a href="https://vercel.dawn-of-time.top/">https://vercel.dawn-of-time.top/</a><b>（推荐）</b></li>
-<li><a href="https://netlify.dawn-of-time.top/">https://netlify.dawn-of-time.top/</a></li>
-<li><a href="https://dawn-of-time.github.io/">https://dawn-of-time.github.io/</a><b>（不推荐）</b></li>
-</ul>
-</blockquote>
-</blockquote>
-</blockquote>
-<hr>
-<h1>2023-5-9更新日志</h1>
-<blockquote>
-<h2 id="重要更新-2">重要更新</h2>
-<blockquote>
-<h3 id="新增功能-评论">新增功能-评论</h3>
-<blockquote>
-<p>评论功能的作用包括但不限于：</p>
-<ul>
-<li>向博主提出疑问、修改建议或者告知侵权内容（如果有）；</li>
-<li>与博主和其他访客交流有关博文内容的学习经验。</li>
-</ul>
-<p><b>评论内容应当遵循至少以下规定：</p>
-<ul>
-<li>一 严禁散布谣言，谎报险情、疫情、警情或者以其他方法故意扰乱公共秩序；</li>
-<li>二 严禁分享除与博文内容相关的第三方链接，包括但不限于广告、刷单、赌博等；</li>
-<li>三 严禁挑衅、辱骂、诋毁、攻击作者和其他访客；</li>
-<li>四 严禁谈论政治话题。</li>
-</ul>
-<p>本规定即日起执行。若有违反者，博主将删除有关评论。<br>
-未尽事宜，后续补充。</b></p>
-</blockquote>
-</blockquote>
-</blockquote>
-]]></content>
-      <categories>
-        <category>BlogBase</category>
-      </categories>
-      <tags>
-        <tag>Update</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>BlogBase|创建或修改博客的常用Hexo命令</title>
-    <url>/2023/05/09/common/</url>
-    <content><![CDATA[<h1>一、创建新的博文</h1>
-<blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;Title&quot;</span> //<span class="string">&quot;Title&quot;</span>是新建博文的标题，引号内部内容可以替换</span><br></pre></td></tr></table></figure>
-<p>更多信息: <a href="https://hexo.io/docs/writing.html">https://hexo.io/docs/writing.html</a></p>
-</blockquote>
-<h1>二、运行服务器</h1>
-<blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server //亦或hexo s</span><br></pre></td></tr></table></figure>
-<p>然后访问 <a href="http://localhost:4000/">http://localhost:4000/</a> 在本地预览效果。预览结束后，使用<code>Ctrl+C</code>停止。<br>
-更多信息，请 <a href="https://hexo.io/docs/server.html">单击此处</a> 访问。</p>
-</blockquote>
-<h1>三、部署博文</h1>
-<blockquote>
-<p>博文撰写完毕后或<b>每次修改结束后</b>，都应当执行以下三条命令以部署。以下三条命令又称<b><code>hexo三联</code></b>。</p>
-<h2 id="（一）删除原有的public文件夹">（一）删除原有的public文件夹</h2>
-<blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean //亦或hexo cl</span><br></pre></td></tr></table></figure>
-</blockquote>
-<h2 id="（二）生成新的public文件夹">（二）生成新的public文件夹</h2>
-<blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate //亦或hexo g</span><br></pre></td></tr></table></figure>
-<p>更多信息，请 <a href="https://hexo.io/docs/generating.html">单击此处</a> 访问。</p>
-</blockquote>
-<h2 id="（三）部署到远程站点">（三）部署到远程站点</h2>
-<div class="note warning flat"><p>部署到远程站点前，建议运行服务器在本地预览效果。<br>
-当确认无误后，将博文部署到远程站点。</p>
-</div>
-<blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy //亦或hexo d</span><br></pre></td></tr></table></figure>
-<p>更多信息，请 <a href="https://hexo.io/docs/one-command-deployment.html">单击此处</a> 访问。</p>
-</blockquote>
-<div class="note info flat"><p>后两步可以简化为以下代码。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate --deploy //亦或hexo g -d</span><br></pre></td></tr></table></figure>
-<p>或者</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy --generate //亦或hexo d -g</span><br></pre></td></tr></table></figure></div>
-</blockquote>
-]]></content>
-      <categories>
-        <category>BlogBase</category>
-      </categories>
-      <tags>
-        <tag>Common</tag>
       </tags>
   </entry>
 </search>
