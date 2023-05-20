@@ -3350,7 +3350,7 @@ h1.page-title + .tag-cloud-list {
   color: var(--font-color);
 }
 #page-header.nav-fixed #nav #blog-info:hover {
-  color: var(--white);
+  color: #4169e1;
 }
 #page-header.nav-fixed #nav #blog-info .site-name {
   text-shadow: none;
@@ -3362,7 +3362,7 @@ h1.page-title + .tag-cloud-list {
 }
 #page-header.nav-fixed #nav a:hover,
 #page-header.nav-fixed #nav #toggle-menu:hover {
-  color: var(--white);
+  color: #4169e1;
 }
 #page-header.nav-fixed.fixed #nav {
   top: 0;
@@ -3394,6 +3394,7 @@ h1.page-title + .tag-cloud-list {
 }
 #page-header.fixed #nav {
   position: fixed;
+  color: var(--white);
 }
 #page-header.fixed + .layout > .aside-content > .sticky_layout {
   top: 70px;
