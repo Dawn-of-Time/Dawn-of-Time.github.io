@@ -3347,7 +3347,7 @@ h1.page-title + .tag-cloud-list {
   transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
 }
 #page-header.nav-fixed #nav #blog-info {
-  color: var(--white);
+  color: var(--font-color);
 }
 #page-header.nav-fixed #nav #blog-info:hover {
   color: #4169e1;
@@ -3371,6 +3371,7 @@ h1.page-title + .tag-cloud-list {
   -o-transition: all 0.5s;
   -ms-transition: all 0.5s;
   transition: all 0.5s;
+  color: var(--white);
 }
 #page-header.nav-visible:not(.fixed) #nav {
   -webkit-transition: all 0.5s;
