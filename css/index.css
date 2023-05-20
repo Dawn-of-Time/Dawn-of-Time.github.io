@@ -3187,7 +3187,7 @@ h1.page-title + .tag-cloud-list {
 #page-header {
   position: relative;
   width: 100%;
-  background-color: transparent;
+  background-color: #4169e1;
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -3201,7 +3201,7 @@ h1.page-title + .tag-cloud-list {
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: transparent;
+  background-color: rgba(0,0,0,0.3);
   content: '';
 }
 #page-header.full_page {
@@ -3297,7 +3297,7 @@ h1.page-title + .tag-cloud-list {
   }
 }
 #page-header.post-bg:before {
-  background-color: transparent;
+  background-color: rgba(0,0,0,0.5);
 }
 #page-header #post-info {
   position: absolute;
@@ -3321,13 +3321,12 @@ h1.page-title + .tag-cloud-list {
 #page-header.not-top-img {
   margin-bottom: 10px;
   height: 60px;
-  background: transparent;
+  background: 0;
 }
 #page-header.not-top-img #nav {
-  background: transparent;
+  background: rgba(255,255,255,0.8);
   -webkit-box-shadow: 0 5px 6px -5px rgba(133,133,133,0.6);
   box-shadow: 0 5px 6px -5px rgba(133,133,133,0.6);
-  color: var(--white);
 }
 #page-header.not-top-img #nav a,
 #page-header.not-top-img #nav .site-name {
@@ -3428,7 +3427,7 @@ h1.page-title + .tag-cloud-list {
 #post-info .post-title {
   margin-bottom: 8px;
   color: var(--white);
-  font-weight: bold;
+  font-weight: normal;
   font-size: 2.5em;
   line-height: 1.5;
   -webkit-line-clamp: 3;
