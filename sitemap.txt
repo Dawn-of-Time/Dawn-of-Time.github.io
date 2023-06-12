@@ -1,8 +1,9 @@
-https://vercel.dawn-of-time.top/2023/05/15/C-Language-001/
-https://vercel.dawn-of-time.top/2023/05/16/C-Language-002/
-https://vercel.dawn-of-time.top/2023/05/18/C-Language-003/
-https://vercel.dawn-of-time.top/2023/05/09/common/
-https://vercel.dawn-of-time.top/2023/05/09/update-log/
+https://vercel.dawn-of-time.top/post/13be382b.html
+https://vercel.dawn-of-time.top/post/f8f674bb.html
+https://vercel.dawn-of-time.top/post/ddd0df44.html
+https://vercel.dawn-of-time.top/post/5663.html
+https://vercel.dawn-of-time.top/post/74158de9.html
+https://vercel.dawn-of-time.top/post/b74865a7.html
 https://vercel.dawn-of-time.top/about/index.html
 https://vercel.dawn-of-time.top/tags/index.html
 https://vercel.dawn-of-time.top/categories/index.html
