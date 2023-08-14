@@ -169,90 +169,6 @@
       </tags>
   </entry>
   <entry>
-    <title>C语言 | 有符号整型与无符号整型 格式化输出十进制整型</title>
-    <url>/post/ddd0df44.html</url>
-    <content><![CDATA[<!-- 让表格居中显示的风格 -->
-<style>
-.center 
-{
-  width: auto;
-  display: table;
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>
-<div class="note warning flat"><p>  初学C语言时，对于整型的分类、存储和输出需厘清。</p>
-</div>
-<h2 id="一-有符号整型与无符号整型">一 有符号整型与无符号整型</h2>
-<h3 id="（一）-存储空间">（一） 存储空间</h3>
-<p>  长整型、基本整型、短整型分别在内存中占据不同的字节数。在64位系统中，长整型和基本整型占据4个字节（32位），短整型占据2个字节（16位）。</p>
-<div class="note info flat"><p>  为了节约内存空间，在定义整型变量时建议采用占据字节数尽可能小的类型。</p>
-</div>
-<h3 id="（二）-符号位-原码、反码、补码">（二） 符号位　原码、反码、补码</h3>
-<p>  在不加修饰的条件下，计算机默认整型为有符号整型。对于有符号整型而言，其对应二进制数的<b>最高位</b>是符号位，并且0表示正数，1表示负数。<br>
-  二进制数的表示方法分为3种：<b>原码、反码、补码</b>。计算机总是以补码的形式存储数。对于正数而言，原码、反码、补码均相同，三者均表示数的真值。<b>对于负数而言，原码除符号位以外的位表示绝对值，反码是对原码除符号位以外的位取反的结果，补码是反码加1的结果。</b>如下例：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> e = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> f = ~e;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数int：%d\n&quot;</span>, f); <span class="comment">//结果是 有符号数int：-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  在64位系统中，基本整型占据4个字节，因此变量e被赋值0后在内存中存储了32位0。按位取反后，32位0变为32位1。32位1的符号位是1，表示其为负数，其原码最高位（符号位）和最低位为1，其余位为0，所以真值为-1。</p>
-<div class="note primary flat"><p><b>为什么计算机要使用补码来存储负数？</b><br>
-  从原理上而言，加法和减法要依靠不同的电路实现，如果能将减法运算转化为加法运算，就能简化电路。同时，如果使用原码进行含负数的加法运算，其结果总是错误的。例如<code>(-2) + 1 = 1000 0010 + 0000 0001 = 1000 0011 = -3</code>（错误）。<br>
-  计算机中的计数是可溢出的。譬如对1字节而言，有符号数的最大值是<code>0111 1111</code>，即127，再加1将溢出，使得最高位同时表示数值和符号，结果是<code>1000 0000</code>，为负数的补码；其原码为<code>1000 0000</code>（最高位仍然同时表示数值和符号），即-128。<br>
-  一周共7天，周四至周六的计算可以是+2，也可以是-5，甚至可以是+9，-12，+17，-19等，这样的计算都是等价的，意味着对于可溢出系统而言，总能够使用加法代替减法运算。设可溢出系统的模为N（例如这里是7），那么加数和减数的和始终为N，这样的关系称为补数。<br>
-  类似地，对于1字节而言，其模是<code>1 0000 0000</code>，若计算<code>(-2) + 1</code>，那么首先将-2转化为其补数。先取-2的绝对值2，然后用模减之，即<code>1 0000 0000 - 0000 0010 = 1111 1110</code>。因此<code>(-2) + 1 = 1111 1110 + 0000 0001 = 1111 1111(补) = -1</code>（正确）。</p>
-</div>
-<h3 id="（三）-有符号整型与无符号整型的定义和区别">（三） 有符号整型与无符号整型的定义和区别</h3>
-<p>  不加修饰时，系统默认整型为有符号整型。无符号整型的表达在常量中为后缀U或u，在变量中则加关键字<code>unsigned</code>。它们的区别在于有符号整型的最高位是符号位，其余位表示数值，1字节的有符号整型的取值范围是[-128,127]；无符号整型每一位都表示数值，1字节的无符号整型的取值范围是[0,255]。</p>
-<hr>
-<h2 id="二-格式化输出十进制整型">二 格式化输出十进制整型</h2>
-<p>  在变量中，整型分为长整型、基本整型和短整型，它们各自又分为有符号整型和无符号整型。每一种类型都有各自的格式控制字符串。就十进制而言，它们的格式控制字符串如表1所示。</p>
-<div class="center">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">整型类型</th>
-<th style="text-align:center">格式控制字符串</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">有符号长整型</td>
-<td style="text-align:center">“%ld”</td>
-</tr>
-<tr>
-<td style="text-align:center">无符号长整型</td>
-<td style="text-align:center">“%lu”</td>
-</tr>
-<tr>
-<td style="text-align:center">有符号基本整型</td>
-<td style="text-align:center">“%d”</td>
-</tr>
-<tr>
-<td style="text-align:center">无符号基本整型</td>
-<td style="text-align:center">“%u”</td>
-</tr>
-<tr>
-<td style="text-align:center">有符号短整型</td>
-<td style="text-align:center">“%hd”</td>
-</tr>
-<tr>
-<td style="text-align:center">无符号短整型</td>
-<td style="text-align:center">“%hu”</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p align="center">表1 十进制整型的格式控制字符串</p>
-<p>  以下就<b>有/无</b>符号<b>基本/短</b>整型为例，形象地体现了它们的区别。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;以下执行对0取反的操作：\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> a = <span class="number">0</span>;<span class="comment">//4字节，32位</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> b = ~a;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;无符号数int：%u\n&quot;</span>, b); <span class="comment">//结果是 无符号数int：4294967295</span></span><br><span class="line">    <span class="comment">//printf(&quot;%d\n&quot;, b);  //结果是 -1</span></span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> c = <span class="number">0</span>;<span class="comment">//2字节，16位</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> d = ~c;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;无符号数short：%hu\n&quot;</span>, d);  <span class="comment">//结果是 无符号数short：65535</span></span><br><span class="line">    <span class="comment">//printf(&quot;%hd\n&quot;, d);  //结果是 -1</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n以下是参照：\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> e = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> f = ~e;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数int：%d\n&quot;</span>, f); <span class="comment">//结果是 有符号数int：-1</span></span><br><span class="line"></span><br><span class="line">    <span class="type">short</span> g = <span class="number">0</span>;</span><br><span class="line">    <span class="type">short</span> h = ~g;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数short：%hd\n&quot;</span>, h);  <span class="comment">//结果是 有符号数short：-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>C语言</category>
-      </categories>
-      <tags>
-        <tag>C</tag>
-        <tag>Fallibility</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>C语言 | 移位运算符</title>
     <url>/post/5663.html</url>
     <content><![CDATA[<div class="note info flat"><p>  本博文的所有变量、数字、公式等均采用<code>katex</code>风格。</p>
@@ -385,6 +301,90 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </tags>
   </entry>
   <entry>
+    <title>C语言 | 有符号整型与无符号整型 格式化输出十进制整型</title>
+    <url>/post/ddd0df44.html</url>
+    <content><![CDATA[<!-- 让表格居中显示的风格 -->
+<style>
+.center 
+{
+  width: auto;
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+<div class="note warning flat"><p>  初学C语言时，对于整型的分类、存储和输出需厘清。</p>
+</div>
+<h2 id="一-有符号整型与无符号整型">一 有符号整型与无符号整型</h2>
+<h3 id="（一）-存储空间">（一） 存储空间</h3>
+<p>  长整型、基本整型、短整型分别在内存中占据不同的字节数。在64位系统中，长整型和基本整型占据4个字节（32位），短整型占据2个字节（16位）。</p>
+<div class="note info flat"><p>  为了节约内存空间，在定义整型变量时建议采用占据字节数尽可能小的类型。</p>
+</div>
+<h3 id="（二）-符号位-原码、反码、补码">（二） 符号位　原码、反码、补码</h3>
+<p>  在不加修饰的条件下，计算机默认整型为有符号整型。对于有符号整型而言，其对应二进制数的<b>最高位</b>是符号位，并且0表示正数，1表示负数。<br>
+  二进制数的表示方法分为3种：<b>原码、反码、补码</b>。计算机总是以补码的形式存储数。对于正数而言，原码、反码、补码均相同，三者均表示数的真值。<b>对于负数而言，原码除符号位以外的位表示绝对值，反码是对原码除符号位以外的位取反的结果，补码是反码加1的结果。</b>如下例：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> e = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> f = ~e;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数int：%d\n&quot;</span>, f); <span class="comment">//结果是 有符号数int：-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  在64位系统中，基本整型占据4个字节，因此变量e被赋值0后在内存中存储了32位0。按位取反后，32位0变为32位1。32位1的符号位是1，表示其为负数，其原码最高位（符号位）和最低位为1，其余位为0，所以真值为-1。</p>
+<div class="note primary flat"><p><b>为什么计算机要使用补码来存储负数？</b><br>
+  从原理上而言，加法和减法要依靠不同的电路实现，如果能将减法运算转化为加法运算，就能简化电路。同时，如果使用原码进行含负数的加法运算，其结果总是错误的。例如<code>(-2) + 1 = 1000 0010 + 0000 0001 = 1000 0011 = -3</code>（错误）。<br>
+  计算机中的计数是可溢出的。譬如对1字节而言，有符号数的最大值是<code>0111 1111</code>，即127，再加1将溢出，使得最高位同时表示数值和符号，结果是<code>1000 0000</code>，为负数的补码；其原码为<code>1000 0000</code>（最高位仍然同时表示数值和符号），即-128。<br>
+  一周共7天，周四至周六的计算可以是+2，也可以是-5，甚至可以是+9，-12，+17，-19等，这样的计算都是等价的，意味着对于可溢出系统而言，总能够使用加法代替减法运算。设可溢出系统的模为N（例如这里是7），那么加数和减数的和始终为N，这样的关系称为补数。<br>
+  类似地，对于1字节而言，其模是<code>1 0000 0000</code>，若计算<code>(-2) + 1</code>，那么首先将-2转化为其补数。先取-2的绝对值2，然后用模减之，即<code>1 0000 0000 - 0000 0010 = 1111 1110</code>。因此<code>(-2) + 1 = 1111 1110 + 0000 0001 = 1111 1111(补) = -1</code>（正确）。</p>
+</div>
+<h3 id="（三）-有符号整型与无符号整型的定义和区别">（三） 有符号整型与无符号整型的定义和区别</h3>
+<p>  不加修饰时，系统默认整型为有符号整型。无符号整型的表达在常量中为后缀U或u，在变量中则加关键字<code>unsigned</code>。它们的区别在于有符号整型的最高位是符号位，其余位表示数值，1字节的有符号整型的取值范围是[-128,127]；无符号整型每一位都表示数值，1字节的无符号整型的取值范围是[0,255]。</p>
+<hr>
+<h2 id="二-格式化输出十进制整型">二 格式化输出十进制整型</h2>
+<p>  在变量中，整型分为长整型、基本整型和短整型，它们各自又分为有符号整型和无符号整型。每一种类型都有各自的格式控制字符串。就十进制而言，它们的格式控制字符串如表1所示。</p>
+<div class="center">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">整型类型</th>
+<th style="text-align:center">格式控制字符串</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">有符号长整型</td>
+<td style="text-align:center">“%ld”</td>
+</tr>
+<tr>
+<td style="text-align:center">无符号长整型</td>
+<td style="text-align:center">“%lu”</td>
+</tr>
+<tr>
+<td style="text-align:center">有符号基本整型</td>
+<td style="text-align:center">“%d”</td>
+</tr>
+<tr>
+<td style="text-align:center">无符号基本整型</td>
+<td style="text-align:center">“%u”</td>
+</tr>
+<tr>
+<td style="text-align:center">有符号短整型</td>
+<td style="text-align:center">“%hd”</td>
+</tr>
+<tr>
+<td style="text-align:center">无符号短整型</td>
+<td style="text-align:center">“%hu”</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p align="center">表1 十进制整型的格式控制字符串</p>
+<p>  以下就<b>有/无</b>符号<b>基本/短</b>整型为例，形象地体现了它们的区别。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;以下执行对0取反的操作：\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> a = <span class="number">0</span>;<span class="comment">//4字节，32位</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> b = ~a;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;无符号数int：%u\n&quot;</span>, b); <span class="comment">//结果是 无符号数int：4294967295</span></span><br><span class="line">    <span class="comment">//printf(&quot;%d\n&quot;, b);  //结果是 -1</span></span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> c = <span class="number">0</span>;<span class="comment">//2字节，16位</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> d = ~c;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;无符号数short：%hu\n&quot;</span>, d);  <span class="comment">//结果是 无符号数short：65535</span></span><br><span class="line">    <span class="comment">//printf(&quot;%hd\n&quot;, d);  //结果是 -1</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n以下是参照：\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> e = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> f = ~e;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数int：%d\n&quot;</span>, f); <span class="comment">//结果是 有符号数int：-1</span></span><br><span class="line"></span><br><span class="line">    <span class="type">short</span> g = <span class="number">0</span>;</span><br><span class="line">    <span class="type">short</span> h = ~g;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数short：%hd\n&quot;</span>, h);  <span class="comment">//结果是 有符号数short：-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>C语言</category>
+      </categories>
+      <tags>
+        <tag>C</tag>
+        <tag>Fallibility</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C语言 | 函数scanf()的使用</title>
     <url>/post/13be382b.html</url>
     <content><![CDATA[<h2 id="一-函数scanf-的基本含义">一 函数scanf()的基本含义</h2>
@@ -498,78 +498,6 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       <tags>
         <tag>C</tag>
         <tag>Exploration</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>博客基建 | 博客搭建更新日志</title>
-    <url>/post/b74865a7.html</url>
-    <content><![CDATA[<h2 id="2023-7-23更新日志">2023-7-23更新日志</h2>
-<h3 id="1-重要更新">1 重要更新</h3>
-<h4 id="1-1-新增页面-友链">1.1 新增页面-友链</h4>
-<blockquote>
-<p>  置身于信息世界的广阔天地，踽踽独行难媲集思广益。未来立足于过往，每一位奋斗者都值得被铭记。您现在可以在<code>友链</code>页面查看同行者，他们的不断探究和经验分享促成了如今博客的繁花似锦。</p>
-</blockquote>
-<h3 id="2-其它更新">2 其它更新</h3>
-<h4 id="2-1-优化感官-页面简化">2.1 优化感官-页面简化</h4>
-<blockquote>
-<p>  此前的页面背景过于纷繁复杂，降低了访客的视觉体验；同时过多的资源加载降低了网页载入速率，延长了访客的等待时间。这不符合博客的工具性。因此，本次更新通过放弃部分效果以获得更直观清晰的访问体验。</p>
-</blockquote>
-<hr>
-<h2 id="2023-5-10更新日志">2023-5-10更新日志</h2>
-<h3 id="1-重要更新-2">1 重要更新</h3>
-<h4 id="1-1-新增功能-搜索">1.1 新增功能-搜索</h4>
-<blockquote>
-<p>  您现在可以单击导航栏的<code>放大镜</code>按钮唤起搜索弹窗，输入关键词以查找相关博文。</p>
-</blockquote>
-<h4 id="1-2-优化功能-评论">1.2 优化功能-评论</h4>
-<blockquote>
-<p>  为了提供更方便的评论服务，评论系统由Valine变更为Waline。<br>
-  您现在可以单击评论栏底部的<code>登录</code>按钮进入登录页面登录您的账号，以享受个性化的评论服务。您可选用的登录方式包括但不仅限于<b>QQ/微博/Github</b>。</p>
-</blockquote>
-<div class="note info flat"><ul>
-<li>如果您在昵称处输入了您的QQ账号，您的头像将设置为与QQ相同；</li>
-<li>如果您在邮箱处输入了您的QQ邮箱，您的昵称和头像将设置为与QQ相同；</li>
-<li>如果您采用QQ登录，您的昵称和头像将设置为与QQ相同。</li>
-</ul>
-</div>
-<h3 id="2-其它更新-2">2 其它更新</h3>
-<h4 id="2-1-优化感官-加载速率">2.1 优化感官-加载速率</h4>
-<blockquote>
-<p>  博客加载速度过慢致使访问体验降低。因此，本次更新通过尝试不同的部署进一步优化了博客加载速率。加载速率具有地区差异性。</p>
-</blockquote>
-<div class="note success flat"><p>  以下为您提供了三个链接，您可以尝试访问其中任意一个，收藏其中加载速率较快的一个。</p>
-<ul>
-<li><a href="https://www.dawn-of-time.top/">https://www.dawn-of-time.top/</a><b>（推荐）</b></li>
-<li><a href="https://netlify.dawn-of-time.top/">https://netlify.dawn-of-time.top/</a></li>
-<li><a href="https://dawn-of-time.github.io/">https://dawn-of-time.github.io/</a><b>（不推荐）</b></li>
-</ul>
-</div>
-<hr>
-<h2 id="2023-5-9更新日志">2023-5-9更新日志</h2>
-<h3 id="1-重要更新-3">1 重要更新</h3>
-<h4 id="1-1-新增功能-评论">1.1 新增功能-评论</h4>
-<blockquote>
-<p>  评论功能的作用包括但不限于：</p>
-<ul>
-<li>向我提出疑问、修改建议或者告知侵权内容（如果有）；</li>
-<li>与我和其他访客交流有关博文内容的学习经验。</li>
-</ul>
-<p>  <b>评论内容应当遵循至少以下规定：</b></p>
-<ul>
-<li>一 严禁散布谣言，谎报险情、疫情、警情或者以其他方法故意扰乱公共秩序；</li>
-<li>二 严禁分享除与博文内容相关的第三方链接，包括但不限于广告、刷单、赌博等；</li>
-<li>三 严禁挑衅、辱骂、诋毁、攻击作者和其他访客；</li>
-<li>四 严禁谈论政治话题。</li>
-</ul>
-</blockquote>
- <div class="note danger flat"><p>  本规定即日起执行。若有违反者，我将依据以上规定删除有关评论。<br>
-  未尽事宜，后续补充。</p>
-</div>]]></content>
-      <categories>
-        <category>博客基建</category>
-      </categories>
-      <tags>
-        <tag>Update</tag>
       </tags>
   </entry>
   <entry>
@@ -727,8 +655,8 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
 <h3 id="（五）-在增长率比较中的应用">（五） 在增长率比较中的应用</h3>
 <p>  对于给定的函数<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>和<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">g(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>，如果</p>
 <blockquote>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><munder><mrow><mi>lim</mi><mo>⁡</mo></mrow><mrow><mi>x</mi><mo>→</mo><mi mathvariant="normal">∞</mi></mrow></munder><mfrac><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><mrow><mo stretchy="false">(</mo><mi>g</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">\lim\limits_{x\to \infty} \frac{f(n)}{(g(n))}
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.363em;vertical-align:-0.936em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6944em;"><span style="top:-2.4em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">x</span><span class="mrel mtight">→</span><span class="mord mtight">∞</span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop">lim</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">))</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><munder><mrow><mi>lim</mi><mo>⁡</mo></mrow><mrow><mi>x</mi><mo>→</mo><mi mathvariant="normal">∞</mi></mrow></munder><mfrac><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><mrow><mi>g</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">\lim\limits_{x\to \infty} \frac{f(n)}{g(n)}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.363em;vertical-align:-0.936em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6944em;"><span style="top:-2.4em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">x</span><span class="mrel mtight">→</span><span class="mord mtight">∞</span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop">lim</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
 </blockquote>
 <ul>
 <li>值趋向<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∞</mi></mrow><annotation encoding="application/x-tex">\infty</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord">∞</span></span></span></span>，则<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>在<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Ω</mi><mo stretchy="false">(</mo><mi>g</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Omega(g(n))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">Ω</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">))</span></span></span></span>中；</li>
@@ -760,6 +688,78 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </categories>
       <tags>
         <tag>Algorithm Analysis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>博客基建 | 博客搭建更新日志</title>
+    <url>/post/b74865a7.html</url>
+    <content><![CDATA[<h2 id="2023-7-23更新日志">2023-7-23更新日志</h2>
+<h3 id="1-重要更新">1 重要更新</h3>
+<h4 id="1-1-新增页面-友链">1.1 新增页面-友链</h4>
+<blockquote>
+<p>  置身于信息世界的广阔天地，踽踽独行难媲集思广益。未来立足于过往，每一位奋斗者都值得被铭记。您现在可以在<code>友链</code>页面查看同行者，他们的不断探究和经验分享促成了如今博客的繁花似锦。</p>
+</blockquote>
+<h3 id="2-其它更新">2 其它更新</h3>
+<h4 id="2-1-优化感官-页面简化">2.1 优化感官-页面简化</h4>
+<blockquote>
+<p>  此前的页面背景过于纷繁复杂，降低了访客的视觉体验；同时过多的资源加载降低了网页载入速率，延长了访客的等待时间。这不符合博客的工具性。因此，本次更新通过放弃部分效果以获得更直观清晰的访问体验。</p>
+</blockquote>
+<hr>
+<h2 id="2023-5-10更新日志">2023-5-10更新日志</h2>
+<h3 id="1-重要更新-2">1 重要更新</h3>
+<h4 id="1-1-新增功能-搜索">1.1 新增功能-搜索</h4>
+<blockquote>
+<p>  您现在可以单击导航栏的<code>放大镜</code>按钮唤起搜索弹窗，输入关键词以查找相关博文。</p>
+</blockquote>
+<h4 id="1-2-优化功能-评论">1.2 优化功能-评论</h4>
+<blockquote>
+<p>  为了提供更方便的评论服务，评论系统由Valine变更为Waline。<br>
+  您现在可以单击评论栏底部的<code>登录</code>按钮进入登录页面登录您的账号，以享受个性化的评论服务。您可选用的登录方式包括但不仅限于<b>QQ/微博/Github</b>。</p>
+</blockquote>
+<div class="note info flat"><ul>
+<li>如果您在昵称处输入了您的QQ账号，您的头像将设置为与QQ相同；</li>
+<li>如果您在邮箱处输入了您的QQ邮箱，您的昵称和头像将设置为与QQ相同；</li>
+<li>如果您采用QQ登录，您的昵称和头像将设置为与QQ相同。</li>
+</ul>
+</div>
+<h3 id="2-其它更新-2">2 其它更新</h3>
+<h4 id="2-1-优化感官-加载速率">2.1 优化感官-加载速率</h4>
+<blockquote>
+<p>  博客加载速度过慢致使访问体验降低。因此，本次更新通过尝试不同的部署进一步优化了博客加载速率。加载速率具有地区差异性。</p>
+</blockquote>
+<div class="note success flat"><p>  以下为您提供了三个链接，您可以尝试访问其中任意一个，收藏其中加载速率较快的一个。</p>
+<ul>
+<li><a href="https://www.dawn-of-time.top/">https://www.dawn-of-time.top/</a><b>（推荐）</b></li>
+<li><a href="https://netlify.dawn-of-time.top/">https://netlify.dawn-of-time.top/</a></li>
+<li><a href="https://dawn-of-time.github.io/">https://dawn-of-time.github.io/</a><b>（不推荐）</b></li>
+</ul>
+</div>
+<hr>
+<h2 id="2023-5-9更新日志">2023-5-9更新日志</h2>
+<h3 id="1-重要更新-3">1 重要更新</h3>
+<h4 id="1-1-新增功能-评论">1.1 新增功能-评论</h4>
+<blockquote>
+<p>  评论功能的作用包括但不限于：</p>
+<ul>
+<li>向我提出疑问、修改建议或者告知侵权内容（如果有）；</li>
+<li>与我和其他访客交流有关博文内容的学习经验。</li>
+</ul>
+<p>  <b>评论内容应当遵循至少以下规定：</b></p>
+<ul>
+<li>一 严禁散布谣言，谎报险情、疫情、警情或者以其他方法故意扰乱公共秩序；</li>
+<li>二 严禁分享除与博文内容相关的第三方链接，包括但不限于广告、刷单、赌博等；</li>
+<li>三 严禁挑衅、辱骂、诋毁、攻击作者和其他访客；</li>
+<li>四 严禁谈论政治话题。</li>
+</ul>
+</blockquote>
+ <div class="note danger flat"><p>  本规定即日起执行。若有违反者，我将依据以上规定删除有关评论。<br>
+  未尽事宜，后续补充。</p>
+</div>]]></content>
+      <categories>
+        <category>博客基建</category>
+      </categories>
+      <tags>
+        <tag>Update</tag>
       </tags>
   </entry>
 </search>
