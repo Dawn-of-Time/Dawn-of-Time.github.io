@@ -655,6 +655,42 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </tags>
   </entry>
   <entry>
+    <title>博客基建 | 创建或修改博客的常用Hexo命令</title>
+    <url>/post/74158de9.html</url>
+    <content><![CDATA[<h2 id="一-创建新的博文">一 创建新的博文</h2>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;Title&quot;</span> //<span class="string">&quot;Title&quot;</span>是新建博文的标题，引号内部内容可以替换</span><br></pre></td></tr></table></figure>
+<p>  更多信息，请 <a href="https://hexo.io/docs/writing.html">单击此处</a> 访问。</p>
+<hr>
+<h2 id="二-运行服务器">二 运行服务器</h2>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server //亦或hexo s</span><br></pre></td></tr></table></figure>
+<p>  然后访问 <a href="http://localhost:4000/">http://localhost:4000/</a> 在本地预览效果。预览结束后，使用<code>Ctrl+C</code>停止。<br>
+  更多信息，请 <a href="https://hexo.io/docs/server.html">单击此处</a> 访问。</p>
+<hr>
+<h2 id="三-部署博文">三 部署博文</h2>
+<p>  博文撰写完毕后或<b>每次修改结束后</b>，都应当执行以下三条命令以部署。以下三条命令又称<code>hexo三联</code>。</p>
+<h3 id="（一）-删除原有的public文件夹">（一） 删除原有的public文件夹</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean //亦或hexo cl</span><br></pre></td></tr></table></figure>
+<h3 id="（二）-生成新的public文件夹">（二） 生成新的public文件夹</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate //亦或hexo g</span><br></pre></td></tr></table></figure>
+<p>  更多信息，请 <a href="https://hexo.io/docs/generating.html">单击此处</a> 访问。</p>
+<h3 id="（三）-部署到远程站点">（三） 部署到远程站点</h3>
+<div class="note warning flat"><p>  部署到远程站点前，建议运行服务器在本地预览效果。当确认无误后，将博文部署到远程站点。</p>
+</div>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy //亦或hexo d</span><br></pre></td></tr></table></figure>
+<p>  更多信息，请 <a href="https://hexo.io/docs/one-command-deployment.html">单击此处</a> 访问。</p>
+<div class="note info flat"><p>  以上三步可以简化为以下代码。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean&amp;&amp;hexo generate --deploy //亦或hexo cl&amp;&amp;hexo g -d</span><br></pre></td></tr></table></figure>
+<p>  或者</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean&amp;&amp;hexo deploy --generate //亦或hexo cl&amp;&amp;hexo d -g</span><br></pre></td></tr></table></figure></div>
+]]></content>
+      <categories>
+        <category>博客基建</category>
+      </categories>
+      <tags>
+        <tag>Common</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>博客基建 | 博客搭建更新日志</title>
     <url>/post/b74865a7.html</url>
     <content><![CDATA[<h2 id="2023-7-23更新日志">2023-7-23更新日志</h2>
@@ -724,42 +760,6 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </categories>
       <tags>
         <tag>Update</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>博客基建 | 创建或修改博客的常用Hexo命令</title>
-    <url>/post/74158de9.html</url>
-    <content><![CDATA[<h2 id="一-创建新的博文">一 创建新的博文</h2>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;Title&quot;</span> //<span class="string">&quot;Title&quot;</span>是新建博文的标题，引号内部内容可以替换</span><br></pre></td></tr></table></figure>
-<p>  更多信息，请 <a href="https://hexo.io/docs/writing.html">单击此处</a> 访问。</p>
-<hr>
-<h2 id="二-运行服务器">二 运行服务器</h2>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server //亦或hexo s</span><br></pre></td></tr></table></figure>
-<p>  然后访问 <a href="http://localhost:4000/">http://localhost:4000/</a> 在本地预览效果。预览结束后，使用<code>Ctrl+C</code>停止。<br>
-  更多信息，请 <a href="https://hexo.io/docs/server.html">单击此处</a> 访问。</p>
-<hr>
-<h2 id="三-部署博文">三 部署博文</h2>
-<p>  博文撰写完毕后或<b>每次修改结束后</b>，都应当执行以下三条命令以部署。以下三条命令又称<code>hexo三联</code>。</p>
-<h3 id="（一）-删除原有的public文件夹">（一） 删除原有的public文件夹</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean //亦或hexo cl</span><br></pre></td></tr></table></figure>
-<h3 id="（二）-生成新的public文件夹">（二） 生成新的public文件夹</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate //亦或hexo g</span><br></pre></td></tr></table></figure>
-<p>  更多信息，请 <a href="https://hexo.io/docs/generating.html">单击此处</a> 访问。</p>
-<h3 id="（三）-部署到远程站点">（三） 部署到远程站点</h3>
-<div class="note warning flat"><p>  部署到远程站点前，建议运行服务器在本地预览效果。当确认无误后，将博文部署到远程站点。</p>
-</div>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy //亦或hexo d</span><br></pre></td></tr></table></figure>
-<p>  更多信息，请 <a href="https://hexo.io/docs/one-command-deployment.html">单击此处</a> 访问。</p>
-<div class="note info flat"><p>  以上三步可以简化为以下代码。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean&amp;&amp;hexo generate --deploy //亦或hexo cl&amp;&amp;hexo g -d</span><br></pre></td></tr></table></figure>
-<p>  或者</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean&amp;&amp;hexo deploy --generate //亦或hexo cl&amp;&amp;hexo d -g</span><br></pre></td></tr></table></figure></div>
-]]></content>
-      <categories>
-        <category>博客基建</category>
-      </categories>
-      <tags>
-        <tag>Common</tag>
       </tags>
   </entry>
 </search>
