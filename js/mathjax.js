@@ -15,4 +15,4 @@ MathJax.Hub.Config({
     inlineMath: [["\\(", "\\)"]],
     displayMath: [["\\[", "\\]"]]
   }
-});
+})
