@@ -449,6 +449,58 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </tags>
   </entry>
   <entry>
+    <title>C语言 | 递归实践：汉诺塔问题 青蛙跳台阶问题</title>
+    <url>/post/6290815e.html</url>
+    <content><![CDATA[<h2 id="一-递归的含义及其两个必要条件">一 递归的含义及其两个必要条件</h2>
+<h3 id="（一）-递归的含义">（一） 递归的含义</h3>
+<p>  递归，是指一种通过重复将问题分解为同类的子问题而解决问题的方法。它将大事化小，能够大大减少程序的代码量。</p>
+<h3 id="（二）-递归的两个必要条件">（二） 递归的两个必要条件</h3>
+<p>  1 存在限制条件，当满足这个限制条件的时候，递归便不再继续；<br>
+  2 每次递归调用之后越来越接近这个限制条件。</p>
+<hr>
+<h2 id="二-汉诺塔问题">二 汉诺塔问题</h2>
+<h3 id="（一）-问题内容">（一） 问题内容</h3>
+<div class="note info flat"><ul>
+<li><b>BASE</b>-在一块铜板装置上，有三根杆(编号A、B、C)，在A杆自下而上、由大到小按顺序放置若干个金盘。（如图I1所示）</li>
+<li><b>GOAL</b>-把A杆上的金盘全部移到C杆上，并仍保持原有顺序叠好。</li>
+<li><b>RULE</b>-每次只能移动一个盘子，并且在移动过程中三根杆上都始终保持大盘在下，小盘在上，操作过程中盘子可以置于A、B、C任一杆上。</li>
+</ul>
+</div>
+<p><img src="/post/6290815e/C-Language-005-I1.jpg" alt="I1.汉诺塔问题" title="I1.汉诺塔问题"></p>
+<h3 id="（二）-解决思路">（二） 解决思路</h3>
+<p>  为了满足<code>大盘在下，小盘在上</code>的规则，当金盘进入C杆时，其顺序也应当是<code>先大盘，后小盘</code>。以4个金盘为例，不妨基于C杆考察此问题：<br>
+  <b>第1轮转移</b> 当第一个金盘进入C杆时，其余盘应按照从小到大置于B杆；（如图I2.a所示）<br>
+  <b>第2轮转移</b> 当第二个金盘进入C杆时，其余盘应按照从小到大置于A杆；（如图I2.b所示）<br>
+  <b>第3轮转移</b> 当第三个金盘进入C杆时，其余盘应按照从小到大置于B杆；（如图I2.c所示）<br>
+  <b>第4轮转移</b> 当第四个金盘进入C杆时，达到目标。（如图I2.d所示）<br>
+<img src="/post/6290815e/C-Language-005-I2.jpg" alt="I2.汉诺塔问题" title="I2.汉诺塔问题操作流程示例"><br>
+  注意到，总是需要将A杆（或B杆）上的n个金盘中的n-1个转移到B杆（或A杆），然后将第n个金盘转移到C杆。并且在转移n-1个金盘的过程中，也同样遵循上述规律，即将A杆（或B杆）上的n-1个金盘中的n-2个转移到C杆，然后将第n-1金盘转移到B杆（或A杆）。这样一来，不难发现该问题可以分解为同类的子类问题，并且符合递归的必要条件——其限制条件是转移前A杆和B杆的金盘数目都为0；并且每轮结束时，金盘数目都<code>减1</code>，越来越接近限制条件。<br>
+  基于以上思路进行程序设计。</p>
+<h3 id="（三）-解决办法">（三） 解决办法</h3>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//函数的传入参数n是A杆放置的金盘数目。</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">TOH</span><span class="params">(<span class="type">int</span> n)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//定义返回结果为操作次数。</span></span><br><span class="line">	<span class="type">static</span> <span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//1.递归限制条件：</span></span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">0</span>)</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//2.递归部分：</span></span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//2.1.将A杆（或B杆）最底盘之上的n-1个盘子移动至B杆（或A杆）上。</span></span><br><span class="line">		ret += TOH(n - <span class="number">1</span>);</span><br><span class="line">		<span class="comment">//2.2.将最底盘移动至C杆上。</span></span><br><span class="line">		ret += <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">return</span> ret;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="三-青蛙跳台阶问题">三 青蛙跳台阶问题</h2>
+<h3 id="（一）-问题内容-2">（一） 问题内容</h3>
+<div class="note info flat"><ul>
+<li><b>BASE</b>-有一只青蛙处于若干阶台阶底层。</li>
+<li><b>GOAL</b>-青蛙恰好到达台阶顶层。</li>
+<li><b>RULE</b>-青蛙每次跳跃的台阶数仅能为1或2。</li>
+</ul>
+</div>
+<h3 id="（二）-解决思路-2">（二） 解决思路</h3>
+<p>  注意到<code>青蛙每次跳跃的台阶数仅能为1或2</code>，设跳跃的次数为M，台阶数为N，那么当进行第M次跳跃时，也仅能跳跃1阶或2阶；当进行第M-1次跳跃时，已经跳跃的台阶数是N-1或N-2。类似地，当进行第M-2次跳跃时，已经跳跃的台阶数是N-1-1或N-1-2或N-2-1或N-2-2。据此就可以知道，<b>跳跃N<code>(N≥3)</code>阶台阶的跳法总是跳跃N-1阶台阶的跳法与跳跃N-2阶台阶的跳法之和；当N=1时，仅有1种跳法；当N=2时，仅有两种跳法。</b>这便符合了递归的必要条件——其限制条件是跳跃前剩余台阶数为1或2；并且每次跳跃结束时，台阶数目都<code>减1</code>或<code>减2</code>，越来越接近限制条件。<br>
+  基于以上思路进行程序设计。</p>
+<h3 id="（三）-解决办法-2">（三） 解决办法</h3>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//函数的传入参数n是台阶数目。</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">CS</span><span class="params">(<span class="type">int</span> n)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//定义返回结果为跳法数目。</span></span><br><span class="line">	<span class="type">static</span> <span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//1.递归限制条件：</span></span><br><span class="line">	<span class="comment">//1.1.台阶数为1时，有1种跳法。</span></span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//1.2.台阶数为2时，有2种跳法。</span></span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (n == <span class="number">2</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//2.递归部分：</span></span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//跳跃n阶台阶的跳法总是跳跃n-1阶台阶的跳法与跳跃n-2阶台阶的跳法之和。</span></span><br><span class="line">		ret = CS(n - <span class="number">1</span>) + CS(n - <span class="number">2</span>);</span><br><span class="line">		<span class="keyword">return</span> ret;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>C语言</category>
+      </categories>
+      <tags>
+        <tag>C</tag>
+        <tag>Exploration</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>算法分析 | 渐进算法分析</title>
     <url>/post/ba640e12.html</url>
     <content><![CDATA[<div class="note info flat"><p>  本博文的所有变量、数字、公式等均采用<code>katex</code>风格。</p>
@@ -520,7 +572,7 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
 <li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>n</mi><mi>a</mi></msup></mrow><annotation encoding="application/x-tex">n^a</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6644em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">a</span></span></span></span></span></span></span></span></span></span></span>的增长率总是快于<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mi>o</mi><msup><mi>g</mi><mi>b</mi></msup><mi>n</mi></mrow><annotation encoding="application/x-tex">log^bn</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0435em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8491em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">b</span></span></span></span></span></span></span></span><span class="mord mathnormal">n</span></span></span></span>和<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mi>o</mi><mi>g</mi><msup><mi>n</mi><mi>b</mi></msup></mrow><annotation encoding="application/x-tex">logn^b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0435em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8491em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">b</span></span></span></span></span></span></span></span></span></span></span>（<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo separator="true">,</mo><mi>b</mi><mo>&gt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">a,b&gt;1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">b</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span>）；</li>
 <li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>a</mi><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">a^n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6644em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span>的增长率总是快于<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>n</mi><mi>b</mi></msup></mrow><annotation encoding="application/x-tex">n^b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8491em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8491em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">b</span></span></span></span></span></span></span></span></span></span></span>（<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo separator="true">,</mo><mi>b</mi><mo>≥</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">a,b \geq 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">b</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span>）。</li>
 </ul>
-<p>  实际上，按照增长速率又快到慢总是有<b>（当规模较大时）</b>：阶乘函数、指数函数、幂函数、<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mi>l</mi><mi>o</mi><mi>g</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">nlogn</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">n</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">n</span></span></span></span>、线性函数、对数函数、常函数。注意到总是在强调<b>当规模较大时</b>，这实际上是在运用了一些渐进分析的思想，为其做铺垫。<br>
+<p>  实际上，按照增长速率又快到慢总是有<b>（当规模较大时）</b>：阶乘函数、指数函数、幂函数、<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mi>l</mi><mi>o</mi><mi>g</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">nlogn</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">n</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">n</span></span></span></span>、线性函数、对数函数、常函数。注意到总是在强调<b>当规模较大时</b>，这实际上运用了一些渐进分析（将会在后文介绍到）的思想。<br>
 <img src="/post/ba640e12/algorithm-analysis-001-I1.jpg" alt="I1.运行时间函数示例" title="I1.运行时间函数示例"></p>
 </div>
 <hr>
@@ -603,94 +655,6 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </tags>
   </entry>
   <entry>
-    <title>C语言 | 递归实践：汉诺塔问题 青蛙跳台阶问题</title>
-    <url>/post/6290815e.html</url>
-    <content><![CDATA[<h2 id="一-递归的含义及其两个必要条件">一 递归的含义及其两个必要条件</h2>
-<h3 id="（一）-递归的含义">（一） 递归的含义</h3>
-<p>  递归，是指一种通过重复将问题分解为同类的子问题而解决问题的方法。它将大事化小，能够大大减少程序的代码量。</p>
-<h3 id="（二）-递归的两个必要条件">（二） 递归的两个必要条件</h3>
-<p>  1 存在限制条件，当满足这个限制条件的时候，递归便不再继续；<br>
-  2 每次递归调用之后越来越接近这个限制条件。</p>
-<hr>
-<h2 id="二-汉诺塔问题">二 汉诺塔问题</h2>
-<h3 id="（一）-问题内容">（一） 问题内容</h3>
-<div class="note info flat"><ul>
-<li><b>BASE</b>-在一块铜板装置上，有三根杆(编号A、B、C)，在A杆自下而上、由大到小按顺序放置若干个金盘。（如图I1所示）</li>
-<li><b>GOAL</b>-把A杆上的金盘全部移到C杆上，并仍保持原有顺序叠好。</li>
-<li><b>RULE</b>-每次只能移动一个盘子，并且在移动过程中三根杆上都始终保持大盘在下，小盘在上，操作过程中盘子可以置于A、B、C任一杆上。</li>
-</ul>
-</div>
-<p><img src="/post/6290815e/C-Language-005-I1.jpg" alt="I1.汉诺塔问题" title="I1.汉诺塔问题"></p>
-<h3 id="（二）-解决思路">（二） 解决思路</h3>
-<p>  为了满足<code>大盘在下，小盘在上</code>的规则，当金盘进入C杆时，其顺序也应当是<code>先大盘，后小盘</code>。以4个金盘为例，不妨基于C杆考察此问题：<br>
-  <b>第1轮转移</b> 当第一个金盘进入C杆时，其余盘应按照从小到大置于B杆；（如图I2.a所示）<br>
-  <b>第2轮转移</b> 当第二个金盘进入C杆时，其余盘应按照从小到大置于A杆；（如图I2.b所示）<br>
-  <b>第3轮转移</b> 当第三个金盘进入C杆时，其余盘应按照从小到大置于B杆；（如图I2.c所示）<br>
-  <b>第4轮转移</b> 当第四个金盘进入C杆时，达到目标。（如图I2.d所示）<br>
-<img src="/post/6290815e/C-Language-005-I2.jpg" alt="I2.汉诺塔问题" title="I2.汉诺塔问题操作流程示例"><br>
-  注意到，总是需要将A杆（或B杆）上的n个金盘中的n-1个转移到B杆（或A杆），然后将第n个金盘转移到C杆。并且在转移n-1个金盘的过程中，也同样遵循上述规律，即将A杆（或B杆）上的n-1个金盘中的n-2个转移到C杆，然后将第n-1金盘转移到B杆（或A杆）。这样一来，不难发现该问题可以分解为同类的子类问题，并且符合递归的必要条件——其限制条件是转移前A杆和B杆的金盘数目都为0；并且每轮结束时，金盘数目都<code>减1</code>，越来越接近限制条件。<br>
-  基于以上思路进行程序设计。</p>
-<h3 id="（三）-解决办法">（三） 解决办法</h3>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//函数的传入参数n是A杆放置的金盘数目。</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">TOH</span><span class="params">(<span class="type">int</span> n)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//定义返回结果为操作次数。</span></span><br><span class="line">	<span class="type">static</span> <span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//1.递归限制条件：</span></span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">0</span>)</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//2.递归部分：</span></span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//2.1.将A杆（或B杆）最底盘之上的n-1个盘子移动至B杆（或A杆）上。</span></span><br><span class="line">		ret += TOH(n - <span class="number">1</span>);</span><br><span class="line">		<span class="comment">//2.2.将最底盘移动至C杆上。</span></span><br><span class="line">		ret += <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">return</span> ret;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="三-青蛙跳台阶问题">三 青蛙跳台阶问题</h2>
-<h3 id="（一）-问题内容-2">（一） 问题内容</h3>
-<div class="note info flat"><ul>
-<li><b>BASE</b>-有一只青蛙处于若干阶台阶底层。</li>
-<li><b>GOAL</b>-青蛙恰好到达台阶顶层。</li>
-<li><b>RULE</b>-青蛙每次跳跃的台阶数仅能为1或2。</li>
-</ul>
-</div>
-<h3 id="（二）-解决思路-2">（二） 解决思路</h3>
-<p>  注意到<code>青蛙每次跳跃的台阶数仅能为1或2</code>，设跳跃的次数为M，台阶数为N，那么当进行第M次跳跃时，也仅能跳跃1阶或2阶；当进行第M-1次跳跃时，已经跳跃的台阶数是N-1或N-2。类似地，当进行第M-2次跳跃时，已经跳跃的台阶数是N-1-1或N-1-2或N-2-1或N-2-2。据此就可以知道，<b>跳跃N<code>(N≥3)</code>阶台阶的跳法总是跳跃N-1阶台阶的跳法与跳跃N-2阶台阶的跳法之和；当N=1时，仅有1种跳法；当N=2时，仅有两种跳法。</b>这便符合了递归的必要条件——其限制条件是跳跃前剩余台阶数为1或2；并且每次跳跃结束时，台阶数目都<code>减1</code>或<code>减2</code>，越来越接近限制条件。<br>
-  基于以上思路进行程序设计。</p>
-<h3 id="（三）-解决办法-2">（三） 解决办法</h3>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//函数的传入参数n是台阶数目。</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">CS</span><span class="params">(<span class="type">int</span> n)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//定义返回结果为跳法数目。</span></span><br><span class="line">	<span class="type">static</span> <span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//1.递归限制条件：</span></span><br><span class="line">	<span class="comment">//1.1.台阶数为1时，有1种跳法。</span></span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//1.2.台阶数为2时，有2种跳法。</span></span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (n == <span class="number">2</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//2.递归部分：</span></span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//跳跃n阶台阶的跳法总是跳跃n-1阶台阶的跳法与跳跃n-2阶台阶的跳法之和。</span></span><br><span class="line">		ret = CS(n - <span class="number">1</span>) + CS(n - <span class="number">2</span>);</span><br><span class="line">		<span class="keyword">return</span> ret;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>C语言</category>
-      </categories>
-      <tags>
-        <tag>C</tag>
-        <tag>Exploration</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>博客基建 | 创建或修改博客的常用Hexo命令</title>
-    <url>/post/74158de9.html</url>
-    <content><![CDATA[<h2 id="一-创建新的博文">一 创建新的博文</h2>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;Title&quot;</span> //<span class="string">&quot;Title&quot;</span>是新建博文的标题，引号内部内容可以替换</span><br></pre></td></tr></table></figure>
-<p>  更多信息，请 <a href="https://hexo.io/docs/writing.html">单击此处</a> 访问。</p>
-<hr>
-<h2 id="二-运行服务器">二 运行服务器</h2>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server //亦或hexo s</span><br></pre></td></tr></table></figure>
-<p>  然后访问 <a href="http://localhost:4000/">http://localhost:4000/</a> 在本地预览效果。预览结束后，使用<code>Ctrl+C</code>停止。<br>
-  更多信息，请 <a href="https://hexo.io/docs/server.html">单击此处</a> 访问。</p>
-<hr>
-<h2 id="三-部署博文">三 部署博文</h2>
-<p>  博文撰写完毕后或<b>每次修改结束后</b>，都应当执行以下三条命令以部署。以下三条命令又称<code>hexo三联</code>。</p>
-<h3 id="（一）-删除原有的public文件夹">（一） 删除原有的public文件夹</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean //亦或hexo cl</span><br></pre></td></tr></table></figure>
-<h3 id="（二）-生成新的public文件夹">（二） 生成新的public文件夹</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate //亦或hexo g</span><br></pre></td></tr></table></figure>
-<p>  更多信息，请 <a href="https://hexo.io/docs/generating.html">单击此处</a> 访问。</p>
-<h3 id="（三）-部署到远程站点">（三） 部署到远程站点</h3>
-<div class="note warning flat"><p>  部署到远程站点前，建议运行服务器在本地预览效果。当确认无误后，将博文部署到远程站点。</p>
-</div>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy //亦或hexo d</span><br></pre></td></tr></table></figure>
-<p>  更多信息，请 <a href="https://hexo.io/docs/one-command-deployment.html">单击此处</a> 访问。</p>
-<div class="note info flat"><p>  以上三步可以简化为以下代码。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean&amp;&amp;hexo generate --deploy //亦或hexo cl&amp;&amp;hexo g -d</span><br></pre></td></tr></table></figure>
-<p>  或者</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean&amp;&amp;hexo deploy --generate //亦或hexo cl&amp;&amp;hexo d -g</span><br></pre></td></tr></table></figure></div>
-]]></content>
-      <categories>
-        <category>博客基建</category>
-      </categories>
-      <tags>
-        <tag>Common</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>博客基建 | 博客搭建更新日志</title>
     <url>/post/b74865a7.html</url>
     <content><![CDATA[<h2 id="2023-7-23更新日志">2023-7-23更新日志</h2>
@@ -760,6 +724,42 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </categories>
       <tags>
         <tag>Update</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>博客基建 | 创建或修改博客的常用Hexo命令</title>
+    <url>/post/74158de9.html</url>
+    <content><![CDATA[<h2 id="一-创建新的博文">一 创建新的博文</h2>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;Title&quot;</span> //<span class="string">&quot;Title&quot;</span>是新建博文的标题，引号内部内容可以替换</span><br></pre></td></tr></table></figure>
+<p>  更多信息，请 <a href="https://hexo.io/docs/writing.html">单击此处</a> 访问。</p>
+<hr>
+<h2 id="二-运行服务器">二 运行服务器</h2>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server //亦或hexo s</span><br></pre></td></tr></table></figure>
+<p>  然后访问 <a href="http://localhost:4000/">http://localhost:4000/</a> 在本地预览效果。预览结束后，使用<code>Ctrl+C</code>停止。<br>
+  更多信息，请 <a href="https://hexo.io/docs/server.html">单击此处</a> 访问。</p>
+<hr>
+<h2 id="三-部署博文">三 部署博文</h2>
+<p>  博文撰写完毕后或<b>每次修改结束后</b>，都应当执行以下三条命令以部署。以下三条命令又称<code>hexo三联</code>。</p>
+<h3 id="（一）-删除原有的public文件夹">（一） 删除原有的public文件夹</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean //亦或hexo cl</span><br></pre></td></tr></table></figure>
+<h3 id="（二）-生成新的public文件夹">（二） 生成新的public文件夹</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate //亦或hexo g</span><br></pre></td></tr></table></figure>
+<p>  更多信息，请 <a href="https://hexo.io/docs/generating.html">单击此处</a> 访问。</p>
+<h3 id="（三）-部署到远程站点">（三） 部署到远程站点</h3>
+<div class="note warning flat"><p>  部署到远程站点前，建议运行服务器在本地预览效果。当确认无误后，将博文部署到远程站点。</p>
+</div>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy //亦或hexo d</span><br></pre></td></tr></table></figure>
+<p>  更多信息，请 <a href="https://hexo.io/docs/one-command-deployment.html">单击此处</a> 访问。</p>
+<div class="note info flat"><p>  以上三步可以简化为以下代码。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean&amp;&amp;hexo generate --deploy //亦或hexo cl&amp;&amp;hexo g -d</span><br></pre></td></tr></table></figure>
+<p>  或者</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean&amp;&amp;hexo deploy --generate //亦或hexo cl&amp;&amp;hexo d -g</span><br></pre></td></tr></table></figure></div>
+]]></content>
+      <categories>
+        <category>博客基建</category>
+      </categories>
+      <tags>
+        <tag>Common</tag>
       </tags>
   </entry>
 </search>
