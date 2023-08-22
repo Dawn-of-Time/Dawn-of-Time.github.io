@@ -253,70 +253,6 @@
       </tags>
   </entry>
   <entry>
-    <title>C语言 | 函数scanf()的使用</title>
-    <url>/post/13be382b.html</url>
-    <content><![CDATA[<h2 id="一-函数scanf-的基本含义">一 函数scanf()的基本含义</h2>
-<p>  <code>scanf()</code>函数是这样定义的：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">scanf</span><span class="params">(格式字符串, 指针列表)</span>;</span><br></pre></td></tr></table></figure>
-<p>  它的返回值是成功读入的数据项数。如果遇到错误，返回值为0；如果遇到<code>end of file</code>（<code>end of file</code>在Windows系统中用<code>Ctrl+Z</code>代替），返回值为<code>EOF</code>（<code>EOF</code>是在<code>&lt;stdio.h&gt;</code>文件中宏定义的一个常量，值为-1）。可以从下例验证该结果。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 当以空格或换行为分隔输入a b c d后，换行输出0 0 0 0 0；</span></span><br><span class="line"><span class="comment">// 当以空格或换行为分隔输入1 2 3 4后，换行输出1 2 3 4 4；</span></span><br><span class="line"><span class="comment">// 当以空格为分隔输入1 2 ^Z 3 4之后，换行输出1 2 0 0 2（实际上无论在^Z后输入什么都没有意义）；</span></span><br><span class="line"><span class="comment">// 当以换行为分隔输入1 2 ^Z ^Z之后，换行输出1 2 0 0 2；</span></span><br><span class="line"><span class="comment">// 当以换行为分隔输入^Z ^Z ^Z时，输出0 0 0 0 -1；</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> c = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> d = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> num = <span class="built_in">scanf</span>(<span class="string">&quot;%d%d%d%d&quot;</span>, &amp;a, &amp;b, &amp;c, &amp;d);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d %d %d %d&quot;</span>, a, b, c, d, num);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<details class="toggle"><summary class="toggle-button" style>我对此存疑，但我目前无法解决这个问题。单击此处查看具体疑问</summary><div class="toggle-content"><ul>
-<li>
-<p><b>疑问一：是否输入过有效的内容影响退出时<code>^Z</code>所需次数。</b><br>
-  通过上例可以知道，在以换行为分隔输入时，如果输入过有效内容，2次<code>^Z</code>可以结束输入，否则需要3次。</p>
-</li>
-<li>
-<p><b>疑问二：不同的格式字符串可能会导致不同的结果。</b><br>
-  如下例所示。</p>
-</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> ch = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%c&quot;</span>, &amp;ch);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;a);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  在逐步调试下发现，以<code>&quot;%c&quot;</code>为格式字符串时需要2次<code>^Z</code>结束输入，而以<code>&quot;%d&quot;</code>为格式字符串时则需要3次<code>^Z</code>。<br>
-  更进一步的，我做了一些研究来观察是否每一次<code>^Z</code>都有作用。<br>
-–&gt; 对于<code>&quot;%c&quot;</code>为格式字符串的情形：<br>
-  在逐步调试下发现，如果以换行为分隔输入<code>^Z a</code>，观察到变量ch的值仍为0，这意味着第2次输入<code>^Z</code>无作用。</p>
-<p>–&gt; 对于<code>&quot;%d&quot;</code>为格式字符串的情形：<br>
-  在逐步调试下发现，如果以换行为分隔输入<code>^Z 1</code>，观察到变量a的值变为1，这意味着第1次输入<code>^Z</code>无作用；如果以换行为分隔输入<code>^Z ^Z 1</code>，观察到变量a的值仍为0，这意味着第3次输入<code>^Z</code>无作用。</p>
-<p>  得到这样的结果令人百思不得其解，但我目前的水平还无法解决该问题。先将这样的疑问留在此处，我会在以后的学习过程中寻找契机解决它。<b>如果有知之者，还望在评论区不吝赐教。另：我使用的是64位Windows系统下的Visio Studio 2022专业版。</b></p>
-</div></details>
-<hr>
-<h2 id="二-格式字符串的说明">二 格式字符串的说明</h2>
-<h3 id="（一）-抑制符（跳过符）">（一） 抑制符（跳过符）</h3>
-<p>  在格式字符串中添加抑制符（<code>*</code>）使得读入的该数据被舍弃。如下例所示。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> num = <span class="built_in">scanf</span>(<span class="string">&quot;%d%*d%d&quot;</span>, &amp;a, &amp;b); <span class="comment">//输入1 2 3</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d %d&quot;</span>, a, b, num); <span class="comment">//得到 1 3 2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="（二）-域宽">（二） 域宽</h3>
-<p>  在格式字符串中添加十进制整数使以限制读入的数量。如果输入流数量超过域宽，则下次读入时从断点处开始。如下例所示。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%3d%4d&quot;</span>, &amp;a, &amp;b); <span class="comment">//输入123456789</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d&quot;</span>, a, b); <span class="comment">//得到123 4567 </span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  基本整型a读入的域宽是<code>3</code>，即读入<code>123</code>；基本整型b读入时，从断点处开始，即从<code>4</code>开始，其域宽为<code>4</code>，故读入<code>4567</code>。</p>
-<h3 id="（三）-空白字符">（三） 空白字符</h3>
-<p>  在格式字符串中所添加的空白字符<code>【空格（Space）、换行符（Newline）、制表符（Tab）】</code>和不添加的效果一致。如下例所示。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;a, &amp;b);     <span class="comment">//形式1</span></span><br><span class="line">	<span class="comment">//scanf(&quot;%d %d&quot;, &amp;a, &amp;b);  //形式2</span></span><br><span class="line">	<span class="comment">//scanf(&quot;%d\n%d&quot;, &amp;a, &amp;b); //形式3</span></span><br><span class="line">	<span class="comment">//scanf(&quot;%d\t%d&quot;, &amp;a, &amp;b); //形式4</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d&quot;</span>, a, b);	   <span class="comment">//以上4种形式的结果一致</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  在输入流中所添加的空白字符具有分隔两数据的功能，一般来说只读不存。但当以单字符形式读入时则取消了分隔功能，如下例所示。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">char</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="type">char</span> c = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%c%c%c&quot;</span>, &amp;a, &amp;b, &amp;c);<span class="comment">//输入m (Space) n</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%c %c %c&quot;</span>, a, b, c);<span class="comment">//得到m (Space) n，即a为字符m，b为空格字符，c为字符n</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  这意味着此时的空白字符不再具有分隔作用，而直接如同其他字符一般被读取和存储。</p>
-<h3 id="（四）-非空白字符">（四） 非空白字符</h3>
-<p>  在输入流中添加非空白字符意味着当在输入流中匹配到相同字符时不保存，未匹配到则停止读入（下次读入从断点处开始），如下例所示。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%dxy%d&quot;</span>, &amp;a, &amp;b);<span class="comment">//输入-情况1:123 456；情况2：123xy456</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d&quot;</span>, a, b);<span class="comment">//得到-情况1：123 0；情况2：123 456</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>在情况1下，当读入123并赋变量a后，由于未匹配到字符<code>x</code>，因此停止读取，故变量a为<code>123</code>，变量b仍为<code>0</code>；</li>
-<li>在情况2下，当读入123并赋变量a后，依次匹配并不保存字符<code>x</code> <code>y</code>，然后继续读入456并赋变量b，故变量a为<code>123</code>，变量b为<code>456</code>。</li>
-</ul>
-<hr>
-<h2 id="三-字符残留问题">三 字符残留问题</h2>
-<p>  考虑读入完全的情况，在读入完毕后，数据缓冲区仍残留换行符<code>\n</code>。可以从下例验证该结果。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">char</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> i = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//while (i &lt; 2)</span></span><br><span class="line">	<span class="comment">//&#123;</span></span><br><span class="line">	<span class="comment">//	scanf(&quot;%c&quot;, &amp;a);//i=0：输入a；i=1：（无法输入）</span></span><br><span class="line">	<span class="comment">//	printf(&quot;%c&quot;, a);//i=0：得到a；i=1：得到(Newline)</span></span><br><span class="line">	<span class="comment">//	i++;</span></span><br><span class="line">	<span class="comment">//&#125;</span></span><br><span class="line">	<span class="keyword">while</span> (i &lt; <span class="number">2</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%c&quot;</span>, &amp;a);<span class="comment">//i=0：输入a；i=1：b</span></span><br><span class="line">		<span class="keyword">while</span> (b = getchar() != <span class="string">&#x27;\n&#x27;</span>);<span class="comment">//用以除去换行符</span></span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%c\n&quot;</span>, a);<span class="comment">//i=0：得到a；i=1：得到b</span></span><br><span class="line">		i++;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<div class="note warning flat"><p>  除了采用上述办法解决字符残留问题外，还可以使用<code>fflush(stdin);</code>语句解决之。但是这在高版本的VS中不适用。</p>
-</div>]]></content>
-      <categories>
-        <category>C语言</category>
-      </categories>
-      <tags>
-        <tag>C</tag>
-        <tag>Fallibility</tag>
-        <tag>Exploration</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>C语言 | 移位运算符</title>
     <url>/post/5663.html</url>
     <content><![CDATA[<div class="note info flat"><p>  本博文的所有变量、数字、公式等均采用<code>katex</code>风格。</p>
@@ -427,6 +363,70 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </tags>
   </entry>
   <entry>
+    <title>C语言 | 函数scanf()的使用</title>
+    <url>/post/13be382b.html</url>
+    <content><![CDATA[<h2 id="一-函数scanf-的基本含义">一 函数scanf()的基本含义</h2>
+<p>  <code>scanf()</code>函数是这样定义的：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">scanf</span><span class="params">(格式字符串, 指针列表)</span>;</span><br></pre></td></tr></table></figure>
+<p>  它的返回值是成功读入的数据项数。如果遇到错误，返回值为0；如果遇到<code>end of file</code>（<code>end of file</code>在Windows系统中用<code>Ctrl+Z</code>代替），返回值为<code>EOF</code>（<code>EOF</code>是在<code>&lt;stdio.h&gt;</code>文件中宏定义的一个常量，值为-1）。可以从下例验证该结果。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 当以空格或换行为分隔输入a b c d后，换行输出0 0 0 0 0；</span></span><br><span class="line"><span class="comment">// 当以空格或换行为分隔输入1 2 3 4后，换行输出1 2 3 4 4；</span></span><br><span class="line"><span class="comment">// 当以空格为分隔输入1 2 ^Z 3 4之后，换行输出1 2 0 0 2（实际上无论在^Z后输入什么都没有意义）；</span></span><br><span class="line"><span class="comment">// 当以换行为分隔输入1 2 ^Z ^Z之后，换行输出1 2 0 0 2；</span></span><br><span class="line"><span class="comment">// 当以换行为分隔输入^Z ^Z ^Z时，输出0 0 0 0 -1；</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> c = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> d = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> num = <span class="built_in">scanf</span>(<span class="string">&quot;%d%d%d%d&quot;</span>, &amp;a, &amp;b, &amp;c, &amp;d);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d %d %d %d&quot;</span>, a, b, c, d, num);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<details class="toggle"><summary class="toggle-button" style>我对此存疑，但我目前无法解决这个问题。单击此处查看具体疑问</summary><div class="toggle-content"><ul>
+<li>
+<p><b>疑问一：是否输入过有效的内容影响退出时<code>^Z</code>所需次数。</b><br>
+  通过上例可以知道，在以换行为分隔输入时，如果输入过有效内容，2次<code>^Z</code>可以结束输入，否则需要3次。</p>
+</li>
+<li>
+<p><b>疑问二：不同的格式字符串可能会导致不同的结果。</b><br>
+  如下例所示。</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> ch = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%c&quot;</span>, &amp;ch);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;a);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  在逐步调试下发现，以<code>&quot;%c&quot;</code>为格式字符串时需要2次<code>^Z</code>结束输入，而以<code>&quot;%d&quot;</code>为格式字符串时则需要3次<code>^Z</code>。<br>
+  更进一步的，我做了一些研究来观察是否每一次<code>^Z</code>都有作用。<br>
+–&gt; 对于<code>&quot;%c&quot;</code>为格式字符串的情形：<br>
+  在逐步调试下发现，如果以换行为分隔输入<code>^Z a</code>，观察到变量ch的值仍为0，这意味着第2次输入<code>^Z</code>无作用。</p>
+<p>–&gt; 对于<code>&quot;%d&quot;</code>为格式字符串的情形：<br>
+  在逐步调试下发现，如果以换行为分隔输入<code>^Z 1</code>，观察到变量a的值变为1，这意味着第1次输入<code>^Z</code>无作用；如果以换行为分隔输入<code>^Z ^Z 1</code>，观察到变量a的值仍为0，这意味着第3次输入<code>^Z</code>无作用。</p>
+<p>  得到这样的结果令人百思不得其解，但我目前的水平还无法解决该问题。先将这样的疑问留在此处，我会在以后的学习过程中寻找契机解决它。<b>如果有知之者，还望在评论区不吝赐教。另：我使用的是64位Windows系统下的Visio Studio 2022专业版。</b></p>
+</div></details>
+<hr>
+<h2 id="二-格式字符串的说明">二 格式字符串的说明</h2>
+<h3 id="（一）-抑制符（跳过符）">（一） 抑制符（跳过符）</h3>
+<p>  在格式字符串中添加抑制符（<code>*</code>）使得读入的该数据被舍弃。如下例所示。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> num = <span class="built_in">scanf</span>(<span class="string">&quot;%d%*d%d&quot;</span>, &amp;a, &amp;b); <span class="comment">//输入1 2 3</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d %d&quot;</span>, a, b, num); <span class="comment">//得到 1 3 2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="（二）-域宽">（二） 域宽</h3>
+<p>  在格式字符串中添加十进制整数使以限制读入的数量。如果输入流数量超过域宽，则下次读入时从断点处开始。如下例所示。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%3d%4d&quot;</span>, &amp;a, &amp;b); <span class="comment">//输入123456789</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d&quot;</span>, a, b); <span class="comment">//得到123 4567 </span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  基本整型a读入的域宽是<code>3</code>，即读入<code>123</code>；基本整型b读入时，从断点处开始，即从<code>4</code>开始，其域宽为<code>4</code>，故读入<code>4567</code>。</p>
+<h3 id="（三）-空白字符">（三） 空白字符</h3>
+<p>  在格式字符串中所添加的空白字符<code>【空格（Space）、换行符（Newline）、制表符（Tab）】</code>和不添加的效果一致。如下例所示。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;a, &amp;b);     <span class="comment">//形式1</span></span><br><span class="line">	<span class="comment">//scanf(&quot;%d %d&quot;, &amp;a, &amp;b);  //形式2</span></span><br><span class="line">	<span class="comment">//scanf(&quot;%d\n%d&quot;, &amp;a, &amp;b); //形式3</span></span><br><span class="line">	<span class="comment">//scanf(&quot;%d\t%d&quot;, &amp;a, &amp;b); //形式4</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d&quot;</span>, a, b);	   <span class="comment">//以上4种形式的结果一致</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  在输入流中所添加的空白字符具有分隔两数据的功能，一般来说只读不存。但当以单字符形式读入时则取消了分隔功能，如下例所示。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">char</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="type">char</span> c = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%c%c%c&quot;</span>, &amp;a, &amp;b, &amp;c);<span class="comment">//输入m (Space) n</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%c %c %c&quot;</span>, a, b, c);<span class="comment">//得到m (Space) n，即a为字符m，b为空格字符，c为字符n</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  这意味着此时的空白字符不再具有分隔作用，而直接如同其他字符一般被读取和存储。</p>
+<h3 id="（四）-非空白字符">（四） 非空白字符</h3>
+<p>  在输入流中添加非空白字符意味着当在输入流中匹配到相同字符时不保存，未匹配到则停止读入（下次读入从断点处开始），如下例所示。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%dxy%d&quot;</span>, &amp;a, &amp;b);<span class="comment">//输入-情况1:123 456；情况2：123xy456</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d&quot;</span>, a, b);<span class="comment">//得到-情况1：123 0；情况2：123 456</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在情况1下，当读入123并赋变量a后，由于未匹配到字符<code>x</code>，因此停止读取，故变量a为<code>123</code>，变量b仍为<code>0</code>；</li>
+<li>在情况2下，当读入123并赋变量a后，依次匹配并不保存字符<code>x</code> <code>y</code>，然后继续读入456并赋变量b，故变量a为<code>123</code>，变量b为<code>456</code>。</li>
+</ul>
+<hr>
+<h2 id="三-字符残留问题">三 字符残留问题</h2>
+<p>  考虑读入完全的情况，在读入完毕后，数据缓冲区仍残留换行符<code>\n</code>。可以从下例验证该结果。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">char</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> i = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//while (i &lt; 2)</span></span><br><span class="line">	<span class="comment">//&#123;</span></span><br><span class="line">	<span class="comment">//	scanf(&quot;%c&quot;, &amp;a);//i=0：输入a；i=1：（无法输入）</span></span><br><span class="line">	<span class="comment">//	printf(&quot;%c&quot;, a);//i=0：得到a；i=1：得到(Newline)</span></span><br><span class="line">	<span class="comment">//	i++;</span></span><br><span class="line">	<span class="comment">//&#125;</span></span><br><span class="line">	<span class="keyword">while</span> (i &lt; <span class="number">2</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%c&quot;</span>, &amp;a);<span class="comment">//i=0：输入a；i=1：b</span></span><br><span class="line">		<span class="keyword">while</span> (b = getchar() != <span class="string">&#x27;\n&#x27;</span>);<span class="comment">//用以除去换行符</span></span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%c\n&quot;</span>, a);<span class="comment">//i=0：得到a；i=1：得到b</span></span><br><span class="line">		i++;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<div class="note warning flat"><p>  除了采用上述办法解决字符残留问题外，还可以使用<code>fflush(stdin);</code>语句解决之。但是这在高版本的VS中不适用。</p>
+</div>]]></content>
+      <categories>
+        <category>C语言</category>
+      </categories>
+      <tags>
+        <tag>C</tag>
+        <tag>Fallibility</tag>
+        <tag>Exploration</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C语言 | 递归实践：汉诺塔问题 青蛙跳台阶问题</title>
     <url>/post/6290815e.html</url>
     <content><![CDATA[<h2 id="一-递归的含义及其两个必要条件">一 递归的含义及其两个必要条件</h2>
@@ -476,6 +476,42 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       <tags>
         <tag>C</tag>
         <tag>Exploration</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>博客基建 | 创建或修改博客的常用Hexo命令</title>
+    <url>/post/74158de9.html</url>
+    <content><![CDATA[<h2 id="一-创建新的博文">一 创建新的博文</h2>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;Title&quot;</span> //<span class="string">&quot;Title&quot;</span>是新建博文的标题，引号内部内容可以替换</span><br></pre></td></tr></table></figure>
+<p>  更多信息，请 <a href="https://hexo.io/docs/writing.html">单击此处</a> 访问。</p>
+<hr>
+<h2 id="二-运行服务器">二 运行服务器</h2>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server //亦或hexo s</span><br></pre></td></tr></table></figure>
+<p>  然后访问 <a href="http://localhost:4000/">http://localhost:4000/</a> 在本地预览效果。预览结束后，使用<code>Ctrl+C</code>停止。<br>
+  更多信息，请 <a href="https://hexo.io/docs/server.html">单击此处</a> 访问。</p>
+<hr>
+<h2 id="三-部署博文">三 部署博文</h2>
+<p>  博文撰写完毕后或<b>每次修改结束后</b>，都应当执行以下三条命令以部署。以下三条命令又称<code>hexo三联</code>。</p>
+<h3 id="（一）-删除原有的public文件夹">（一） 删除原有的public文件夹</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean //亦或hexo cl</span><br></pre></td></tr></table></figure>
+<h3 id="（二）-生成新的public文件夹">（二） 生成新的public文件夹</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate //亦或hexo g</span><br></pre></td></tr></table></figure>
+<p>  更多信息，请 <a href="https://hexo.io/docs/generating.html">单击此处</a> 访问。</p>
+<h3 id="（三）-部署到远程站点">（三） 部署到远程站点</h3>
+<div class="note warning flat"><p>  部署到远程站点前，建议运行服务器在本地预览效果。当确认无误后，将博文部署到远程站点。</p>
+</div>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy //亦或hexo d</span><br></pre></td></tr></table></figure>
+<p>  更多信息，请 <a href="https://hexo.io/docs/one-command-deployment.html">单击此处</a> 访问。</p>
+<div class="note info flat"><p>  以上三步可以简化为以下代码。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean&amp;&amp;hexo generate --deploy //亦或hexo cl&amp;&amp;hexo g -d</span><br></pre></td></tr></table></figure>
+<p>  或者</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean&amp;&amp;hexo deploy --generate //亦或hexo cl&amp;&amp;hexo d -g</span><br></pre></td></tr></table></figure></div>
+]]></content>
+      <categories>
+        <category>博客基建</category>
+      </categories>
+      <tags>
+        <tag>Common</tag>
       </tags>
   </entry>
   <entry>
@@ -635,43 +671,7 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </tags>
   </entry>
   <entry>
-    <title>博客基建 | 创建或修改博客的常用Hexo命令</title>
-    <url>/post/74158de9.html</url>
-    <content><![CDATA[<h2 id="一-创建新的博文">一 创建新的博文</h2>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;Title&quot;</span> //<span class="string">&quot;Title&quot;</span>是新建博文的标题，引号内部内容可以替换</span><br></pre></td></tr></table></figure>
-<p>  更多信息，请 <a href="https://hexo.io/docs/writing.html">单击此处</a> 访问。</p>
-<hr>
-<h2 id="二-运行服务器">二 运行服务器</h2>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server //亦或hexo s</span><br></pre></td></tr></table></figure>
-<p>  然后访问 <a href="http://localhost:4000/">http://localhost:4000/</a> 在本地预览效果。预览结束后，使用<code>Ctrl+C</code>停止。<br>
-  更多信息，请 <a href="https://hexo.io/docs/server.html">单击此处</a> 访问。</p>
-<hr>
-<h2 id="三-部署博文">三 部署博文</h2>
-<p>  博文撰写完毕后或<b>每次修改结束后</b>，都应当执行以下三条命令以部署。以下三条命令又称<code>hexo三联</code>。</p>
-<h3 id="（一）-删除原有的public文件夹">（一） 删除原有的public文件夹</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean //亦或hexo cl</span><br></pre></td></tr></table></figure>
-<h3 id="（二）-生成新的public文件夹">（二） 生成新的public文件夹</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate //亦或hexo g</span><br></pre></td></tr></table></figure>
-<p>  更多信息，请 <a href="https://hexo.io/docs/generating.html">单击此处</a> 访问。</p>
-<h3 id="（三）-部署到远程站点">（三） 部署到远程站点</h3>
-<div class="note warning flat"><p>  部署到远程站点前，建议运行服务器在本地预览效果。当确认无误后，将博文部署到远程站点。</p>
-</div>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy //亦或hexo d</span><br></pre></td></tr></table></figure>
-<p>  更多信息，请 <a href="https://hexo.io/docs/one-command-deployment.html">单击此处</a> 访问。</p>
-<div class="note info flat"><p>  以上三步可以简化为以下代码。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean&amp;&amp;hexo generate --deploy //亦或hexo cl&amp;&amp;hexo g -d</span><br></pre></td></tr></table></figure>
-<p>  或者</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean&amp;&amp;hexo deploy --generate //亦或hexo cl&amp;&amp;hexo d -g</span><br></pre></td></tr></table></figure></div>
-]]></content>
-      <categories>
-        <category>博客基建</category>
-      </categories>
-      <tags>
-        <tag>Common</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>抽象数据类型和数据结构</title>
+    <title>数据结构 | 抽象数据类型和数据结构</title>
     <url>/post/4c4fa0a7.html</url>
     <content><![CDATA[<!-- 让表格居中显示的风格 -->
 <style>
@@ -710,17 +710,16 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
 <li><code>pop()</code>: 弹出栈顶元素并返回。</li>
 <li><code>peek()</code>: 查看栈顶元素，不进行弹出操作。</li>
 <li><code>isEmpty()</code>: 检查栈是否为空。</li>
-<li><code>size()</code>: 返回栈中元素的数量。<br>
-  注意到栈定义了一组操作，但并未规定其具体实现方式。不同的数据结构（如数组、链表）可以用来支持栈的操作，但只需要关注栈的操作，而不必关心实现细节。</li>
+<li><code>size()</code>: 返回栈中元素的数量。</li>
 </ul>
 </li>
 </ul>
+<p>  注意到栈定义了一组操作，但并未规定其具体实现方式。不同的数据结构（如数组、链表）可以用来支持栈的操作，但只需要关注栈的操作，而不必关心实现细节。</p>
 </div></details>
 <h2 id="二-数据结构">二 数据结构</h2>
 <p>  <b>数据结构</b>是指相互之间存在<b>一种或多种特定关系</b>的数据元素的集合。它研究的是数据的<b>逻辑结构</b>和数据的<b>物理结构</b>以及它们之间的相互关系，并对这种结构定义相适应的运算，设计出相应的算法，并确保经过这些运算以后所得到的新结构仍保持原来的结构类型。</p>
-<div class="note warning flat"></div>
-<p>未完待续。</p>
-]]></content>
+<div class="note warning flat"><p>未完待续。</p>
+</div>]]></content>
       <categories>
         <category>数据结构</category>
       </categories>
