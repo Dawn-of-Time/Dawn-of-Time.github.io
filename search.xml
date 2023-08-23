@@ -169,6 +169,90 @@
       </tags>
   </entry>
   <entry>
+    <title>C语言 | 有符号整型与无符号整型 格式化输出十进制整型</title>
+    <url>/post/ddd0df44.html</url>
+    <content><![CDATA[<!-- 让表格居中显示的风格 -->
+<style>
+.center 
+{
+  width: auto;
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+<div class="note warning flat"><p>  初学C语言时，对于整型的分类、存储和输出需厘清。</p>
+</div>
+<h2 id="一-有符号整型与无符号整型">一 有符号整型与无符号整型</h2>
+<h3 id="（一）-存储空间">（一） 存储空间</h3>
+<p>  长整型、基本整型、短整型分别在内存中占据不同的字节数。在64位系统中，长整型和基本整型占据4个字节（32位），短整型占据2个字节（16位）。</p>
+<div class="note info flat"><p>  为了节约内存空间，在定义整型变量时建议采用占据字节数尽可能小的类型。</p>
+</div>
+<h3 id="（二）-符号位-原码、反码、补码">（二） 符号位　原码、反码、补码</h3>
+<p>  在不加修饰的条件下，计算机默认整型为有符号整型。对于有符号整型而言，其对应二进制数的<b>最高位</b>是符号位，并且0表示正数，1表示负数。<br>
+  二进制数的表示方法分为3种：<b>原码、反码、补码</b>。计算机总是以补码的形式存储数。对于正数而言，原码、反码、补码均相同，三者均表示数的真值。<b>对于负数而言，原码除符号位以外的位表示绝对值，反码是对原码除符号位以外的位取反的结果，补码是反码加1的结果。</b>如下例：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> e = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> f = ~e;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数int：%d\n&quot;</span>, f); <span class="comment">//结果是 有符号数int：-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  在64位系统中，基本整型占据4个字节，因此变量e被赋值0后在内存中存储了32位0。按位取反后，32位0变为32位1。32位1的符号位是1，表示其为负数，其原码最高位（符号位）和最低位为1，其余位为0，所以真值为-1。</p>
+<div class="note primary flat"><p><b>为什么计算机要使用补码来存储负数？</b><br>
+  从原理上而言，加法和减法要依靠不同的电路实现，如果能将减法运算转化为加法运算，就能简化电路。同时，如果使用原码进行含负数的加法运算，其结果总是错误的。例如<code>(-2) + 1 = 1000 0010 + 0000 0001 = 1000 0011 = -3</code>（错误）。<br>
+  计算机中的计数是可溢出的。譬如对1字节而言，有符号数的最大值是<code>0111 1111</code>，即127，再加1将溢出，使得最高位同时表示数值和符号，结果是<code>1000 0000</code>，为负数的补码；其原码为<code>1000 0000</code>（最高位仍然同时表示数值和符号），即-128。<br>
+  一周共7天，周四至周六的计算可以是+2，也可以是-5，甚至可以是+9，-12，+17，-19等，这样的计算都是等价的，意味着对于可溢出系统而言，总能够使用加法代替减法运算。设可溢出系统的模为N（例如这里是7），那么加数和减数的和始终为N，这样的关系称为补数。<br>
+  类似地，对于1字节而言，其模是<code>1 0000 0000</code>，若计算<code>(-2) + 1</code>，那么首先将-2转化为其补数。先取-2的绝对值2，然后用模减之，即<code>1 0000 0000 - 0000 0010 = 1111 1110</code>。因此<code>(-2) + 1 = 1111 1110 + 0000 0001 = 1111 1111(补) = -1</code>（正确）。</p>
+</div>
+<h3 id="（三）-有符号整型与无符号整型的定义和区别">（三） 有符号整型与无符号整型的定义和区别</h3>
+<p>  不加修饰时，系统默认整型为有符号整型。无符号整型的表达在常量中为后缀U或u，在变量中则加关键字<code>unsigned</code>。它们的区别在于有符号整型的最高位是符号位，其余位表示数值，1字节的有符号整型的取值范围是[-128,127]；无符号整型每一位都表示数值，1字节的无符号整型的取值范围是[0,255]。</p>
+<hr>
+<h2 id="二-格式化输出十进制整型">二 格式化输出十进制整型</h2>
+<p>  在变量中，整型分为长整型、基本整型和短整型，它们各自又分为有符号整型和无符号整型。每一种类型都有各自的格式控制字符串。就十进制而言，它们的格式控制字符串如表1所示。</p>
+<div class="center">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">整型类型</th>
+<th style="text-align:center">格式控制字符串</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">有符号长整型</td>
+<td style="text-align:center">“%ld”</td>
+</tr>
+<tr>
+<td style="text-align:center">无符号长整型</td>
+<td style="text-align:center">“%lu”</td>
+</tr>
+<tr>
+<td style="text-align:center">有符号基本整型</td>
+<td style="text-align:center">“%d”</td>
+</tr>
+<tr>
+<td style="text-align:center">无符号基本整型</td>
+<td style="text-align:center">“%u”</td>
+</tr>
+<tr>
+<td style="text-align:center">有符号短整型</td>
+<td style="text-align:center">“%hd”</td>
+</tr>
+<tr>
+<td style="text-align:center">无符号短整型</td>
+<td style="text-align:center">“%hu”</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p align="center">表1 十进制整型的格式控制字符串</p>
+<p>  以下就<b>有/无</b>符号<b>基本/短</b>整型为例，形象地体现了它们的区别。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;以下执行对0取反的操作：\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> a = <span class="number">0</span>;<span class="comment">//4字节，32位</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> b = ~a;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;无符号数int：%u\n&quot;</span>, b); <span class="comment">//结果是 无符号数int：4294967295</span></span><br><span class="line">    <span class="comment">//printf(&quot;%d\n&quot;, b);  //结果是 -1</span></span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> c = <span class="number">0</span>;<span class="comment">//2字节，16位</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> d = ~c;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;无符号数short：%hu\n&quot;</span>, d);  <span class="comment">//结果是 无符号数short：65535</span></span><br><span class="line">    <span class="comment">//printf(&quot;%hd\n&quot;, d);  //结果是 -1</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n以下是参照：\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> e = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> f = ~e;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数int：%d\n&quot;</span>, f); <span class="comment">//结果是 有符号数int：-1</span></span><br><span class="line"></span><br><span class="line">    <span class="type">short</span> g = <span class="number">0</span>;</span><br><span class="line">    <span class="type">short</span> h = ~g;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数short：%hd\n&quot;</span>, h);  <span class="comment">//结果是 有符号数short：-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>C语言</category>
+      </categories>
+      <tags>
+        <tag>C</tag>
+        <tag>Fallibility</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C语言 | 移位运算符</title>
     <url>/post/5663.html</url>
     <content><![CDATA[<div class="note info flat"><p>  本博文的所有变量、数字、公式等均采用<code>katex</code>风格。</p>
@@ -276,90 +360,6 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       <tags>
         <tag>C</tag>
         <tag>Exploration</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C语言 | 有符号整型与无符号整型 格式化输出十进制整型</title>
-    <url>/post/ddd0df44.html</url>
-    <content><![CDATA[<!-- 让表格居中显示的风格 -->
-<style>
-.center 
-{
-  width: auto;
-  display: table;
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>
-<div class="note warning flat"><p>  初学C语言时，对于整型的分类、存储和输出需厘清。</p>
-</div>
-<h2 id="一-有符号整型与无符号整型">一 有符号整型与无符号整型</h2>
-<h3 id="（一）-存储空间">（一） 存储空间</h3>
-<p>  长整型、基本整型、短整型分别在内存中占据不同的字节数。在64位系统中，长整型和基本整型占据4个字节（32位），短整型占据2个字节（16位）。</p>
-<div class="note info flat"><p>  为了节约内存空间，在定义整型变量时建议采用占据字节数尽可能小的类型。</p>
-</div>
-<h3 id="（二）-符号位-原码、反码、补码">（二） 符号位　原码、反码、补码</h3>
-<p>  在不加修饰的条件下，计算机默认整型为有符号整型。对于有符号整型而言，其对应二进制数的<b>最高位</b>是符号位，并且0表示正数，1表示负数。<br>
-  二进制数的表示方法分为3种：<b>原码、反码、补码</b>。计算机总是以补码的形式存储数。对于正数而言，原码、反码、补码均相同，三者均表示数的真值。<b>对于负数而言，原码除符号位以外的位表示绝对值，反码是对原码除符号位以外的位取反的结果，补码是反码加1的结果。</b>如下例：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> e = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> f = ~e;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数int：%d\n&quot;</span>, f); <span class="comment">//结果是 有符号数int：-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  在64位系统中，基本整型占据4个字节，因此变量e被赋值0后在内存中存储了32位0。按位取反后，32位0变为32位1。32位1的符号位是1，表示其为负数，其原码最高位（符号位）和最低位为1，其余位为0，所以真值为-1。</p>
-<div class="note primary flat"><p><b>为什么计算机要使用补码来存储负数？</b><br>
-  从原理上而言，加法和减法要依靠不同的电路实现，如果能将减法运算转化为加法运算，就能简化电路。同时，如果使用原码进行含负数的加法运算，其结果总是错误的。例如<code>(-2) + 1 = 1000 0010 + 0000 0001 = 1000 0011 = -3</code>（错误）。<br>
-  计算机中的计数是可溢出的。譬如对1字节而言，有符号数的最大值是<code>0111 1111</code>，即127，再加1将溢出，使得最高位同时表示数值和符号，结果是<code>1000 0000</code>，为负数的补码；其原码为<code>1000 0000</code>（最高位仍然同时表示数值和符号），即-128。<br>
-  一周共7天，周四至周六的计算可以是+2，也可以是-5，甚至可以是+9，-12，+17，-19等，这样的计算都是等价的，意味着对于可溢出系统而言，总能够使用加法代替减法运算。设可溢出系统的模为N（例如这里是7），那么加数和减数的和始终为N，这样的关系称为补数。<br>
-  类似地，对于1字节而言，其模是<code>1 0000 0000</code>，若计算<code>(-2) + 1</code>，那么首先将-2转化为其补数。先取-2的绝对值2，然后用模减之，即<code>1 0000 0000 - 0000 0010 = 1111 1110</code>。因此<code>(-2) + 1 = 1111 1110 + 0000 0001 = 1111 1111(补) = -1</code>（正确）。</p>
-</div>
-<h3 id="（三）-有符号整型与无符号整型的定义和区别">（三） 有符号整型与无符号整型的定义和区别</h3>
-<p>  不加修饰时，系统默认整型为有符号整型。无符号整型的表达在常量中为后缀U或u，在变量中则加关键字<code>unsigned</code>。它们的区别在于有符号整型的最高位是符号位，其余位表示数值，1字节的有符号整型的取值范围是[-128,127]；无符号整型每一位都表示数值，1字节的无符号整型的取值范围是[0,255]。</p>
-<hr>
-<h2 id="二-格式化输出十进制整型">二 格式化输出十进制整型</h2>
-<p>  在变量中，整型分为长整型、基本整型和短整型，它们各自又分为有符号整型和无符号整型。每一种类型都有各自的格式控制字符串。就十进制而言，它们的格式控制字符串如表1所示。</p>
-<div class="center">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">整型类型</th>
-<th style="text-align:center">格式控制字符串</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">有符号长整型</td>
-<td style="text-align:center">“%ld”</td>
-</tr>
-<tr>
-<td style="text-align:center">无符号长整型</td>
-<td style="text-align:center">“%lu”</td>
-</tr>
-<tr>
-<td style="text-align:center">有符号基本整型</td>
-<td style="text-align:center">“%d”</td>
-</tr>
-<tr>
-<td style="text-align:center">无符号基本整型</td>
-<td style="text-align:center">“%u”</td>
-</tr>
-<tr>
-<td style="text-align:center">有符号短整型</td>
-<td style="text-align:center">“%hd”</td>
-</tr>
-<tr>
-<td style="text-align:center">无符号短整型</td>
-<td style="text-align:center">“%hu”</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p align="center">表1 十进制整型的格式控制字符串</p>
-<p>  以下就<b>有/无</b>符号<b>基本/短</b>整型为例，形象地体现了它们的区别。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;以下执行对0取反的操作：\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> a = <span class="number">0</span>;<span class="comment">//4字节，32位</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> b = ~a;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;无符号数int：%u\n&quot;</span>, b); <span class="comment">//结果是 无符号数int：4294967295</span></span><br><span class="line">    <span class="comment">//printf(&quot;%d\n&quot;, b);  //结果是 -1</span></span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> c = <span class="number">0</span>;<span class="comment">//2字节，16位</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> d = ~c;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;无符号数short：%hu\n&quot;</span>, d);  <span class="comment">//结果是 无符号数short：65535</span></span><br><span class="line">    <span class="comment">//printf(&quot;%hd\n&quot;, d);  //结果是 -1</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n以下是参照：\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> e = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> f = ~e;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数int：%d\n&quot;</span>, f); <span class="comment">//结果是 有符号数int：-1</span></span><br><span class="line"></span><br><span class="line">    <span class="type">short</span> g = <span class="number">0</span>;</span><br><span class="line">    <span class="type">short</span> h = ~g;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数short：%hd\n&quot;</span>, h);  <span class="comment">//结果是 有符号数short：-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>C语言</category>
-      </categories>
-      <tags>
-        <tag>C</tag>
-        <tag>Fallibility</tag>
       </tags>
   </entry>
   <entry>
