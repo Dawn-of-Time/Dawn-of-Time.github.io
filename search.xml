@@ -1,90 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>C语言 | 有符号整型与无符号整型 格式化输出十进制整型</title>
-    <url>/post/ddd0df44.html</url>
-    <content><![CDATA[<!-- 让表格居中显示的风格 -->
-<style>
-.center 
-{
-  width: auto;
-  display: table;
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>
-<div class="note warning flat"><p>  初学C语言时，对于整型的分类、存储和输出需厘清。</p>
-</div>
-<h2 id="一-有符号整型与无符号整型">一 有符号整型与无符号整型</h2>
-<h3 id="（一）-存储空间">（一） 存储空间</h3>
-<p>  长整型、基本整型、短整型分别在内存中占据不同的字节数。在64位系统中，长整型和基本整型占据4个字节（32位），短整型占据2个字节（16位）。</p>
-<div class="note info flat"><p>  为了节约内存空间，在定义整型变量时建议采用占据字节数尽可能小的类型。</p>
-</div>
-<h3 id="（二）-符号位-原码、反码、补码">（二） 符号位　原码、反码、补码</h3>
-<p>  在不加修饰的条件下，计算机默认整型为有符号整型。对于有符号整型而言，其对应二进制数的<b>最高位</b>是符号位，并且0表示正数，1表示负数。<br>
-  二进制数的表示方法分为3种：<b>原码、反码、补码</b>。计算机总是以补码的形式存储数。对于正数而言，原码、反码、补码均相同，三者均表示数的真值。<b>对于负数而言，原码除符号位以外的位表示绝对值，反码是对原码除符号位以外的位取反的结果，补码是反码加1的结果。</b>如下例：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> e = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> f = ~e;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数int：%d\n&quot;</span>, f); <span class="comment">//结果是 有符号数int：-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  在64位系统中，基本整型占据4个字节，因此变量e被赋值0后在内存中存储了32位0。按位取反后，32位0变为32位1。32位1的符号位是1，表示其为负数，其原码最高位（符号位）和最低位为1，其余位为0，所以真值为-1。</p>
-<div class="note primary flat"><p><b>为什么计算机要使用补码来存储负数？</b><br>
-  从原理上而言，加法和减法要依靠不同的电路实现，如果能将减法运算转化为加法运算，就能简化电路。同时，如果使用原码进行含负数的加法运算，其结果总是错误的。例如<code>(-2) + 1 = 1000 0010 + 0000 0001 = 1000 0011 = -3</code>（错误）。<br>
-  计算机中的计数是可溢出的。譬如对1字节而言，有符号数的最大值是<code>0111 1111</code>，即127，再加1将溢出，使得最高位同时表示数值和符号，结果是<code>1000 0000</code>，为负数的补码；其原码为<code>1000 0000</code>（最高位仍然同时表示数值和符号），即-128。<br>
-  一周共7天，周四至周六的计算可以是+2，也可以是-5，甚至可以是+9，-12，+17，-19等，这样的计算都是等价的，意味着对于可溢出系统而言，总能够使用加法代替减法运算。设可溢出系统的模为N（例如这里是7），那么加数和减数的和始终为N，这样的关系称为补数。<br>
-  类似地，对于1字节而言，其模是<code>1 0000 0000</code>，若计算<code>(-2) + 1</code>，那么首先将-2转化为其补数。先取-2的绝对值2，然后用模减之，即<code>1 0000 0000 - 0000 0010 = 1111 1110</code>。因此<code>(-2) + 1 = 1111 1110 + 0000 0001 = 1111 1111(补) = -1</code>（正确）。</p>
-</div>
-<h3 id="（三）-有符号整型与无符号整型的定义和区别">（三） 有符号整型与无符号整型的定义和区别</h3>
-<p>  不加修饰时，系统默认整型为有符号整型。无符号整型的表达在常量中为后缀U或u，在变量中则加关键字<code>unsigned</code>。它们的区别在于有符号整型的最高位是符号位，其余位表示数值，1字节的有符号整型的取值范围是[-128,127]；无符号整型每一位都表示数值，1字节的无符号整型的取值范围是[0,255]。</p>
-<hr>
-<h2 id="二-格式化输出十进制整型">二 格式化输出十进制整型</h2>
-<p>  在变量中，整型分为长整型、基本整型和短整型，它们各自又分为有符号整型和无符号整型。每一种类型都有各自的格式控制字符串。就十进制而言，它们的格式控制字符串如表1所示。</p>
-<div class="center">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">整型类型</th>
-<th style="text-align:center">格式控制字符串</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">有符号长整型</td>
-<td style="text-align:center">“%ld”</td>
-</tr>
-<tr>
-<td style="text-align:center">无符号长整型</td>
-<td style="text-align:center">“%lu”</td>
-</tr>
-<tr>
-<td style="text-align:center">有符号基本整型</td>
-<td style="text-align:center">“%d”</td>
-</tr>
-<tr>
-<td style="text-align:center">无符号基本整型</td>
-<td style="text-align:center">“%u”</td>
-</tr>
-<tr>
-<td style="text-align:center">有符号短整型</td>
-<td style="text-align:center">“%hd”</td>
-</tr>
-<tr>
-<td style="text-align:center">无符号短整型</td>
-<td style="text-align:center">“%hu”</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p align="center">表1 十进制整型的格式控制字符串</p>
-<p>  以下就<b>有/无</b>符号<b>基本/短</b>整型为例，形象地体现了它们的区别。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;以下执行对0取反的操作：\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> a = <span class="number">0</span>;<span class="comment">//4字节，32位</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> b = ~a;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;无符号数int：%u\n&quot;</span>, b); <span class="comment">//结果是 无符号数int：4294967295</span></span><br><span class="line">    <span class="comment">//printf(&quot;%d\n&quot;, b);  //结果是 -1</span></span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> c = <span class="number">0</span>;<span class="comment">//2字节，16位</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> d = ~c;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;无符号数short：%hu\n&quot;</span>, d);  <span class="comment">//结果是 无符号数short：65535</span></span><br><span class="line">    <span class="comment">//printf(&quot;%hd\n&quot;, d);  //结果是 -1</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n以下是参照：\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> e = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> f = ~e;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数int：%d\n&quot;</span>, f); <span class="comment">//结果是 有符号数int：-1</span></span><br><span class="line"></span><br><span class="line">    <span class="type">short</span> g = <span class="number">0</span>;</span><br><span class="line">    <span class="type">short</span> h = ~g;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数short：%hd\n&quot;</span>, h);  <span class="comment">//结果是 有符号数short：-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>C语言</category>
-      </categories>
-      <tags>
-        <tag>C</tag>
-        <tag>Fallibility</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>C语言 | 常量与只读变量</title>
     <url>/post/f8f674bb.html</url>
     <content><![CDATA[<!-- 让表格居中显示的风格 -->
@@ -253,6 +169,90 @@
       </tags>
   </entry>
   <entry>
+    <title>C语言 | 有符号整型与无符号整型 格式化输出十进制整型</title>
+    <url>/post/ddd0df44.html</url>
+    <content><![CDATA[<!-- 让表格居中显示的风格 -->
+<style>
+.center 
+{
+  width: auto;
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+<div class="note warning flat"><p>  初学C语言时，对于整型的分类、存储和输出需厘清。</p>
+</div>
+<h2 id="一-有符号整型与无符号整型">一 有符号整型与无符号整型</h2>
+<h3 id="（一）-存储空间">（一） 存储空间</h3>
+<p>  长整型、基本整型、短整型分别在内存中占据不同的字节数。在64位系统中，长整型和基本整型占据4个字节（32位），短整型占据2个字节（16位）。</p>
+<div class="note info flat"><p>  为了节约内存空间，在定义整型变量时建议采用占据字节数尽可能小的类型。</p>
+</div>
+<h3 id="（二）-符号位-原码、反码、补码">（二） 符号位　原码、反码、补码</h3>
+<p>  在不加修饰的条件下，计算机默认整型为有符号整型。对于有符号整型而言，其对应二进制数的<b>最高位</b>是符号位，并且0表示正数，1表示负数。<br>
+  二进制数的表示方法分为3种：<b>原码、反码、补码</b>。计算机总是以补码的形式存储数。对于正数而言，原码、反码、补码均相同，三者均表示数的真值。<b>对于负数而言，原码除符号位以外的位表示绝对值，反码是对原码除符号位以外的位取反的结果，补码是反码加1的结果。</b>如下例：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> e = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> f = ~e;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数int：%d\n&quot;</span>, f); <span class="comment">//结果是 有符号数int：-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  在64位系统中，基本整型占据4个字节，因此变量e被赋值0后在内存中存储了32位0。按位取反后，32位0变为32位1。32位1的符号位是1，表示其为负数，其原码最高位（符号位）和最低位为1，其余位为0，所以真值为-1。</p>
+<div class="note primary flat"><p><b>为什么计算机要使用补码来存储负数？</b><br>
+  从原理上而言，加法和减法要依靠不同的电路实现，如果能将减法运算转化为加法运算，就能简化电路。同时，如果使用原码进行含负数的加法运算，其结果总是错误的。例如<code>(-2) + 1 = 1000 0010 + 0000 0001 = 1000 0011 = -3</code>（错误）。<br>
+  计算机中的计数是可溢出的。譬如对1字节而言，有符号数的最大值是<code>0111 1111</code>，即127，再加1将溢出，使得最高位同时表示数值和符号，结果是<code>1000 0000</code>，为负数的补码；其原码为<code>1000 0000</code>（最高位仍然同时表示数值和符号），即-128。<br>
+  一周共7天，周四至周六的计算可以是+2，也可以是-5，甚至可以是+9，-12，+17，-19等，这样的计算都是等价的，意味着对于可溢出系统而言，总能够使用加法代替减法运算。设可溢出系统的模为N（例如这里是7），那么加数和减数的和始终为N，这样的关系称为补数。<br>
+  类似地，对于1字节而言，其模是<code>1 0000 0000</code>，若计算<code>(-2) + 1</code>，那么首先将-2转化为其补数。先取-2的绝对值2，然后用模减之，即<code>1 0000 0000 - 0000 0010 = 1111 1110</code>。因此<code>(-2) + 1 = 1111 1110 + 0000 0001 = 1111 1111(补) = -1</code>（正确）。</p>
+</div>
+<h3 id="（三）-有符号整型与无符号整型的定义和区别">（三） 有符号整型与无符号整型的定义和区别</h3>
+<p>  不加修饰时，系统默认整型为有符号整型。无符号整型的表达在常量中为后缀U或u，在变量中则加关键字<code>unsigned</code>。它们的区别在于有符号整型的最高位是符号位，其余位表示数值，1字节的有符号整型的取值范围是[-128,127]；无符号整型每一位都表示数值，1字节的无符号整型的取值范围是[0,255]。</p>
+<hr>
+<h2 id="二-格式化输出十进制整型">二 格式化输出十进制整型</h2>
+<p>  在变量中，整型分为长整型、基本整型和短整型，它们各自又分为有符号整型和无符号整型。每一种类型都有各自的格式控制字符串。就十进制而言，它们的格式控制字符串如表1所示。</p>
+<div class="center">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">整型类型</th>
+<th style="text-align:center">格式控制字符串</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">有符号长整型</td>
+<td style="text-align:center">“%ld”</td>
+</tr>
+<tr>
+<td style="text-align:center">无符号长整型</td>
+<td style="text-align:center">“%lu”</td>
+</tr>
+<tr>
+<td style="text-align:center">有符号基本整型</td>
+<td style="text-align:center">“%d”</td>
+</tr>
+<tr>
+<td style="text-align:center">无符号基本整型</td>
+<td style="text-align:center">“%u”</td>
+</tr>
+<tr>
+<td style="text-align:center">有符号短整型</td>
+<td style="text-align:center">“%hd”</td>
+</tr>
+<tr>
+<td style="text-align:center">无符号短整型</td>
+<td style="text-align:center">“%hu”</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p align="center">表1 十进制整型的格式控制字符串</p>
+<p>  以下就<b>有/无</b>符号<b>基本/短</b>整型为例，形象地体现了它们的区别。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;以下执行对0取反的操作：\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> a = <span class="number">0</span>;<span class="comment">//4字节，32位</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> b = ~a;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;无符号数int：%u\n&quot;</span>, b); <span class="comment">//结果是 无符号数int：4294967295</span></span><br><span class="line">    <span class="comment">//printf(&quot;%d\n&quot;, b);  //结果是 -1</span></span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> c = <span class="number">0</span>;<span class="comment">//2字节，16位</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> d = ~c;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;无符号数short：%hu\n&quot;</span>, d);  <span class="comment">//结果是 无符号数short：65535</span></span><br><span class="line">    <span class="comment">//printf(&quot;%hd\n&quot;, d);  //结果是 -1</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n以下是参照：\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> e = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> f = ~e;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数int：%d\n&quot;</span>, f); <span class="comment">//结果是 有符号数int：-1</span></span><br><span class="line"></span><br><span class="line">    <span class="type">short</span> g = <span class="number">0</span>;</span><br><span class="line">    <span class="type">short</span> h = ~g;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数short：%hd\n&quot;</span>, h);  <span class="comment">//结果是 有符号数short：-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>C语言</category>
+      </categories>
+      <tags>
+        <tag>C</tag>
+        <tag>Fallibility</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C语言 | 移位运算符</title>
     <url>/post/5663.html</url>
     <content><![CDATA[<div class="note info flat"><p>  本博文的所有变量、数字、公式等均采用<code>katex</code>风格。</p>
@@ -359,6 +359,70 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </categories>
       <tags>
         <tag>C</tag>
+        <tag>Exploration</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C语言 | 函数scanf()的使用</title>
+    <url>/post/13be382b.html</url>
+    <content><![CDATA[<h2 id="一-函数scanf-的基本含义">一 函数scanf()的基本含义</h2>
+<p>  <code>scanf()</code>函数是这样定义的：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">scanf</span><span class="params">(格式字符串, 指针列表)</span>;</span><br></pre></td></tr></table></figure>
+<p>  它的返回值是成功读入的数据项数。如果遇到错误，返回值为0；如果遇到<code>end of file</code>（<code>end of file</code>在Windows系统中用<code>Ctrl+Z</code>代替），返回值为<code>EOF</code>（<code>EOF</code>是在<code>&lt;stdio.h&gt;</code>文件中宏定义的一个常量，值为-1）。可以从下例验证该结果。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 当以空格或换行为分隔输入a b c d后，换行输出0 0 0 0 0；</span></span><br><span class="line"><span class="comment">// 当以空格或换行为分隔输入1 2 3 4后，换行输出1 2 3 4 4；</span></span><br><span class="line"><span class="comment">// 当以空格为分隔输入1 2 ^Z 3 4之后，换行输出1 2 0 0 2（实际上无论在^Z后输入什么都没有意义）；</span></span><br><span class="line"><span class="comment">// 当以换行为分隔输入1 2 ^Z ^Z之后，换行输出1 2 0 0 2；</span></span><br><span class="line"><span class="comment">// 当以换行为分隔输入^Z ^Z ^Z时，输出0 0 0 0 -1；</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> c = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> d = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> num = <span class="built_in">scanf</span>(<span class="string">&quot;%d%d%d%d&quot;</span>, &amp;a, &amp;b, &amp;c, &amp;d);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d %d %d %d&quot;</span>, a, b, c, d, num);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<details class="toggle"><summary class="toggle-button" style>我对此存疑，但我目前无法解决这个问题。单击此处查看具体疑问</summary><div class="toggle-content"><ul>
+<li>
+<p><b>疑问一：是否输入过有效的内容影响退出时<code>^Z</code>所需次数。</b><br>
+  通过上例可以知道，在以换行为分隔输入时，如果输入过有效内容，2次<code>^Z</code>可以结束输入，否则需要3次。</p>
+</li>
+<li>
+<p><b>疑问二：不同的格式字符串可能会导致不同的结果。</b><br>
+  如下例所示。</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> ch = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%c&quot;</span>, &amp;ch);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;a);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  在逐步调试下发现，以<code>&quot;%c&quot;</code>为格式字符串时需要2次<code>^Z</code>结束输入，而以<code>&quot;%d&quot;</code>为格式字符串时则需要3次<code>^Z</code>。<br>
+  更进一步的，我做了一些研究来观察是否每一次<code>^Z</code>都有作用。<br>
+–&gt; 对于<code>&quot;%c&quot;</code>为格式字符串的情形：<br>
+  在逐步调试下发现，如果以换行为分隔输入<code>^Z a</code>，观察到变量ch的值仍为0，这意味着第2次输入<code>^Z</code>无作用。</p>
+<p>–&gt; 对于<code>&quot;%d&quot;</code>为格式字符串的情形：<br>
+  在逐步调试下发现，如果以换行为分隔输入<code>^Z 1</code>，观察到变量a的值变为1，这意味着第1次输入<code>^Z</code>无作用；如果以换行为分隔输入<code>^Z ^Z 1</code>，观察到变量a的值仍为0，这意味着第3次输入<code>^Z</code>无作用。</p>
+<p>  得到这样的结果令人百思不得其解，但我目前的水平还无法解决该问题。先将这样的疑问留在此处，我会在以后的学习过程中寻找契机解决它。<b>如果有知之者，还望在评论区不吝赐教。另：我使用的是64位Windows系统下的Visio Studio 2022专业版。</b></p>
+</div></details>
+<hr>
+<h2 id="二-格式字符串的说明">二 格式字符串的说明</h2>
+<h3 id="（一）-抑制符（跳过符）">（一） 抑制符（跳过符）</h3>
+<p>  在格式字符串中添加抑制符（<code>*</code>）使得读入的该数据被舍弃。如下例所示。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> num = <span class="built_in">scanf</span>(<span class="string">&quot;%d%*d%d&quot;</span>, &amp;a, &amp;b); <span class="comment">//输入1 2 3</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d %d&quot;</span>, a, b, num); <span class="comment">//得到 1 3 2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="（二）-域宽">（二） 域宽</h3>
+<p>  在格式字符串中添加十进制整数使以限制读入的数量。如果输入流数量超过域宽，则下次读入时从断点处开始。如下例所示。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%3d%4d&quot;</span>, &amp;a, &amp;b); <span class="comment">//输入123456789</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d&quot;</span>, a, b); <span class="comment">//得到123 4567 </span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  基本整型a读入的域宽是<code>3</code>，即读入<code>123</code>；基本整型b读入时，从断点处开始，即从<code>4</code>开始，其域宽为<code>4</code>，故读入<code>4567</code>。</p>
+<h3 id="（三）-空白字符">（三） 空白字符</h3>
+<p>  在格式字符串中所添加的空白字符<code>【空格（Space）、换行符（Newline）、制表符（Tab）】</code>和不添加的效果一致。如下例所示。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;a, &amp;b);     <span class="comment">//形式1</span></span><br><span class="line">	<span class="comment">//scanf(&quot;%d %d&quot;, &amp;a, &amp;b);  //形式2</span></span><br><span class="line">	<span class="comment">//scanf(&quot;%d\n%d&quot;, &amp;a, &amp;b); //形式3</span></span><br><span class="line">	<span class="comment">//scanf(&quot;%d\t%d&quot;, &amp;a, &amp;b); //形式4</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d&quot;</span>, a, b);	   <span class="comment">//以上4种形式的结果一致</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  在输入流中所添加的空白字符具有分隔两数据的功能，一般来说只读不存。但当以单字符形式读入时则取消了分隔功能，如下例所示。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">char</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="type">char</span> c = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%c%c%c&quot;</span>, &amp;a, &amp;b, &amp;c);<span class="comment">//输入m (Space) n</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%c %c %c&quot;</span>, a, b, c);<span class="comment">//得到m (Space) n，即a为字符m，b为空格字符，c为字符n</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  这意味着此时的空白字符不再具有分隔作用，而直接如同其他字符一般被读取和存储。</p>
+<h3 id="（四）-非空白字符">（四） 非空白字符</h3>
+<p>  在输入流中添加非空白字符意味着当在输入流中匹配到相同字符时不保存，未匹配到则停止读入（下次读入从断点处开始），如下例所示。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%dxy%d&quot;</span>, &amp;a, &amp;b);<span class="comment">//输入-情况1:123 456；情况2：123xy456</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d&quot;</span>, a, b);<span class="comment">//得到-情况1：123 0；情况2：123 456</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在情况1下，当读入123并赋变量a后，由于未匹配到字符<code>x</code>，因此停止读取，故变量a为<code>123</code>，变量b仍为<code>0</code>；</li>
+<li>在情况2下，当读入123并赋变量a后，依次匹配并不保存字符<code>x</code> <code>y</code>，然后继续读入456并赋变量b，故变量a为<code>123</code>，变量b为<code>456</code>。</li>
+</ul>
+<hr>
+<h2 id="三-字符残留问题">三 字符残留问题</h2>
+<p>  考虑读入完全的情况，在读入完毕后，数据缓冲区仍残留换行符<code>\n</code>。可以从下例验证该结果。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">char</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> i = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//while (i &lt; 2)</span></span><br><span class="line">	<span class="comment">//&#123;</span></span><br><span class="line">	<span class="comment">//	scanf(&quot;%c&quot;, &amp;a);//i=0：输入a；i=1：（无法输入）</span></span><br><span class="line">	<span class="comment">//	printf(&quot;%c&quot;, a);//i=0：得到a；i=1：得到(Newline)</span></span><br><span class="line">	<span class="comment">//	i++;</span></span><br><span class="line">	<span class="comment">//&#125;</span></span><br><span class="line">	<span class="keyword">while</span> (i &lt; <span class="number">2</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%c&quot;</span>, &amp;a);<span class="comment">//i=0：输入a；i=1：b</span></span><br><span class="line">		<span class="keyword">while</span> (b = getchar() != <span class="string">&#x27;\n&#x27;</span>);<span class="comment">//用以除去换行符</span></span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%c\n&quot;</span>, a);<span class="comment">//i=0：得到a；i=1：得到b</span></span><br><span class="line">		i++;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<div class="note warning flat"><p>  除了采用上述办法解决字符残留问题外，还可以使用<code>fflush(stdin);</code>语句解决之。但是这在高版本的VS中不适用。</p>
+</div>]]></content>
+      <categories>
+        <category>C语言</category>
+      </categories>
+      <tags>
+        <tag>C</tag>
+        <tag>Fallibility</tag>
         <tag>Exploration</tag>
       </tags>
   </entry>
@@ -567,70 +631,6 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </categories>
       <tags>
         <tag>C</tag>
-        <tag>Exploration</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C语言 | 函数scanf()的使用</title>
-    <url>/post/13be382b.html</url>
-    <content><![CDATA[<h2 id="一-函数scanf-的基本含义">一 函数scanf()的基本含义</h2>
-<p>  <code>scanf()</code>函数是这样定义的：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">scanf</span><span class="params">(格式字符串, 指针列表)</span>;</span><br></pre></td></tr></table></figure>
-<p>  它的返回值是成功读入的数据项数。如果遇到错误，返回值为0；如果遇到<code>end of file</code>（<code>end of file</code>在Windows系统中用<code>Ctrl+Z</code>代替），返回值为<code>EOF</code>（<code>EOF</code>是在<code>&lt;stdio.h&gt;</code>文件中宏定义的一个常量，值为-1）。可以从下例验证该结果。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 当以空格或换行为分隔输入a b c d后，换行输出0 0 0 0 0；</span></span><br><span class="line"><span class="comment">// 当以空格或换行为分隔输入1 2 3 4后，换行输出1 2 3 4 4；</span></span><br><span class="line"><span class="comment">// 当以空格为分隔输入1 2 ^Z 3 4之后，换行输出1 2 0 0 2（实际上无论在^Z后输入什么都没有意义）；</span></span><br><span class="line"><span class="comment">// 当以换行为分隔输入1 2 ^Z ^Z之后，换行输出1 2 0 0 2；</span></span><br><span class="line"><span class="comment">// 当以换行为分隔输入^Z ^Z ^Z时，输出0 0 0 0 -1；</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> c = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> d = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> num = <span class="built_in">scanf</span>(<span class="string">&quot;%d%d%d%d&quot;</span>, &amp;a, &amp;b, &amp;c, &amp;d);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d %d %d %d&quot;</span>, a, b, c, d, num);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<details class="toggle"><summary class="toggle-button" style>我对此存疑，但我目前无法解决这个问题。单击此处查看具体疑问</summary><div class="toggle-content"><ul>
-<li>
-<p><b>疑问一：是否输入过有效的内容影响退出时<code>^Z</code>所需次数。</b><br>
-  通过上例可以知道，在以换行为分隔输入时，如果输入过有效内容，2次<code>^Z</code>可以结束输入，否则需要3次。</p>
-</li>
-<li>
-<p><b>疑问二：不同的格式字符串可能会导致不同的结果。</b><br>
-  如下例所示。</p>
-</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> ch = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%c&quot;</span>, &amp;ch);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;a);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  在逐步调试下发现，以<code>&quot;%c&quot;</code>为格式字符串时需要2次<code>^Z</code>结束输入，而以<code>&quot;%d&quot;</code>为格式字符串时则需要3次<code>^Z</code>。<br>
-  更进一步的，我做了一些研究来观察是否每一次<code>^Z</code>都有作用。<br>
-–&gt; 对于<code>&quot;%c&quot;</code>为格式字符串的情形：<br>
-  在逐步调试下发现，如果以换行为分隔输入<code>^Z a</code>，观察到变量ch的值仍为0，这意味着第2次输入<code>^Z</code>无作用。</p>
-<p>–&gt; 对于<code>&quot;%d&quot;</code>为格式字符串的情形：<br>
-  在逐步调试下发现，如果以换行为分隔输入<code>^Z 1</code>，观察到变量a的值变为1，这意味着第1次输入<code>^Z</code>无作用；如果以换行为分隔输入<code>^Z ^Z 1</code>，观察到变量a的值仍为0，这意味着第3次输入<code>^Z</code>无作用。</p>
-<p>  得到这样的结果令人百思不得其解，但我目前的水平还无法解决该问题。先将这样的疑问留在此处，我会在以后的学习过程中寻找契机解决它。<b>如果有知之者，还望在评论区不吝赐教。另：我使用的是64位Windows系统下的Visio Studio 2022专业版。</b></p>
-</div></details>
-<hr>
-<h2 id="二-格式字符串的说明">二 格式字符串的说明</h2>
-<h3 id="（一）-抑制符（跳过符）">（一） 抑制符（跳过符）</h3>
-<p>  在格式字符串中添加抑制符（<code>*</code>）使得读入的该数据被舍弃。如下例所示。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> num = <span class="built_in">scanf</span>(<span class="string">&quot;%d%*d%d&quot;</span>, &amp;a, &amp;b); <span class="comment">//输入1 2 3</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d %d&quot;</span>, a, b, num); <span class="comment">//得到 1 3 2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="（二）-域宽">（二） 域宽</h3>
-<p>  在格式字符串中添加十进制整数使以限制读入的数量。如果输入流数量超过域宽，则下次读入时从断点处开始。如下例所示。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%3d%4d&quot;</span>, &amp;a, &amp;b); <span class="comment">//输入123456789</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d&quot;</span>, a, b); <span class="comment">//得到123 4567 </span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  基本整型a读入的域宽是<code>3</code>，即读入<code>123</code>；基本整型b读入时，从断点处开始，即从<code>4</code>开始，其域宽为<code>4</code>，故读入<code>4567</code>。</p>
-<h3 id="（三）-空白字符">（三） 空白字符</h3>
-<p>  在格式字符串中所添加的空白字符<code>【空格（Space）、换行符（Newline）、制表符（Tab）】</code>和不添加的效果一致。如下例所示。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;a, &amp;b);     <span class="comment">//形式1</span></span><br><span class="line">	<span class="comment">//scanf(&quot;%d %d&quot;, &amp;a, &amp;b);  //形式2</span></span><br><span class="line">	<span class="comment">//scanf(&quot;%d\n%d&quot;, &amp;a, &amp;b); //形式3</span></span><br><span class="line">	<span class="comment">//scanf(&quot;%d\t%d&quot;, &amp;a, &amp;b); //形式4</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d&quot;</span>, a, b);	   <span class="comment">//以上4种形式的结果一致</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  在输入流中所添加的空白字符具有分隔两数据的功能，一般来说只读不存。但当以单字符形式读入时则取消了分隔功能，如下例所示。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">char</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="type">char</span> c = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%c%c%c&quot;</span>, &amp;a, &amp;b, &amp;c);<span class="comment">//输入m (Space) n</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%c %c %c&quot;</span>, a, b, c);<span class="comment">//得到m (Space) n，即a为字符m，b为空格字符，c为字符n</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  这意味着此时的空白字符不再具有分隔作用，而直接如同其他字符一般被读取和存储。</p>
-<h3 id="（四）-非空白字符">（四） 非空白字符</h3>
-<p>  在输入流中添加非空白字符意味着当在输入流中匹配到相同字符时不保存，未匹配到则停止读入（下次读入从断点处开始），如下例所示。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%dxy%d&quot;</span>, &amp;a, &amp;b);<span class="comment">//输入-情况1:123 456；情况2：123xy456</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d&quot;</span>, a, b);<span class="comment">//得到-情况1：123 0；情况2：123 456</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>在情况1下，当读入123并赋变量a后，由于未匹配到字符<code>x</code>，因此停止读取，故变量a为<code>123</code>，变量b仍为<code>0</code>；</li>
-<li>在情况2下，当读入123并赋变量a后，依次匹配并不保存字符<code>x</code> <code>y</code>，然后继续读入456并赋变量b，故变量a为<code>123</code>，变量b为<code>456</code>。</li>
-</ul>
-<hr>
-<h2 id="三-字符残留问题">三 字符残留问题</h2>
-<p>  考虑读入完全的情况，在读入完毕后，数据缓冲区仍残留换行符<code>\n</code>。可以从下例验证该结果。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">char</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> i = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//while (i &lt; 2)</span></span><br><span class="line">	<span class="comment">//&#123;</span></span><br><span class="line">	<span class="comment">//	scanf(&quot;%c&quot;, &amp;a);//i=0：输入a；i=1：（无法输入）</span></span><br><span class="line">	<span class="comment">//	printf(&quot;%c&quot;, a);//i=0：得到a；i=1：得到(Newline)</span></span><br><span class="line">	<span class="comment">//	i++;</span></span><br><span class="line">	<span class="comment">//&#125;</span></span><br><span class="line">	<span class="keyword">while</span> (i &lt; <span class="number">2</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%c&quot;</span>, &amp;a);<span class="comment">//i=0：输入a；i=1：b</span></span><br><span class="line">		<span class="keyword">while</span> (b = getchar() != <span class="string">&#x27;\n&#x27;</span>);<span class="comment">//用以除去换行符</span></span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%c\n&quot;</span>, a);<span class="comment">//i=0：得到a；i=1：得到b</span></span><br><span class="line">		i++;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<div class="note warning flat"><p>  除了采用上述办法解决字符残留问题外，还可以使用<code>fflush(stdin);</code>语句解决之。但是这在高版本的VS中不适用。</p>
-</div>]]></content>
-      <categories>
-        <category>C语言</category>
-      </categories>
-      <tags>
-        <tag>C</tag>
-        <tag>Fallibility</tag>
         <tag>Exploration</tag>
       </tags>
   </entry>
