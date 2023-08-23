@@ -1958,22 +1958,17 @@ figure.highlight pre .javascript .function {
 .error404 + #rightside {
   display: none;
 }
-.article-sort {
-  margin-left: 10px;
-  padding-left: 20px;
-  border-left: 2px solid #0ff;
-}
-.article-sort-title {
+.h1:article-sort-title {
   position: relative;
   margin-left: 10px;
   padding-bottom: 20px;
   padding-left: 20px;
   font-size: 1.72em;
 }
-.article-sort-title:hover:before {
+.h1:article-sort-title:hover:before {
   border-color: var(--pseudo-hover);
 }
-.article-sort-title:before {
+.h1:article-sort-title:before {
   position: absolute;
   top: calc(((100% - 36px) / 2));
   left: -9px;
@@ -1991,7 +1986,7 @@ figure.highlight pre .javascript .function {
   -ms-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
-.article-sort-title:after {
+.h1:article-sort-title:after {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -2000,6 +1995,11 @@ figure.highlight pre .javascript .function {
   height: 1.5em;
   background: #0ff;
   content: '';
+}
+.article-sort {
+  margin-left: 10px;
+  padding-left: 20px;
+  border-left: 2px solid #0ff;
 }
 .article-sort-item {
   position: relative;
