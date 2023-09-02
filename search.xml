@@ -169,6 +169,90 @@
       </tags>
   </entry>
   <entry>
+    <title>C语言 | 有符号整型与无符号整型 格式化输出十进制整型</title>
+    <url>/post/ddd0df44.html</url>
+    <content><![CDATA[<!-- 让表格居中显示的风格 -->
+<style>
+.center 
+{
+  width: auto;
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+<div class="note warning flat"><p>  初学C语言时，对于整型的分类、存储和输出需厘清。</p>
+</div>
+<h2 id="一-有符号整型与无符号整型">一 有符号整型与无符号整型</h2>
+<h3 id="（一）-存储空间">（一） 存储空间</h3>
+<p>  长整型、基本整型、短整型分别在内存中占据不同的字节数。在64位系统中，长整型和基本整型占据4个字节（32位），短整型占据2个字节（16位）。</p>
+<div class="note info flat"><p>  为了节约内存空间，在定义整型变量时建议采用占据字节数尽可能小的类型。</p>
+</div>
+<h3 id="（二）-符号位-原码、反码、补码">（二） 符号位　原码、反码、补码</h3>
+<p>  在不加修饰的条件下，计算机默认整型为有符号整型。对于有符号整型而言，其对应二进制数的<b>最高位</b>是符号位，并且0表示正数，1表示负数。<br>
+  二进制数的表示方法分为3种：<b>原码、反码、补码</b>。计算机总是以补码的形式存储数。对于正数而言，原码、反码、补码均相同，三者均表示数的真值。<b>对于负数而言，原码除符号位以外的位表示绝对值，反码是对原码除符号位以外的位取反的结果，补码是反码加1的结果。</b>如下例：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> e = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> f = ~e;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数int：%d\n&quot;</span>, f); <span class="comment">//结果是 有符号数int：-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  在64位系统中，基本整型占据4个字节，因此变量e被赋值0后在内存中存储了32位0。按位取反后，32位0变为32位1。32位1的符号位是1，表示其为负数，其原码最高位（符号位）和最低位为1，其余位为0，所以真值为-1。</p>
+<div class="note primary flat"><p><b>为什么计算机要使用补码来存储负数？</b><br>
+  从原理上而言，加法和减法要依靠不同的电路实现，如果能将减法运算转化为加法运算，就能简化电路。同时，如果使用原码进行含负数的加法运算，其结果总是错误的。例如<code>(-2) + 1 = 1000 0010 + 0000 0001 = 1000 0011 = -3</code>（错误）。<br>
+  计算机中的计数是可溢出的。譬如对1字节而言，有符号数的最大值是<code>0111 1111</code>，即127，再加1将溢出，使得最高位同时表示数值和符号，结果是<code>1000 0000</code>，为负数的补码；其原码为<code>1000 0000</code>（最高位仍然同时表示数值和符号），即-128。<br>
+  一周共7天，周四至周六的计算可以是+2，也可以是-5，甚至可以是+9，-12，+17，-19等，这样的计算都是等价的，意味着对于可溢出系统而言，总能够使用加法代替减法运算。设可溢出系统的模为N（例如这里是7），那么加数和减数的和始终为N，这样的关系称为补数。<br>
+  类似地，对于1字节而言，其模是<code>1 0000 0000</code>，若计算<code>(-2) + 1</code>，那么首先将-2转化为其补数。先取-2的绝对值2，然后用模减之，即<code>1 0000 0000 - 0000 0010 = 1111 1110</code>。因此<code>(-2) + 1 = 1111 1110 + 0000 0001 = 1111 1111(补) = -1</code>（正确）。</p>
+</div>
+<h3 id="（三）-有符号整型与无符号整型的定义和区别">（三） 有符号整型与无符号整型的定义和区别</h3>
+<p>  不加修饰时，系统默认整型为有符号整型。无符号整型的表达在常量中为后缀U或u，在变量中则加关键字<code>unsigned</code>。它们的区别在于有符号整型的最高位是符号位，其余位表示数值，1字节的有符号整型的取值范围是[-128,127]；无符号整型每一位都表示数值，1字节的无符号整型的取值范围是[0,255]。</p>
+<hr>
+<h2 id="二-格式化输出十进制整型">二 格式化输出十进制整型</h2>
+<p>  在变量中，整型分为长整型、基本整型和短整型，它们各自又分为有符号整型和无符号整型。每一种类型都有各自的格式控制字符串。就十进制而言，它们的格式控制字符串如表1所示。</p>
+<div class="center">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">整型类型</th>
+<th style="text-align:center">格式控制字符串</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">有符号长整型</td>
+<td style="text-align:center">“%ld”</td>
+</tr>
+<tr>
+<td style="text-align:center">无符号长整型</td>
+<td style="text-align:center">“%lu”</td>
+</tr>
+<tr>
+<td style="text-align:center">有符号基本整型</td>
+<td style="text-align:center">“%d”</td>
+</tr>
+<tr>
+<td style="text-align:center">无符号基本整型</td>
+<td style="text-align:center">“%u”</td>
+</tr>
+<tr>
+<td style="text-align:center">有符号短整型</td>
+<td style="text-align:center">“%hd”</td>
+</tr>
+<tr>
+<td style="text-align:center">无符号短整型</td>
+<td style="text-align:center">“%hu”</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p align="center">表1 十进制整型的格式控制字符串</p>
+<p>  以下就<b>有/无</b>符号<b>基本/短</b>整型为例，形象地体现了它们的区别。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;以下执行对0取反的操作：\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> a = <span class="number">0</span>;<span class="comment">//4字节，32位</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> b = ~a;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;无符号数int：%u\n&quot;</span>, b); <span class="comment">//结果是 无符号数int：4294967295</span></span><br><span class="line">    <span class="comment">//printf(&quot;%d\n&quot;, b);  //结果是 -1</span></span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> c = <span class="number">0</span>;<span class="comment">//2字节，16位</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> d = ~c;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;无符号数short：%hu\n&quot;</span>, d);  <span class="comment">//结果是 无符号数short：65535</span></span><br><span class="line">    <span class="comment">//printf(&quot;%hd\n&quot;, d);  //结果是 -1</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n以下是参照：\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> e = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> f = ~e;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数int：%d\n&quot;</span>, f); <span class="comment">//结果是 有符号数int：-1</span></span><br><span class="line"></span><br><span class="line">    <span class="type">short</span> g = <span class="number">0</span>;</span><br><span class="line">    <span class="type">short</span> h = ~g;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数short：%hd\n&quot;</span>, h);  <span class="comment">//结果是 有符号数short：-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>C语言</category>
+      </categories>
+      <tags>
+        <tag>C</tag>
+        <tag>Fallibility</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C语言 | 移位运算符</title>
     <url>/post/5663.html</url>
     <content><![CDATA[<div class="note info flat"><p>  本博文的所有变量、数字、公式等均采用<code>katex</code>风格。</p>
@@ -276,90 +360,6 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       <tags>
         <tag>C</tag>
         <tag>Exploration</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C语言 | 有符号整型与无符号整型 格式化输出十进制整型</title>
-    <url>/post/ddd0df44.html</url>
-    <content><![CDATA[<!-- 让表格居中显示的风格 -->
-<style>
-.center 
-{
-  width: auto;
-  display: table;
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>
-<div class="note warning flat"><p>  初学C语言时，对于整型的分类、存储和输出需厘清。</p>
-</div>
-<h2 id="一-有符号整型与无符号整型">一 有符号整型与无符号整型</h2>
-<h3 id="（一）-存储空间">（一） 存储空间</h3>
-<p>  长整型、基本整型、短整型分别在内存中占据不同的字节数。在64位系统中，长整型和基本整型占据4个字节（32位），短整型占据2个字节（16位）。</p>
-<div class="note info flat"><p>  为了节约内存空间，在定义整型变量时建议采用占据字节数尽可能小的类型。</p>
-</div>
-<h3 id="（二）-符号位-原码、反码、补码">（二） 符号位　原码、反码、补码</h3>
-<p>  在不加修饰的条件下，计算机默认整型为有符号整型。对于有符号整型而言，其对应二进制数的<b>最高位</b>是符号位，并且0表示正数，1表示负数。<br>
-  二进制数的表示方法分为3种：<b>原码、反码、补码</b>。计算机总是以补码的形式存储数。对于正数而言，原码、反码、补码均相同，三者均表示数的真值。<b>对于负数而言，原码除符号位以外的位表示绝对值，反码是对原码除符号位以外的位取反的结果，补码是反码加1的结果。</b>如下例：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> e = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> f = ~e;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数int：%d\n&quot;</span>, f); <span class="comment">//结果是 有符号数int：-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  在64位系统中，基本整型占据4个字节，因此变量e被赋值0后在内存中存储了32位0。按位取反后，32位0变为32位1。32位1的符号位是1，表示其为负数，其原码最高位（符号位）和最低位为1，其余位为0，所以真值为-1。</p>
-<div class="note primary flat"><p><b>为什么计算机要使用补码来存储负数？</b><br>
-  从原理上而言，加法和减法要依靠不同的电路实现，如果能将减法运算转化为加法运算，就能简化电路。同时，如果使用原码进行含负数的加法运算，其结果总是错误的。例如<code>(-2) + 1 = 1000 0010 + 0000 0001 = 1000 0011 = -3</code>（错误）。<br>
-  计算机中的计数是可溢出的。譬如对1字节而言，有符号数的最大值是<code>0111 1111</code>，即127，再加1将溢出，使得最高位同时表示数值和符号，结果是<code>1000 0000</code>，为负数的补码；其原码为<code>1000 0000</code>（最高位仍然同时表示数值和符号），即-128。<br>
-  一周共7天，周四至周六的计算可以是+2，也可以是-5，甚至可以是+9，-12，+17，-19等，这样的计算都是等价的，意味着对于可溢出系统而言，总能够使用加法代替减法运算。设可溢出系统的模为N（例如这里是7），那么加数和减数的和始终为N，这样的关系称为补数。<br>
-  类似地，对于1字节而言，其模是<code>1 0000 0000</code>，若计算<code>(-2) + 1</code>，那么首先将-2转化为其补数。先取-2的绝对值2，然后用模减之，即<code>1 0000 0000 - 0000 0010 = 1111 1110</code>。因此<code>(-2) + 1 = 1111 1110 + 0000 0001 = 1111 1111(补) = -1</code>（正确）。</p>
-</div>
-<h3 id="（三）-有符号整型与无符号整型的定义和区别">（三） 有符号整型与无符号整型的定义和区别</h3>
-<p>  不加修饰时，系统默认整型为有符号整型。无符号整型的表达在常量中为后缀U或u，在变量中则加关键字<code>unsigned</code>。它们的区别在于有符号整型的最高位是符号位，其余位表示数值，1字节的有符号整型的取值范围是[-128,127]；无符号整型每一位都表示数值，1字节的无符号整型的取值范围是[0,255]。</p>
-<hr>
-<h2 id="二-格式化输出十进制整型">二 格式化输出十进制整型</h2>
-<p>  在变量中，整型分为长整型、基本整型和短整型，它们各自又分为有符号整型和无符号整型。每一种类型都有各自的格式控制字符串。就十进制而言，它们的格式控制字符串如表1所示。</p>
-<div class="center">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">整型类型</th>
-<th style="text-align:center">格式控制字符串</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">有符号长整型</td>
-<td style="text-align:center">“%ld”</td>
-</tr>
-<tr>
-<td style="text-align:center">无符号长整型</td>
-<td style="text-align:center">“%lu”</td>
-</tr>
-<tr>
-<td style="text-align:center">有符号基本整型</td>
-<td style="text-align:center">“%d”</td>
-</tr>
-<tr>
-<td style="text-align:center">无符号基本整型</td>
-<td style="text-align:center">“%u”</td>
-</tr>
-<tr>
-<td style="text-align:center">有符号短整型</td>
-<td style="text-align:center">“%hd”</td>
-</tr>
-<tr>
-<td style="text-align:center">无符号短整型</td>
-<td style="text-align:center">“%hu”</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p align="center">表1 十进制整型的格式控制字符串</p>
-<p>  以下就<b>有/无</b>符号<b>基本/短</b>整型为例，形象地体现了它们的区别。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;以下执行对0取反的操作：\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> a = <span class="number">0</span>;<span class="comment">//4字节，32位</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> b = ~a;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;无符号数int：%u\n&quot;</span>, b); <span class="comment">//结果是 无符号数int：4294967295</span></span><br><span class="line">    <span class="comment">//printf(&quot;%d\n&quot;, b);  //结果是 -1</span></span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> c = <span class="number">0</span>;<span class="comment">//2字节，16位</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> d = ~c;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;无符号数short：%hu\n&quot;</span>, d);  <span class="comment">//结果是 无符号数short：65535</span></span><br><span class="line">    <span class="comment">//printf(&quot;%hd\n&quot;, d);  //结果是 -1</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n以下是参照：\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> e = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> f = ~e;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数int：%d\n&quot;</span>, f); <span class="comment">//结果是 有符号数int：-1</span></span><br><span class="line"></span><br><span class="line">    <span class="type">short</span> g = <span class="number">0</span>;</span><br><span class="line">    <span class="type">short</span> h = ~g;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数short：%hd\n&quot;</span>, h);  <span class="comment">//结果是 有符号数short：-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>C语言</category>
-      </categories>
-      <tags>
-        <tag>C</tag>
-        <tag>Fallibility</tag>
       </tags>
   </entry>
   <entry>
@@ -476,42 +476,6 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       <tags>
         <tag>C</tag>
         <tag>Exploration</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>博客基建 | 创建或修改博客的常用Hexo命令</title>
-    <url>/post/74158de9.html</url>
-    <content><![CDATA[<h2 id="一-创建新的博文">一 创建新的博文</h2>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;Title&quot;</span> //<span class="string">&quot;Title&quot;</span>是新建博文的标题，引号内部内容可以替换</span><br></pre></td></tr></table></figure>
-<p>  更多信息，请 <a href="https://hexo.io/docs/writing.html">单击此处</a> 访问。</p>
-<hr>
-<h2 id="二-运行服务器">二 运行服务器</h2>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server //亦或hexo s</span><br></pre></td></tr></table></figure>
-<p>  然后访问 <a href="http://localhost:4000/">http://localhost:4000/</a> 在本地预览效果。预览结束后，使用<code>Ctrl+C</code>停止。<br>
-  更多信息，请 <a href="https://hexo.io/docs/server.html">单击此处</a> 访问。</p>
-<hr>
-<h2 id="三-部署博文">三 部署博文</h2>
-<p>  博文撰写完毕后或<b>每次修改结束后</b>，都应当执行以下三条命令以部署。以下三条命令又称<code>hexo三联</code>。</p>
-<h3 id="（一）-删除原有的public文件夹">（一） 删除原有的public文件夹</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean //亦或hexo cl</span><br></pre></td></tr></table></figure>
-<h3 id="（二）-生成新的public文件夹">（二） 生成新的public文件夹</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate //亦或hexo g</span><br></pre></td></tr></table></figure>
-<p>  更多信息，请 <a href="https://hexo.io/docs/generating.html">单击此处</a> 访问。</p>
-<h3 id="（三）-部署到远程站点">（三） 部署到远程站点</h3>
-<div class="note warning flat"><p>  部署到远程站点前，建议运行服务器在本地预览效果。当确认无误后，将博文部署到远程站点。</p>
-</div>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy //亦或hexo d</span><br></pre></td></tr></table></figure>
-<p>  更多信息，请 <a href="https://hexo.io/docs/one-command-deployment.html">单击此处</a> 访问。</p>
-<div class="note info flat"><p>  以上三步可以简化为以下代码。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean&amp;&amp;hexo generate --deploy //亦或hexo cl&amp;&amp;hexo g -d</span><br></pre></td></tr></table></figure>
-<p>  或者</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean&amp;&amp;hexo deploy --generate //亦或hexo cl&amp;&amp;hexo d -g</span><br></pre></td></tr></table></figure></div>
-]]></content>
-      <categories>
-        <category>博客基建</category>
-      </categories>
-      <tags>
-        <tag>Common</tag>
       </tags>
   </entry>
   <entry>
@@ -668,6 +632,42 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </categories>
       <tags>
         <tag>Algorithm Analysis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>博客基建 | 创建或修改博客的常用Hexo命令</title>
+    <url>/post/74158de9.html</url>
+    <content><![CDATA[<h2 id="一-创建新的博文">一 创建新的博文</h2>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;Title&quot;</span> //<span class="string">&quot;Title&quot;</span>是新建博文的标题，引号内部内容可以替换</span><br></pre></td></tr></table></figure>
+<p>  更多信息，请 <a href="https://hexo.io/docs/writing.html">单击此处</a> 访问。</p>
+<hr>
+<h2 id="二-运行服务器">二 运行服务器</h2>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server //亦或hexo s</span><br></pre></td></tr></table></figure>
+<p>  然后访问 <a href="http://localhost:4000/">http://localhost:4000/</a> 在本地预览效果。预览结束后，使用<code>Ctrl+C</code>停止。<br>
+  更多信息，请 <a href="https://hexo.io/docs/server.html">单击此处</a> 访问。</p>
+<hr>
+<h2 id="三-部署博文">三 部署博文</h2>
+<p>  博文撰写完毕后或<b>每次修改结束后</b>，都应当执行以下三条命令以部署。以下三条命令又称<code>hexo三联</code>。</p>
+<h3 id="（一）-删除原有的public文件夹">（一） 删除原有的public文件夹</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean //亦或hexo cl</span><br></pre></td></tr></table></figure>
+<h3 id="（二）-生成新的public文件夹">（二） 生成新的public文件夹</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate //亦或hexo g</span><br></pre></td></tr></table></figure>
+<p>  更多信息，请 <a href="https://hexo.io/docs/generating.html">单击此处</a> 访问。</p>
+<h3 id="（三）-部署到远程站点">（三） 部署到远程站点</h3>
+<div class="note warning flat"><p>  部署到远程站点前，建议运行服务器在本地预览效果。当确认无误后，将博文部署到远程站点。</p>
+</div>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy //亦或hexo d</span><br></pre></td></tr></table></figure>
+<p>  更多信息，请 <a href="https://hexo.io/docs/one-command-deployment.html">单击此处</a> 访问。</p>
+<div class="note info flat"><p>  以上三步可以简化为以下代码。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean&amp;&amp;hexo generate --deploy //亦或hexo cl&amp;&amp;hexo g -d</span><br></pre></td></tr></table></figure>
+<p>  或者</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean&amp;&amp;hexo deploy --generate //亦或hexo cl&amp;&amp;hexo d -g</span><br></pre></td></tr></table></figure></div>
+]]></content>
+      <categories>
+        <category>博客基建</category>
+      </categories>
+      <tags>
+        <tag>Common</tag>
       </tags>
   </entry>
   <entry>
@@ -947,11 +947,29 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
 <h3 id="（一）-顺序队列">（一） 顺序队列</h3>
 <p>  由于顺序队列的顺序性，如果仅仅是简单地变化顺序表，执行出队/入队操作的效率总是不尽人意，因为无论如何排列，总是有出队/入队操作之一需要将原本的元素全部移动一位。这样的问题可以通过<b>移动队列</b>来解决，也就是说在出队时，其他元素都不移动，放宽了<b>队列的所有元素都必须处于数组前n个位置</b>的条件，入队时仍然将元素添加至队尾，然而这很容易造成数组中靠后的空间耗尽。实际上，如果数组是循环的，那么这个问题就迎刃而解了，如图I2所示。<br>
 <img src="/post/d7d38339/data-structures-003-I2.jpg" alt="I2.使用循环数组实现顺序队列示例" title="I2.使用循环数组实现顺序队列示例"><br>
-  </p>
-<h3 id="（二）-链式队列">（二） 链式队列</h3>
-<h3 id="（三）-顺序队列和链式队列的比较">（三） 顺序队列和链式队列的比较</h3>
-<div class="note warning flat"><p>  未完待续</p>
+  如果数组的长度是<code>size</code>，那么数组的位置索引从0至size-1，并且size-1的位置被定义为位置0（等价于位置<b>size%size</b>)的前驱。</p>
+<div class="note warning flat"><p><b>如何判断循环数组是空的还是满的？</b><br>
+  如果我们用下面的策略来判断：</p>
+<ul>
+<li><b>空队列判定</b>-rear表示的位置是front表示位置的前驱（rear和front表示的位置相同时，表示有且仅有1个元素）；</li>
+<li><b>满队列判定</b>-rear表示的位置是front表示位置的前驱（rear位于size-1的位置，front位于0的位置）。</li>
+</ul>
+<p>  注意到，仅凭rear和front的位置无法判断队列空/满。一个很直接的办法是<b>新定义一个成员变量记录元素个数（或者至少有一个布尔变量指示队列是否为空）</b>；还有另一个办法被教材选用，就是<b>将数组的大小设置为n+1，但只允许存储至多n个元素</b>。后者的实现办法如下。</p>
+<details class="toggle"><summary class="toggle-button" style>单击此处查看顺序队列的声明</summary><div class="toggle-content"><p>  下面是从教材中摘录的顺序队列的声明。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// From the software distribution accompanying the textbook</span></span><br><span class="line"><span class="comment">// &quot;A Practical Introduction to Data Structures and Algorithm Analysis,</span></span><br><span class="line"><span class="comment">// Third Edition (C++)&quot; by Clifford A. Shaffer.</span></span><br><span class="line"><span class="comment">// Source code Copyright (C) 2007-2011 by Clifford A. Shaffer.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// This is the file to include in your code if you want access to the</span></span><br><span class="line"><span class="comment">// complete AQueue template class</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// First, get the declaration for the base stack class</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;queue.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// This is the declaration for AStack.</span></span><br><span class="line"><span class="comment">// Array-based queue implementation</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt; <span class="keyword">class</span> <span class="title class_">AQueue</span>: <span class="keyword">public</span> Queue&lt;E&gt; &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  <span class="type">int</span> maxSize;               <span class="comment">// Maximum size of queue</span></span><br><span class="line">  <span class="type">int</span> front;                 <span class="comment">// Index of front element</span></span><br><span class="line">  <span class="type">int</span> rear;                  <span class="comment">// Index of rear element</span></span><br><span class="line">  E *listArray;           <span class="comment">// Array holding queue elements</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">AQueue</span>(<span class="type">int</span> size =defaultSize) &#123;  <span class="comment">// Constructor </span></span><br><span class="line">    <span class="comment">// Make list array one position larger for empty slot</span></span><br><span class="line">    maxSize = size+<span class="number">1</span>;</span><br><span class="line">    rear = <span class="number">0</span>;  front = <span class="number">1</span>;</span><br><span class="line">    listArray = <span class="keyword">new</span> E[maxSize];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  ~<span class="built_in">AQueue</span>() &#123; <span class="keyword">delete</span> [] listArray; &#125; <span class="comment">// Destructor</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">clear</span><span class="params">()</span> </span>&#123; rear = <span class="number">0</span>; front = <span class="number">1</span>; &#125; <span class="comment">// Reinitialize</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">enqueue</span><span class="params">(<span class="type">const</span> E&amp; it)</span> </span>&#123;     <span class="comment">// Put &quot;it&quot; in queue</span></span><br><span class="line">    <span class="built_in">Assert</span>(((rear+<span class="number">2</span>) % maxSize) != front, <span class="string">&quot;Queue is full&quot;</span>);</span><br><span class="line">    rear = (rear+<span class="number">1</span>) % maxSize;       <span class="comment">// Circular increment</span></span><br><span class="line">    listArray[rear] = it;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function">E <span class="title">dequeue</span><span class="params">()</span> </span>&#123;           <span class="comment">// Take element out</span></span><br><span class="line">    <span class="built_in">Assert</span>(<span class="built_in">length</span>() != <span class="number">0</span>, <span class="string">&quot;Queue is empty&quot;</span>);</span><br><span class="line">    E it = listArray[front];</span><br><span class="line">    front = (front+<span class="number">1</span>) % maxSize;    <span class="comment">// Circular increment</span></span><br><span class="line">    <span class="keyword">return</span> it;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="type">const</span> E&amp; <span class="title">frontValue</span><span class="params">()</span> <span class="type">const</span> </span>&#123;  <span class="comment">// Get front value</span></span><br><span class="line">    <span class="built_in">Assert</span>(<span class="built_in">length</span>() != <span class="number">0</span>, <span class="string">&quot;Queue is empty&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> listArray[front];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">length</span><span class="params">()</span> <span class="type">const</span>         <span class="comment">// Return length</span></span></span><br><span class="line"><span class="function">   </span>&#123; <span class="keyword">return</span> ((rear+maxSize) - front + <span class="number">1</span>) % maxSize; &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></details>
 </div>
+<h3 id="（二）-链式队列">（二） 链式队列</h3>
+<p>  与顺序队列不同，链式队列不具有顺序性，因而在链表的基础上只需进行简单的变化。它与链式栈不同——链式栈只需要在栈顶执行入栈/出栈操作，对特殊情况（例如空队列）执行入栈/出栈操作时，只需要改变<code>top</code>指针即可，top指针所指的结点的data域是入栈元素，next域是原来的栈顶元素。</p>
+<p>  在实现链式队列时，使用头结点可以简化实现方式和对特殊情况（例如空队列）的操作，这是因为链式队列需要对队首和队尾进行操作。以向空队列插入元素为例：</p>
+<ul>
+<li>如果不使用头结点，那么在首次入队时，需要判空，并且改变front和rear指针指向新插入的元素，此后插入元素便在rear指针后加入元素并改变rear指针；</li>
+<li>如果使用头结点（初始化时，front和rear指针都指向头结点），那么无论是否时首次入队，都不需要判空，只需要在rear指针后加入元素并改变rear指针。</li>
+</ul>
+<p>  实际上，<code>top</code>指针和<code>rear</code>指针是很相似的，对于插入元素而言，前者是在指针前插入元素并改变指针，后者是在指针后插入元素并改变指针。头结点在这里只是优化了<code>front</code>结点的相关操作。</p>
+<details class="toggle"><summary class="toggle-button" style>单击此处查看链式队列的声明</summary><div class="toggle-content"><p>  下面是从教材中摘录的链式队列的声明。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// From the software distribution accompanying the textbook</span></span><br><span class="line"><span class="comment">// &quot;A Practical Introduction to Data Structures and Algorithm Analysis,</span></span><br><span class="line"><span class="comment">// Third Edition (C++)&quot; by Clifford A. Shaffer.</span></span><br><span class="line"><span class="comment">// Source code Copyright (C) 2007-2011 by Clifford A. Shaffer.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// This is the file to include in your code if you want access to the</span></span><br><span class="line"><span class="comment">// complete LQueue template class</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Include the link class</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;link.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// First, get the declaration for the base stack class</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;queue.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Implementations for linked queue function members</span></span><br><span class="line"><span class="comment">// Linked queue implementation</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt; <span class="keyword">class</span> <span class="title class_">LQueue</span>: <span class="keyword">public</span> Queue&lt;E&gt; &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  Link&lt;E&gt;* front;       <span class="comment">// Pointer to front queue node</span></span><br><span class="line">  Link&lt;E&gt;* rear;        <span class="comment">// Pointer to rear queue node</span></span><br><span class="line">  <span class="type">int</span> size;                <span class="comment">// Number of elements in queue</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">LQueue</span>(<span class="type">int</span> sz =defaultSize) <span class="comment">// Constructor </span></span><br><span class="line">    &#123; front = rear = <span class="keyword">new</span> <span class="built_in">Link</span>&lt;E&gt;(); size = <span class="number">0</span>; &#125;</span><br><span class="line"></span><br><span class="line">  ~<span class="built_in">LQueue</span>() &#123; <span class="built_in">clear</span>(); <span class="keyword">delete</span> front; &#125;      <span class="comment">// Destructor</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">clear</span><span class="params">()</span> </span>&#123;           <span class="comment">// Clear queue</span></span><br><span class="line">    <span class="keyword">while</span>(front-&gt;next != <span class="literal">NULL</span>) &#123; <span class="comment">// Delete each link node</span></span><br><span class="line">      rear = front;</span><br><span class="line">      <span class="keyword">delete</span> rear;</span><br><span class="line">    &#125;</span><br><span class="line">    rear = front;</span><br><span class="line">    size = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">enqueue</span><span class="params">(<span class="type">const</span> E&amp; it)</span> </span>&#123; <span class="comment">// Put element on rear</span></span><br><span class="line">    rear-&gt;next = <span class="keyword">new</span> <span class="built_in">Link</span>&lt;E&gt;(it, <span class="literal">NULL</span>);</span><br><span class="line">    rear = rear-&gt;next;</span><br><span class="line">    size++;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function">E <span class="title">dequeue</span><span class="params">()</span> </span>&#123;              <span class="comment">// Remove element from front</span></span><br><span class="line">    <span class="built_in">Assert</span>(size != <span class="number">0</span>, <span class="string">&quot;Queue is empty&quot;</span>);</span><br><span class="line">    E it = front-&gt;next-&gt;element;  <span class="comment">// Store dequeued value</span></span><br><span class="line">    Link&lt;E&gt;* ltemp = front-&gt;next; <span class="comment">// Hold dequeued link</span></span><br><span class="line">    front-&gt;next = ltemp-&gt;next;       <span class="comment">// Advance front</span></span><br><span class="line">    <span class="keyword">if</span> (rear == ltemp) rear = front; <span class="comment">// Dequeue last element</span></span><br><span class="line">    <span class="keyword">delete</span> ltemp;                    <span class="comment">// Delete link</span></span><br><span class="line">    size --;</span><br><span class="line">    <span class="keyword">return</span> it;                       <span class="comment">// Return element value</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="type">const</span> E&amp; <span class="title">frontValue</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="comment">// Get front element</span></span><br><span class="line">    <span class="built_in">Assert</span>(size != <span class="number">0</span>, <span class="string">&quot;Queue is empty&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> front-&gt;next-&gt;element;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">length</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> size; &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></details>
+<h3 id="（三）-顺序队列和链式队列的比较">（三） 顺序队列和链式队列的比较</h3>
+<p>  实现顺序队列和链式队列的所有操作都只需要常数时间，因此它们的时间效率接近。在空间效率方面，它们和顺序栈与链式栈的比较是相似的，不过顺序队列不能在一个数组中存储两个队列，除非二者数据项从一个队列转入另一个队列。</p>
 ]]></content>
       <categories>
         <category>数据结构</category>
