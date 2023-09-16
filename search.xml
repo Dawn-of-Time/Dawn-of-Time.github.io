@@ -169,90 +169,6 @@
       </tags>
   </entry>
   <entry>
-    <title>C语言 | 有符号整型与无符号整型 格式化输出十进制整型</title>
-    <url>/post/ddd0df44.html</url>
-    <content><![CDATA[<!-- 让表格居中显示的风格 -->
-<style>
-.center 
-{
-  width: auto;
-  display: table;
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>
-<div class="note warning flat"><p>  初学C语言时，对于整型的分类、存储和输出需厘清。</p>
-</div>
-<h2 id="一-有符号整型与无符号整型">一 有符号整型与无符号整型</h2>
-<h3 id="（一）-存储空间">（一） 存储空间</h3>
-<p>  长整型、基本整型、短整型分别在内存中占据不同的字节数。在64位系统中，长整型和基本整型占据4个字节（32位），短整型占据2个字节（16位）。</p>
-<div class="note info flat"><p>  为了节约内存空间，在定义整型变量时建议采用占据字节数尽可能小的类型。</p>
-</div>
-<h3 id="（二）-符号位-原码、反码、补码">（二） 符号位　原码、反码、补码</h3>
-<p>  在不加修饰的条件下，计算机默认整型为有符号整型。对于有符号整型而言，其对应二进制数的<b>最高位</b>是符号位，并且0表示正数，1表示负数。<br>
-  二进制数的表示方法分为3种：<b>原码、反码、补码</b>。计算机总是以补码的形式存储数。对于正数而言，原码、反码、补码均相同，三者均表示数的真值。<b>对于负数而言，原码除符号位以外的位表示绝对值，反码是对原码除符号位以外的位取反的结果，补码是反码加1的结果。</b>如下例：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> e = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> f = ~e;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数int：%d\n&quot;</span>, f); <span class="comment">//结果是 有符号数int：-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  在64位系统中，基本整型占据4个字节，因此变量e被赋值0后在内存中存储了32位0。按位取反后，32位0变为32位1。32位1的符号位是1，表示其为负数，其原码最高位（符号位）和最低位为1，其余位为0，所以真值为-1。</p>
-<div class="note primary flat"><p><b>为什么计算机要使用补码来存储负数？</b><br>
-  从原理上而言，加法和减法要依靠不同的电路实现，如果能将减法运算转化为加法运算，就能简化电路。同时，如果使用原码进行含负数的加法运算，其结果总是错误的。例如<code>(-2) + 1 = 1000 0010 + 0000 0001 = 1000 0011 = -3</code>（错误）。<br>
-  计算机中的计数是可溢出的。譬如对1字节而言，有符号数的最大值是<code>0111 1111</code>，即127，再加1将溢出，使得最高位同时表示数值和符号，结果是<code>1000 0000</code>，为负数的补码；其原码为<code>1000 0000</code>（最高位仍然同时表示数值和符号），即-128。<br>
-  一周共7天，周四至周六的计算可以是+2，也可以是-5，甚至可以是+9，-12，+17，-19等，这样的计算都是等价的，意味着对于可溢出系统而言，总能够使用加法代替减法运算。设可溢出系统的模为N（例如这里是7），那么加数和减数的和始终为N，这样的关系称为补数。<br>
-  类似地，对于1字节而言，其模是<code>1 0000 0000</code>，若计算<code>(-2) + 1</code>，那么首先将-2转化为其补数。先取-2的绝对值2，然后用模减之，即<code>1 0000 0000 - 0000 0010 = 1111 1110</code>。因此<code>(-2) + 1 = 1111 1110 + 0000 0001 = 1111 1111(补) = -1</code>（正确）。</p>
-</div>
-<h3 id="（三）-有符号整型与无符号整型的定义和区别">（三） 有符号整型与无符号整型的定义和区别</h3>
-<p>  不加修饰时，系统默认整型为有符号整型。无符号整型的表达在常量中为后缀U或u，在变量中则加关键字<code>unsigned</code>。它们的区别在于有符号整型的最高位是符号位，其余位表示数值，1字节的有符号整型的取值范围是[-128,127]；无符号整型每一位都表示数值，1字节的无符号整型的取值范围是[0,255]。</p>
-<hr>
-<h2 id="二-格式化输出十进制整型">二 格式化输出十进制整型</h2>
-<p>  在变量中，整型分为长整型、基本整型和短整型，它们各自又分为有符号整型和无符号整型。每一种类型都有各自的格式控制字符串。就十进制而言，它们的格式控制字符串如表T1所示。</p>
-<div class="center">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">整型类型</th>
-<th style="text-align:center">格式控制字符串</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">有符号长整型</td>
-<td style="text-align:center">“%ld”</td>
-</tr>
-<tr>
-<td style="text-align:center">无符号长整型</td>
-<td style="text-align:center">“%lu”</td>
-</tr>
-<tr>
-<td style="text-align:center">有符号基本整型</td>
-<td style="text-align:center">“%d”</td>
-</tr>
-<tr>
-<td style="text-align:center">无符号基本整型</td>
-<td style="text-align:center">“%u”</td>
-</tr>
-<tr>
-<td style="text-align:center">有符号短整型</td>
-<td style="text-align:center">“%hd”</td>
-</tr>
-<tr>
-<td style="text-align:center">无符号短整型</td>
-<td style="text-align:center">“%hu”</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p align="center">T1.十进制整型的格式控制字符串</p>
-<p>  以下就<b>有/无</b>符号<b>基本/短</b>整型为例，形象地体现了它们的区别。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;以下执行对0取反的操作：\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> a = <span class="number">0</span>;<span class="comment">//4字节，32位</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> b = ~a;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;无符号数int：%u\n&quot;</span>, b); <span class="comment">//结果是 无符号数int：4294967295</span></span><br><span class="line">    <span class="comment">//printf(&quot;%d\n&quot;, b);  //结果是 -1</span></span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> c = <span class="number">0</span>;<span class="comment">//2字节，16位</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> d = ~c;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;无符号数short：%hu\n&quot;</span>, d);  <span class="comment">//结果是 无符号数short：65535</span></span><br><span class="line">    <span class="comment">//printf(&quot;%hd\n&quot;, d);  //结果是 -1</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n以下是参照：\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> e = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> f = ~e;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数int：%d\n&quot;</span>, f); <span class="comment">//结果是 有符号数int：-1</span></span><br><span class="line"></span><br><span class="line">    <span class="type">short</span> g = <span class="number">0</span>;</span><br><span class="line">    <span class="type">short</span> h = ~g;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数short：%hd\n&quot;</span>, h);  <span class="comment">//结果是 有符号数short：-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>C语言</category>
-      </categories>
-      <tags>
-        <tag>C</tag>
-        <tag>Fallibility</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>C语言 | 移位运算符</title>
     <url>/post/5663.html</url>
     <content><![CDATA[<div class="note info flat"><p>  本博文的所有变量、数字、公式等均采用<code>katex</code>风格。</p>
@@ -363,58 +279,6 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </tags>
   </entry>
   <entry>
-    <title>C语言 | 递归实践：汉诺塔问题 青蛙跳台阶问题</title>
-    <url>/post/6290815e.html</url>
-    <content><![CDATA[<h2 id="一-递归的含义及其两个必要条件">一 递归的含义及其两个必要条件</h2>
-<h3 id="（一）-递归的含义">（一） 递归的含义</h3>
-<p>  递归，是指一种通过重复将问题分解为同类的子问题而解决问题的方法。它将大事化小，能够大大减少程序的代码量。</p>
-<h3 id="（二）-递归的两个必要条件">（二） 递归的两个必要条件</h3>
-<p>  1 存在限制条件，当满足这个限制条件的时候，递归便不再继续；<br>
-  2 每次递归调用之后越来越接近这个限制条件。</p>
-<hr>
-<h2 id="二-汉诺塔问题">二 汉诺塔问题</h2>
-<h3 id="（一）-问题内容">（一） 问题内容</h3>
-<div class="note info flat"><ul>
-<li><b>BASE</b>-在一块铜板装置上，有三根杆(编号A、B、C)，在A杆自下而上、由大到小按顺序放置若干个金盘。（如图F1所示）</li>
-<li><b>GOAL</b>-把A杆上的金盘全部移到C杆上，并仍保持原有顺序叠好。</li>
-<li><b>RULE</b>-每次只能移动一个盘子，并且在移动过程中三根杆上都始终保持大盘在下，小盘在上，操作过程中盘子可以置于A、B、C任一杆上。</li>
-</ul>
-</div>
-<p><img src="/post/6290815e/C-Language-005-F1.jpg" alt="F1.汉诺塔问题" title="F1.汉诺塔问题"></p>
-<h3 id="（二）-解决思路">（二） 解决思路</h3>
-<p>  为了满足<code>大盘在下，小盘在上</code>的规则，当金盘进入C杆时，其顺序也应当是<code>先大盘，后小盘</code>。以4个金盘为例，不妨基于C杆考察此问题：<br>
-  <b>第1轮转移</b> 当第一个金盘进入C杆时，其余盘应按照从小到大置于B杆；（如图F2.a所示）<br>
-  <b>第2轮转移</b> 当第二个金盘进入C杆时，其余盘应按照从小到大置于A杆；（如图F2.b所示）<br>
-  <b>第3轮转移</b> 当第三个金盘进入C杆时，其余盘应按照从小到大置于B杆；（如图F2.c所示）<br>
-  <b>第4轮转移</b> 当第四个金盘进入C杆时，达到目标。（如图F2.d所示）<br>
-<img src="/post/6290815e/C-Language-005-F2.jpg" alt="F2.汉诺塔问题" title="F2.汉诺塔问题操作流程示例"><br>
-  注意到，总是需要将A杆（或B杆）上的n个金盘中的n-1个转移到B杆（或A杆），然后将第n个金盘转移到C杆。并且在转移n-1个金盘的过程中，也同样遵循上述规律，即将A杆（或B杆）上的n-1个金盘中的n-2个转移到C杆，然后将第n-1金盘转移到B杆（或A杆）。这样一来，不难发现该问题可以分解为同类的子类问题，并且符合递归的必要条件——其限制条件是转移前A杆和B杆的金盘数目都为0；并且每轮结束时，金盘数目都<code>减1</code>，越来越接近限制条件。<br>
-  基于以上思路进行程序设计。</p>
-<h3 id="（三）-解决办法">（三） 解决办法</h3>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//函数的传入参数n是A杆放置的金盘数目。</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">TOH</span><span class="params">(<span class="type">int</span> n)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//定义返回结果为操作次数。</span></span><br><span class="line">	<span class="type">static</span> <span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//1.递归限制条件：</span></span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">0</span>)</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//2.递归部分：</span></span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//2.1.将A杆（或B杆）最底盘之上的n-1个盘子移动至B杆（或A杆）上。</span></span><br><span class="line">		ret += TOH(n - <span class="number">1</span>);</span><br><span class="line">		<span class="comment">//2.2.将最底盘移动至C杆上。</span></span><br><span class="line">		ret += <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">return</span> ret;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="三-青蛙跳台阶问题">三 青蛙跳台阶问题</h2>
-<h3 id="（一）-问题内容-2">（一） 问题内容</h3>
-<div class="note info flat"><ul>
-<li><b>BASE</b>-有一只青蛙处于若干阶台阶底层。</li>
-<li><b>GOAL</b>-青蛙恰好到达台阶顶层。</li>
-<li><b>RULE</b>-青蛙每次跳跃的台阶数仅能为1或2。</li>
-</ul>
-</div>
-<h3 id="（二）-解决思路-2">（二） 解决思路</h3>
-<p>  注意到<code>青蛙每次跳跃的台阶数仅能为1或2</code>，设跳跃的次数为M，台阶数为N，那么当进行第M次跳跃时，也仅能跳跃1阶或2阶；当进行第M-1次跳跃时，已经跳跃的台阶数是N-1或N-2。类似地，当进行第M-2次跳跃时，已经跳跃的台阶数是N-1-1或N-1-2或N-2-1或N-2-2。据此就可以知道，<b>跳跃N<code>(N≥3)</code>阶台阶的跳法总是跳跃N-1阶台阶的跳法与跳跃N-2阶台阶的跳法之和；当N=1时，仅有1种跳法；当N=2时，仅有两种跳法。</b>这便符合了递归的必要条件——其限制条件是跳跃前剩余台阶数为1或2；并且每次跳跃结束时，台阶数目都<code>减1</code>或<code>减2</code>，越来越接近限制条件。<br>
-  基于以上思路进行程序设计。</p>
-<h3 id="（三）-解决办法-2">（三） 解决办法</h3>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//函数的传入参数n是台阶数目。</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">CS</span><span class="params">(<span class="type">int</span> n)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//定义返回结果为跳法数目。</span></span><br><span class="line">	<span class="type">static</span> <span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//1.递归限制条件：</span></span><br><span class="line">	<span class="comment">//1.1.台阶数为1时，有1种跳法。</span></span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//1.2.台阶数为2时，有2种跳法。</span></span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (n == <span class="number">2</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//2.递归部分：</span></span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//跳跃n阶台阶的跳法总是跳跃n-1阶台阶的跳法与跳跃n-2阶台阶的跳法之和。</span></span><br><span class="line">		ret = CS(n - <span class="number">1</span>) + CS(n - <span class="number">2</span>);</span><br><span class="line">		<span class="keyword">return</span> ret;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>C语言</category>
-      </categories>
-      <tags>
-        <tag>C</tag>
-        <tag>Exploration</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>C语言 | 函数scanf()的使用</title>
     <url>/post/13be382b.html</url>
     <content><![CDATA[<h2 id="一-函数scanf-的基本含义">一 函数scanf()的基本含义</h2>
@@ -479,39 +343,139 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </tags>
   </entry>
   <entry>
-    <title>博客基建 | 创建或修改博客的常用Hexo命令</title>
-    <url>/post/74158de9.html</url>
-    <content><![CDATA[<h2 id="一-创建新的博文">一 创建新的博文</h2>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;Title&quot;</span> //<span class="string">&quot;Title&quot;</span>是新建博文的标题，引号内部内容可以替换</span><br></pre></td></tr></table></figure>
-<p>  更多信息，请 <a href="https://hexo.io/docs/writing.html">单击此处</a> 访问。</p>
-<hr>
-<h2 id="二-运行服务器">二 运行服务器</h2>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server //亦或hexo s</span><br></pre></td></tr></table></figure>
-<p>  然后访问 <a href="http://localhost:4000/">http://localhost:4000/</a> 在本地预览效果。预览结束后，使用<code>Ctrl+C</code>停止。<br>
-  更多信息，请 <a href="https://hexo.io/docs/server.html">单击此处</a> 访问。</p>
-<hr>
-<h2 id="三-部署博文">三 部署博文</h2>
-<p>  博文撰写完毕后或<b>每次修改结束后</b>，都应当执行以下三条命令以部署。以下三条命令又称<code>hexo三联</code>。</p>
-<h3 id="（一）-删除原有的public文件夹">（一） 删除原有的public文件夹</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean //亦或hexo cl</span><br></pre></td></tr></table></figure>
-<h3 id="（二）-生成新的public文件夹">（二） 生成新的public文件夹</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate //亦或hexo g</span><br></pre></td></tr></table></figure>
-<p>  更多信息，请 <a href="https://hexo.io/docs/generating.html">单击此处</a> 访问。</p>
-<h3 id="（三）-部署到远程站点">（三） 部署到远程站点</h3>
-<div class="note warning flat"><p>  部署到远程站点前，建议运行服务器在本地预览效果。当确认无误后，将博文部署到远程站点。</p>
+    <title>C语言 | 有符号整型与无符号整型 格式化输出十进制整型</title>
+    <url>/post/ddd0df44.html</url>
+    <content><![CDATA[<!-- 让表格居中显示的风格 -->
+<style>
+.center 
+{
+  width: auto;
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+<div class="note warning flat"><p>  初学C语言时，对于整型的分类、存储和输出需厘清。</p>
 </div>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy //亦或hexo d</span><br></pre></td></tr></table></figure>
-<p>  更多信息，请 <a href="https://hexo.io/docs/one-command-deployment.html">单击此处</a> 访问。</p>
-<div class="note info flat"><p>  以上三步可以简化为以下代码。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean&amp;&amp;hexo generate --deploy //亦或hexo cl&amp;&amp;hexo g -d</span><br></pre></td></tr></table></figure>
-<p>  或者</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean&amp;&amp;hexo deploy --generate //亦或hexo cl&amp;&amp;hexo d -g</span><br></pre></td></tr></table></figure></div>
+<h2 id="一-有符号整型与无符号整型">一 有符号整型与无符号整型</h2>
+<h3 id="（一）-存储空间">（一） 存储空间</h3>
+<p>  长整型、基本整型、短整型分别在内存中占据不同的字节数。在64位系统中，长整型和基本整型占据4个字节（32位），短整型占据2个字节（16位）。</p>
+<div class="note info flat"><p>  为了节约内存空间，在定义整型变量时建议采用占据字节数尽可能小的类型。</p>
+</div>
+<h3 id="（二）-符号位-原码、反码、补码">（二） 符号位　原码、反码、补码</h3>
+<p>  在不加修饰的条件下，计算机默认整型为有符号整型。对于有符号整型而言，其对应二进制数的<b>最高位</b>是符号位，并且0表示正数，1表示负数。<br>
+  二进制数的表示方法分为3种：<b>原码、反码、补码</b>。计算机总是以补码的形式存储数。对于正数而言，原码、反码、补码均相同，三者均表示数的真值。<b>对于负数而言，原码除符号位以外的位表示绝对值，反码是对原码除符号位以外的位取反的结果，补码是反码加1的结果。</b>如下例：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> e = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> f = ~e;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数int：%d\n&quot;</span>, f); <span class="comment">//结果是 有符号数int：-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  在64位系统中，基本整型占据4个字节，因此变量e被赋值0后在内存中存储了32位0。按位取反后，32位0变为32位1。32位1的符号位是1，表示其为负数，其原码最高位（符号位）和最低位为1，其余位为0，所以真值为-1。</p>
+<div class="note primary flat"><p><b>为什么计算机要使用补码来存储负数？</b><br>
+  从原理上而言，加法和减法要依靠不同的电路实现，如果能将减法运算转化为加法运算，就能简化电路。同时，如果使用原码进行含负数的加法运算，其结果总是错误的。例如<code>(-2) + 1 = 1000 0010 + 0000 0001 = 1000 0011 = -3</code>（错误）。<br>
+  计算机中的计数是可溢出的。譬如对1字节而言，有符号数的最大值是<code>0111 1111</code>，即127，再加1将溢出，使得最高位同时表示数值和符号，结果是<code>1000 0000</code>，为负数的补码；其原码为<code>1000 0000</code>（最高位仍然同时表示数值和符号），即-128。<br>
+  一周共7天，周四至周六的计算可以是+2，也可以是-5，甚至可以是+9，-12，+17，-19等，这样的计算都是等价的，意味着对于可溢出系统而言，总能够使用加法代替减法运算。设可溢出系统的模为N（例如这里是7），那么加数和减数的和始终为N，这样的关系称为补数。<br>
+  类似地，对于1字节而言，其模是<code>1 0000 0000</code>，若计算<code>(-2) + 1</code>，那么首先将-2转化为其补数。先取-2的绝对值2，然后用模减之，即<code>1 0000 0000 - 0000 0010 = 1111 1110</code>。因此<code>(-2) + 1 = 1111 1110 + 0000 0001 = 1111 1111(补) = -1</code>（正确）。</p>
+</div>
+<h3 id="（三）-有符号整型与无符号整型的定义和区别">（三） 有符号整型与无符号整型的定义和区别</h3>
+<p>  不加修饰时，系统默认整型为有符号整型。无符号整型的表达在常量中为后缀U或u，在变量中则加关键字<code>unsigned</code>。它们的区别在于有符号整型的最高位是符号位，其余位表示数值，1字节的有符号整型的取值范围是[-128,127]；无符号整型每一位都表示数值，1字节的无符号整型的取值范围是[0,255]。</p>
+<hr>
+<h2 id="二-格式化输出十进制整型">二 格式化输出十进制整型</h2>
+<p>  在变量中，整型分为长整型、基本整型和短整型，它们各自又分为有符号整型和无符号整型。每一种类型都有各自的格式控制字符串。就十进制而言，它们的格式控制字符串如表T1所示。</p>
+<div class="center">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">整型类型</th>
+<th style="text-align:center">格式控制字符串</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">有符号长整型</td>
+<td style="text-align:center">“%ld”</td>
+</tr>
+<tr>
+<td style="text-align:center">无符号长整型</td>
+<td style="text-align:center">“%lu”</td>
+</tr>
+<tr>
+<td style="text-align:center">有符号基本整型</td>
+<td style="text-align:center">“%d”</td>
+</tr>
+<tr>
+<td style="text-align:center">无符号基本整型</td>
+<td style="text-align:center">“%u”</td>
+</tr>
+<tr>
+<td style="text-align:center">有符号短整型</td>
+<td style="text-align:center">“%hd”</td>
+</tr>
+<tr>
+<td style="text-align:center">无符号短整型</td>
+<td style="text-align:center">“%hu”</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p align="center">T1.十进制整型的格式控制字符串</p>
+<p>  以下就<b>有/无</b>符号<b>基本/短</b>整型为例，形象地体现了它们的区别。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;以下执行对0取反的操作：\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> a = <span class="number">0</span>;<span class="comment">//4字节，32位</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> b = ~a;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;无符号数int：%u\n&quot;</span>, b); <span class="comment">//结果是 无符号数int：4294967295</span></span><br><span class="line">    <span class="comment">//printf(&quot;%d\n&quot;, b);  //结果是 -1</span></span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> c = <span class="number">0</span>;<span class="comment">//2字节，16位</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> d = ~c;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;无符号数short：%hu\n&quot;</span>, d);  <span class="comment">//结果是 无符号数short：65535</span></span><br><span class="line">    <span class="comment">//printf(&quot;%hd\n&quot;, d);  //结果是 -1</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n以下是参照：\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> e = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> f = ~e;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数int：%d\n&quot;</span>, f); <span class="comment">//结果是 有符号数int：-1</span></span><br><span class="line"></span><br><span class="line">    <span class="type">short</span> g = <span class="number">0</span>;</span><br><span class="line">    <span class="type">short</span> h = ~g;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数short：%hd\n&quot;</span>, h);  <span class="comment">//结果是 有符号数short：-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>博客基建</category>
+        <category>C语言</category>
       </categories>
       <tags>
-        <tag>Common</tag>
+        <tag>C</tag>
+        <tag>Fallibility</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C语言 | 递归实践：汉诺塔问题 青蛙跳台阶问题</title>
+    <url>/post/6290815e.html</url>
+    <content><![CDATA[<h2 id="一-递归的含义及其两个必要条件">一 递归的含义及其两个必要条件</h2>
+<h3 id="（一）-递归的含义">（一） 递归的含义</h3>
+<p>  递归，是指一种通过重复将问题分解为同类的子问题而解决问题的方法。它将大事化小，能够大大减少程序的代码量。</p>
+<h3 id="（二）-递归的两个必要条件">（二） 递归的两个必要条件</h3>
+<p>  1 存在限制条件，当满足这个限制条件的时候，递归便不再继续；<br>
+  2 每次递归调用之后越来越接近这个限制条件。</p>
+<hr>
+<h2 id="二-汉诺塔问题">二 汉诺塔问题</h2>
+<h3 id="（一）-问题内容">（一） 问题内容</h3>
+<div class="note info flat"><ul>
+<li><b>BASE</b>-在一块铜板装置上，有三根杆(编号A、B、C)，在A杆自下而上、由大到小按顺序放置若干个金盘。（如图F1所示）</li>
+<li><b>GOAL</b>-把A杆上的金盘全部移到C杆上，并仍保持原有顺序叠好。</li>
+<li><b>RULE</b>-每次只能移动一个盘子，并且在移动过程中三根杆上都始终保持大盘在下，小盘在上，操作过程中盘子可以置于A、B、C任一杆上。</li>
+</ul>
+</div>
+<p><img src="/post/6290815e/C-Language-005-F1.jpg" alt="F1.汉诺塔问题" title="F1.汉诺塔问题"></p>
+<h3 id="（二）-解决思路">（二） 解决思路</h3>
+<p>  为了满足<code>大盘在下，小盘在上</code>的规则，当金盘进入C杆时，其顺序也应当是<code>先大盘，后小盘</code>。以4个金盘为例，不妨基于C杆考察此问题：<br>
+  <b>第1轮转移</b> 当第一个金盘进入C杆时，其余盘应按照从小到大置于B杆；（如图F2.a所示）<br>
+  <b>第2轮转移</b> 当第二个金盘进入C杆时，其余盘应按照从小到大置于A杆；（如图F2.b所示）<br>
+  <b>第3轮转移</b> 当第三个金盘进入C杆时，其余盘应按照从小到大置于B杆；（如图F2.c所示）<br>
+  <b>第4轮转移</b> 当第四个金盘进入C杆时，达到目标。（如图F2.d所示）<br>
+<img src="/post/6290815e/C-Language-005-F2.jpg" alt="F2.汉诺塔问题" title="F2.汉诺塔问题操作流程示例"><br>
+  注意到，总是需要将A杆（或B杆）上的n个金盘中的n-1个转移到B杆（或A杆），然后将第n个金盘转移到C杆。并且在转移n-1个金盘的过程中，也同样遵循上述规律，即将A杆（或B杆）上的n-1个金盘中的n-2个转移到C杆，然后将第n-1金盘转移到B杆（或A杆）。这样一来，不难发现该问题可以分解为同类的子类问题，并且符合递归的必要条件——其限制条件是转移前A杆和B杆的金盘数目都为0；并且每轮结束时，金盘数目都<code>减1</code>，越来越接近限制条件。<br>
+  基于以上思路进行程序设计。</p>
+<h3 id="（三）-解决办法">（三） 解决办法</h3>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//函数的传入参数n是A杆放置的金盘数目。</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">TOH</span><span class="params">(<span class="type">int</span> n)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//定义返回结果为操作次数。</span></span><br><span class="line">	<span class="type">static</span> <span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//1.递归限制条件：</span></span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">0</span>)</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//2.递归部分：</span></span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//2.1.将A杆（或B杆）最底盘之上的n-1个盘子移动至B杆（或A杆）上。</span></span><br><span class="line">		ret += TOH(n - <span class="number">1</span>);</span><br><span class="line">		<span class="comment">//2.2.将最底盘移动至C杆上。</span></span><br><span class="line">		ret += <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">return</span> ret;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="三-青蛙跳台阶问题">三 青蛙跳台阶问题</h2>
+<h3 id="（一）-问题内容-2">（一） 问题内容</h3>
+<div class="note info flat"><ul>
+<li><b>BASE</b>-有一只青蛙处于若干阶台阶底层。</li>
+<li><b>GOAL</b>-青蛙恰好到达台阶顶层。</li>
+<li><b>RULE</b>-青蛙每次跳跃的台阶数仅能为1或2。</li>
+</ul>
+</div>
+<h3 id="（二）-解决思路-2">（二） 解决思路</h3>
+<p>  注意到<code>青蛙每次跳跃的台阶数仅能为1或2</code>，设跳跃的次数为M，台阶数为N，那么当进行第M次跳跃时，也仅能跳跃1阶或2阶；当进行第M-1次跳跃时，已经跳跃的台阶数是N-1或N-2。类似地，当进行第M-2次跳跃时，已经跳跃的台阶数是N-1-1或N-1-2或N-2-1或N-2-2。据此就可以知道，<b>跳跃N<code>(N≥3)</code>阶台阶的跳法总是跳跃N-1阶台阶的跳法与跳跃N-2阶台阶的跳法之和；当N=1时，仅有1种跳法；当N=2时，仅有两种跳法。</b>这便符合了递归的必要条件——其限制条件是跳跃前剩余台阶数为1或2；并且每次跳跃结束时，台阶数目都<code>减1</code>或<code>减2</code>，越来越接近限制条件。<br>
+  基于以上思路进行程序设计。</p>
+<h3 id="（三）-解决办法-2">（三） 解决办法</h3>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//函数的传入参数n是台阶数目。</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">CS</span><span class="params">(<span class="type">int</span> n)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//定义返回结果为跳法数目。</span></span><br><span class="line">	<span class="type">static</span> <span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//1.递归限制条件：</span></span><br><span class="line">	<span class="comment">//1.1.台阶数为1时，有1种跳法。</span></span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//1.2.台阶数为2时，有2种跳法。</span></span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (n == <span class="number">2</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//2.递归部分：</span></span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//跳跃n阶台阶的跳法总是跳跃n-1阶台阶的跳法与跳跃n-2阶台阶的跳法之和。</span></span><br><span class="line">		ret = CS(n - <span class="number">1</span>) + CS(n - <span class="number">2</span>);</span><br><span class="line">		<span class="keyword">return</span> ret;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>C语言</category>
+      </categories>
+      <tags>
+        <tag>C</tag>
+        <tag>Exploration</tag>
       </tags>
   </entry>
   <entry>
@@ -668,6 +632,104 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </categories>
       <tags>
         <tag>Algorithm Analysis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>博客基建 | 创建或修改博客的常用Hexo命令</title>
+    <url>/post/74158de9.html</url>
+    <content><![CDATA[<h2 id="一-创建新的博文">一 创建新的博文</h2>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;Title&quot;</span> //<span class="string">&quot;Title&quot;</span>是新建博文的标题，引号内部内容可以替换</span><br></pre></td></tr></table></figure>
+<p>  更多信息，请 <a href="https://hexo.io/docs/writing.html">单击此处</a> 访问。</p>
+<hr>
+<h2 id="二-运行服务器">二 运行服务器</h2>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server //亦或hexo s</span><br></pre></td></tr></table></figure>
+<p>  然后访问 <a href="http://localhost:4000/">http://localhost:4000/</a> 在本地预览效果。预览结束后，使用<code>Ctrl+C</code>停止。<br>
+  更多信息，请 <a href="https://hexo.io/docs/server.html">单击此处</a> 访问。</p>
+<hr>
+<h2 id="三-部署博文">三 部署博文</h2>
+<p>  博文撰写完毕后或<b>每次修改结束后</b>，都应当执行以下三条命令以部署。以下三条命令又称<code>hexo三联</code>。</p>
+<h3 id="（一）-删除原有的public文件夹">（一） 删除原有的public文件夹</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean //亦或hexo cl</span><br></pre></td></tr></table></figure>
+<h3 id="（二）-生成新的public文件夹">（二） 生成新的public文件夹</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate //亦或hexo g</span><br></pre></td></tr></table></figure>
+<p>  更多信息，请 <a href="https://hexo.io/docs/generating.html">单击此处</a> 访问。</p>
+<h3 id="（三）-部署到远程站点">（三） 部署到远程站点</h3>
+<div class="note warning flat"><p>  部署到远程站点前，建议运行服务器在本地预览效果。当确认无误后，将博文部署到远程站点。</p>
+</div>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy //亦或hexo d</span><br></pre></td></tr></table></figure>
+<p>  更多信息，请 <a href="https://hexo.io/docs/one-command-deployment.html">单击此处</a> 访问。</p>
+<div class="note info flat"><p>  以上三步可以简化为以下代码。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean&amp;&amp;hexo generate --deploy //亦或hexo cl&amp;&amp;hexo g -d</span><br></pre></td></tr></table></figure>
+<p>  或者</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean&amp;&amp;hexo deploy --generate //亦或hexo cl&amp;&amp;hexo d -g</span><br></pre></td></tr></table></figure></div>
+]]></content>
+      <categories>
+        <category>博客基建</category>
+      </categories>
+      <tags>
+        <tag>Common</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据结构 | 抽象数据类型和数据结构</title>
+    <url>/post/4c4fa0a7.html</url>
+    <content><![CDATA[<h2 id="一-抽象数据类型">一 抽象数据类型</h2>
+<p>  <code>数据类型</code>是指一个<b>类型</b>和定义在这个类型上的一组<b>操作</b>。<br>
+  <code>抽象数据类型（ADT，Abstract Data Type）</code>对数据类型的抽象描述。它并不关注数据类型的实现方式，转而关注数据类型的操作。</p>
+<details class="toggle"><summary class="toggle-button" style>单击此处进一步体会二者差异</summary><div class="toggle-content"><p>  以下给出了数据类型和抽象数据类型的表示示例：<br>
+<b>数据类型示例 - 整数（Integer）</b></p>
+<ul>
+<li>名称：整数（Integer）</li>
+<li>描述：表示整数值的基本数据类型。</li>
+<li>内部表示：在内存中以二进制补码形式存储。</li>
+<li>支持的操作：
+<ul>
+<li>加法、减法、乘法、除法等基本数学运算。</li>
+<li>比较操作（大于、小于、等于等）。</li>
+<li>转换为其他数据类型（例如，转换为浮点数）。</li>
+</ul>
+</li>
+</ul>
+<p><b>抽象数据类型示例 - 栈（Stack）</b></p>
+<ul>
+<li>名称：栈（Stack）</li>
+<li>描述：表示一个具有后进先出（LIFO）特性的抽象数据类型。</li>
+<li>支持的操作：
+<ul>
+<li><b>push(item)</b>: 将元素压入栈顶。</li>
+<li><b>pop()</b>: 弹出栈顶元素并返回。</li>
+<li><b>peek()</b>: 查看栈顶元素，不进行弹出操作。</li>
+<li><b>isEmpty()</b>: 检查栈是否为空。</li>
+<li><b>size()</b>: 返回栈中元素的数量。</li>
+</ul>
+</li>
+</ul>
+<p>  注意到栈定义了一组操作，但并未规定其具体实现方式。不同的数据结构（如数组、链表）可以用来支持栈的操作，但只需要关注栈的操作。这再次表明，<b>抽象数据类型不必关心实现细节</b>。</p>
+</div></details>
+<hr>
+<h2 id="二-数据结构">二 数据结构</h2>
+<p>  <b>数据结构</b>是指相互之间存在<b>一种或多种特定关系</b>的数据元素的集合。它研究的是就是如何按一定的逻辑结构，把数据组织起来，并选择适当的存储表示方法<b>把逻辑结构组织好的数据</b>存储到计算机的存储器里。</p>
+<div class="note info flat"><p><b>请注意</b>：<br>
+  <b>数据结构</b>-常指存储在计算机内存中的数据。<br>
+  <b>文件结构</b>-常指外存储器（如磁盘驱动器、CD）中数据的组织。</p>
+</div>
+<p>  诸如数组、栈、队列、链表等都是常用的数据结构。数据结构一般包含以下几种常用运算：</p>
+<ul>
+<li><b>检索</b>。检索就是在数据结构里查找满足一定条件的节点。一般是给定一个某字段的值，找具有该字段值的节点。</li>
+<li><b>插入</b>。往数据结构中增加新的节点。</li>
+<li><b>删除</b>。把指定的结点从数据结构中去掉。</li>
+<li><b>更新</b>。改变指定节点的一个或多个字段的值。</li>
+<li><b>排序</b>。把节点按某种指定的顺序重新排列。例如递增或递减。</li>
+</ul>
+<hr>
+<h2 id="三-数据项、数据结构和抽象数据类型的关系">三 数据项、数据结构和抽象数据类型的关系</h2>
+<p>  数据项有<b>逻辑形式</b>和<b>物理形式</b>两个方面。<b>ADT定义了数据类型的逻辑形式，数据结构是实现数据类型的物理形式。</b>这是因为我们强调过ADT关注操作而不关注实现，因而ADT用以阐释数据项的逻辑形式。我们注意到在数据结构的研究内容中，提到了<b>把逻辑结构组织好的数据</b>，这就是ADT的作用。而数据结构关注的恰好就是如何存储，亦即如何实现，因而数据结构用以阐释数据项的物理形式。</p>
+]]></content>
+      <categories>
+        <category>数据结构</category>
+      </categories>
+      <tags>
+        <tag>Data Structures</tag>
       </tags>
   </entry>
   <entry>
@@ -830,68 +892,6 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </tags>
   </entry>
   <entry>
-    <title>数据结构 | 抽象数据类型和数据结构</title>
-    <url>/post/4c4fa0a7.html</url>
-    <content><![CDATA[<h2 id="一-抽象数据类型">一 抽象数据类型</h2>
-<p>  <code>数据类型</code>是指一个<b>类型</b>和定义在这个类型上的一组<b>操作</b>。<br>
-  <code>抽象数据类型（ADT，Abstract Data Type）</code>对数据类型的抽象描述。它并不关注数据类型的实现方式，转而关注数据类型的操作。</p>
-<details class="toggle"><summary class="toggle-button" style>单击此处进一步体会二者差异</summary><div class="toggle-content"><p>  以下给出了数据类型和抽象数据类型的表示示例：<br>
-<b>数据类型示例 - 整数（Integer）</b></p>
-<ul>
-<li>名称：整数（Integer）</li>
-<li>描述：表示整数值的基本数据类型。</li>
-<li>内部表示：在内存中以二进制补码形式存储。</li>
-<li>支持的操作：
-<ul>
-<li>加法、减法、乘法、除法等基本数学运算。</li>
-<li>比较操作（大于、小于、等于等）。</li>
-<li>转换为其他数据类型（例如，转换为浮点数）。</li>
-</ul>
-</li>
-</ul>
-<p><b>抽象数据类型示例 - 栈（Stack）</b></p>
-<ul>
-<li>名称：栈（Stack）</li>
-<li>描述：表示一个具有后进先出（LIFO）特性的抽象数据类型。</li>
-<li>支持的操作：
-<ul>
-<li><b>push(item)</b>: 将元素压入栈顶。</li>
-<li><b>pop()</b>: 弹出栈顶元素并返回。</li>
-<li><b>peek()</b>: 查看栈顶元素，不进行弹出操作。</li>
-<li><b>isEmpty()</b>: 检查栈是否为空。</li>
-<li><b>size()</b>: 返回栈中元素的数量。</li>
-</ul>
-</li>
-</ul>
-<p>  注意到栈定义了一组操作，但并未规定其具体实现方式。不同的数据结构（如数组、链表）可以用来支持栈的操作，但只需要关注栈的操作。这再次表明，<b>抽象数据类型不必关心实现细节</b>。</p>
-</div></details>
-<hr>
-<h2 id="二-数据结构">二 数据结构</h2>
-<p>  <b>数据结构</b>是指相互之间存在<b>一种或多种特定关系</b>的数据元素的集合。它研究的是就是如何按一定的逻辑结构，把数据组织起来，并选择适当的存储表示方法<b>把逻辑结构组织好的数据</b>存储到计算机的存储器里。</p>
-<div class="note info flat"><p><b>请注意</b>：<br>
-  <b>数据结构</b>-常指存储在计算机内存中的数据。<br>
-  <b>文件结构</b>-常指外存储器（如磁盘驱动器、CD）中数据的组织。</p>
-</div>
-<p>  诸如数组、栈、队列、链表等都是常用的数据结构。数据结构一般包含以下几种常用运算：</p>
-<ul>
-<li><b>检索</b>。检索就是在数据结构里查找满足一定条件的节点。一般是给定一个某字段的值，找具有该字段值的节点。</li>
-<li><b>插入</b>。往数据结构中增加新的节点。</li>
-<li><b>删除</b>。把指定的结点从数据结构中去掉。</li>
-<li><b>更新</b>。改变指定节点的一个或多个字段的值。</li>
-<li><b>排序</b>。把节点按某种指定的顺序重新排列。例如递增或递减。</li>
-</ul>
-<hr>
-<h2 id="三-数据项、数据结构和抽象数据类型的关系">三 数据项、数据结构和抽象数据类型的关系</h2>
-<p>  数据项有<b>逻辑形式</b>和<b>物理形式</b>两个方面。<b>ADT定义了数据类型的逻辑形式，数据结构是实现数据类型的物理形式。</b>这是因为我们强调过ADT关注操作而不关注实现，因而ADT用以阐释数据项的逻辑形式。我们注意到在数据结构的研究内容中，提到了<b>把逻辑结构组织好的数据</b>，这就是ADT的作用。而数据结构关注的恰好就是如何存储，亦即如何实现，因而数据结构用以阐释数据项的物理形式。</p>
-]]></content>
-      <categories>
-        <category>数据结构</category>
-      </categories>
-      <tags>
-        <tag>Data Structures</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>数据结构 | 栈 队列</title>
     <url>/post/d7d38339.html</url>
     <content><![CDATA[<div class="note info flat"><p>  本博文中引入的：</p>
@@ -1016,112 +1016,6 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
 <li><b>将关键码与值绑定</b>-某些情况下，利用比较类从记录中抽取关键码，比存储键值对更合适。博主认为，这是说关键码的确定来源于记录，记录的相对大小（由用户定义）确定了关键码的相对大小（由用户定义），这使得关键码和记录的相对大小总是一致，这样能更好地管理以有序顺序表实现的字典。（若有误，还望在评论区指出，谢谢！）</li>
 </ul>
 </div>]]></content>
-      <categories>
-        <category>数据结构</category>
-      </categories>
-      <tags>
-        <tag>Data Structures</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>博客基建 | 博客搭建更新日志</title>
-    <url>/post/b74865a7.html</url>
-    <content><![CDATA[<h2 id="2023-7-23更新日志">2023-7-23更新日志</h2>
-<h3 id="1-重要更新">1 重要更新</h3>
-<h4 id="1-1-新增页面-友链">1.1 新增页面-友链</h4>
-<blockquote>
-<p>  置身于信息世界的广阔天地，踽踽独行难媲集思广益。未来立足于过往，每一位奋斗者都值得被铭记。您现在可以在<code>友链</code>页面查看同行者，他们的不断探究和经验分享促成了如今博客的繁花似锦。</p>
-</blockquote>
-<h3 id="2-其它更新">2 其它更新</h3>
-<h4 id="2-1-优化感官-页面简化">2.1 优化感官-页面简化</h4>
-<blockquote>
-<p>  此前的页面背景过于纷繁复杂，降低了访客的视觉体验；同时过多的资源加载降低了网页载入速率，延长了访客的等待时间。这不符合博客的工具性。因此，本次更新通过放弃部分效果以获得更直观清晰的访问体验。</p>
-</blockquote>
-<hr>
-<h2 id="2023-5-10更新日志">2023-5-10更新日志</h2>
-<h3 id="1-重要更新-2">1 重要更新</h3>
-<h4 id="1-1-新增功能-搜索">1.1 新增功能-搜索</h4>
-<blockquote>
-<p>  您现在可以单击导航栏的<code>放大镜</code>按钮唤起搜索弹窗，输入关键词以查找相关博文。</p>
-</blockquote>
-<h4 id="1-2-优化功能-评论">1.2 优化功能-评论</h4>
-<blockquote>
-<p>  为了提供更方便的评论服务，评论系统由Valine变更为Waline。<br>
-  您现在可以单击评论栏底部的<code>登录</code>按钮进入登录页面登录您的账号，以享受个性化的评论服务。您可选用的登录方式包括但不仅限于<b>QQ/微博/Github</b>。</p>
-</blockquote>
-<div class="note info flat"><ul>
-<li>如果您在昵称处输入了您的QQ账号，您的头像将设置为与QQ相同；</li>
-<li>如果您在邮箱处输入了您的QQ邮箱，您的昵称和头像将设置为与QQ相同；</li>
-<li>如果您采用QQ登录，您的昵称和头像将设置为与QQ相同。</li>
-</ul>
-</div>
-<h3 id="2-其它更新-2">2 其它更新</h3>
-<h4 id="2-1-优化感官-加载速率">2.1 优化感官-加载速率</h4>
-<blockquote>
-<p>  博客加载速度过慢致使访问体验降低。因此，本次更新通过尝试不同的部署进一步优化了博客加载速率。加载速率具有地区差异性。</p>
-</blockquote>
-<div class="note success flat"><p>  以下为您提供了三个链接，您可以尝试访问其中任意一个，收藏其中加载速率较快的一个。</p>
-<ul>
-<li><a href="https://www.dawn-of-time.top/">https://www.dawn-of-time.top/</a><b>（推荐）</b></li>
-<li><a href="https://netlify.dawn-of-time.top/">https://netlify.dawn-of-time.top/</a></li>
-<li><a href="https://dawn-of-time.github.io/">https://dawn-of-time.github.io/</a><b>（不推荐）</b></li>
-</ul>
-</div>
-<hr>
-<h2 id="2023-5-9更新日志">2023-5-9更新日志</h2>
-<h3 id="1-重要更新-3">1 重要更新</h3>
-<h4 id="1-1-新增功能-评论">1.1 新增功能-评论</h4>
-<blockquote>
-<p>  评论功能的作用包括但不限于：</p>
-<ul>
-<li>向我提出疑问、修改建议或者告知侵权内容（如果有）；</li>
-<li>与我和其他访客交流有关博文内容的学习经验。</li>
-</ul>
-<p>  <b>评论内容应当遵循至少以下规定：</b></p>
-<ul>
-<li>一 严禁散布谣言，谎报险情、疫情、警情或者以其他方法故意扰乱公共秩序；</li>
-<li>二 严禁分享除与博文内容相关的第三方链接，包括但不限于广告、刷单、赌博等；</li>
-<li>三 严禁挑衅、辱骂、诋毁、攻击作者和其他访客；</li>
-<li>四 严禁谈论政治话题。</li>
-</ul>
-</blockquote>
- <div class="note danger flat"><p>  本规定即日起执行。若有违反者，我将依据以上规定删除有关评论。<br>
-  未尽事宜，后续补充。</p>
-</div>]]></content>
-      <categories>
-        <category>博客基建</category>
-      </categories>
-      <tags>
-        <tag>Update</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数据结构 | 优先队列 堆</title>
-    <url>/post/7805a75e.html</url>
-    <content><![CDATA[<h2 id="一-优先队列">一 优先队列</h2>
-<p>  <b>优先队列</b>是一些按照重要性或优先级来组织的对象。按优先级组织的<a href="https://www.dawn-of-time.top/post/eb4efb69.html">二叉检索树</a>，其平均情况下插入和删除操作的总时间代价为Θ(nlog n)，但这可能回导致二叉检索树不平衡，降低性能。这样一来，<b>堆</b>数据结构应运而生。</p>
-<hr>
-<h2 id="二-堆">二 堆</h2>
-<p>  <b>堆</b>由以下两条性质来定义：</p>
-<ul>
-<li>它是一棵<b>完全二叉树</b>；</li>
-<li>其中存储的数据<b>局部有序</b>。</li>
-</ul>
-<p>  注意到堆和二叉检索树的区别。二叉检索树定义了一组完全排序的结点，而堆的排序是局部的——<b>堆的兄弟结点之间并无必然联系</b>。</p>
-<div class="note info flat"><p>  根据局部有序的不同，有以下两种堆：</p>
-<ul>
-<li><b>最大堆</b>-任意一个结点存储的值都大于或等于其任意一个子结点存储的值。</li>
-<li><b>最小堆</b>-任意一个结点存储的值都小于或等于其任意一个子结点存储的值。</li>
-</ul>
-<p>  这两种堆都各有所长。下文都以最大堆为例。</p>
-</div>
-<details class="toggle"><summary class="toggle-button" style>单击此处查看最大堆的类声明及其成员函数的实现</summary><div class="toggle-content"><p>  下面是从教材中摘录的最大堆的类声明及其成员函数的实现。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// From the software distribution accompanying the textbook</span></span><br><span class="line"><span class="comment">// &quot;A Practical Introduction to Data Structures and Algorithm Analysis,</span></span><br><span class="line"><span class="comment">// Third Edition (C++)&quot; by Clifford A. Shaffer.</span></span><br><span class="line"><span class="comment">// Source code Copyright (C) 2007-2011 by Clifford A. Shaffer.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Heap class</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E, <span class="keyword">typename</span> Comp&gt; <span class="keyword">class</span> <span class="title class_">heap</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  E* Heap;          <span class="comment">// Pointer to the heap array</span></span><br><span class="line">  <span class="type">int</span> maxsize;         <span class="comment">// Maximum size of the heap</span></span><br><span class="line">  <span class="type">int</span> n;               <span class="comment">// Number of elements now in the heap</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// Helper function to put element in its correct place</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">siftdown</span><span class="params">(<span class="type">int</span> pos)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (!<span class="built_in">isLeaf</span>(pos)) &#123; <span class="comment">// Stop if pos is a leaf</span></span><br><span class="line">      <span class="type">int</span> j = <span class="built_in">leftchild</span>(pos);  <span class="type">int</span> rc = <span class="built_in">rightchild</span>(pos);</span><br><span class="line">      <span class="keyword">if</span> ((rc &lt; n) &amp;&amp; Comp::<span class="built_in">prior</span>(Heap[rc], Heap[j]))</span><br><span class="line">        j = rc;            <span class="comment">// Set j to greater child&#x27;s value</span></span><br><span class="line">      <span class="keyword">if</span> (Comp::<span class="built_in">prior</span>(Heap[pos], Heap[j])) <span class="keyword">return</span>; <span class="comment">// Done</span></span><br><span class="line">      <span class="built_in">swap</span>(Heap, pos, j);</span><br><span class="line">      pos = j;             <span class="comment">// Move down</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">heap</span>(E* h, <span class="type">int</span> num, <span class="type">int</span> max)     <span class="comment">// Constructor</span></span><br><span class="line">    &#123; Heap = h;  n = num;  maxsize = max;  <span class="built_in">buildHeap</span>(); &#125;</span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">size</span><span class="params">()</span> <span class="type">const</span>       <span class="comment">// Return current heap size</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">return</span> n; &#125;</span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">isLeaf</span><span class="params">(<span class="type">int</span> pos)</span> <span class="type">const</span> <span class="comment">// True if pos is a leaf</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">return</span> (pos &gt;= n/<span class="number">2</span>) &amp;&amp; (pos &lt; n); &#125;</span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">leftchild</span><span class="params">(<span class="type">int</span> pos)</span> <span class="type">const</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">return</span> <span class="number">2</span>*pos + <span class="number">1</span>; &#125;    <span class="comment">// Return leftchild position</span></span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">rightchild</span><span class="params">(<span class="type">int</span> pos)</span> <span class="type">const</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">return</span> <span class="number">2</span>*pos + <span class="number">2</span>; &#125;    <span class="comment">// Return rightchild position</span></span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">parent</span><span class="params">(<span class="type">int</span> pos)</span> <span class="type">const</span>  <span class="comment">// Return parent position</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">return</span> (pos<span class="number">-1</span>)/<span class="number">2</span>; &#125;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">buildHeap</span><span class="params">()</span>           <span class="comment">// Heapify contents of Heap</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">for</span> (<span class="type">int</span> i=n/<span class="number">2</span><span class="number">-1</span>; i&gt;=<span class="number">0</span>; i--) <span class="built_in">siftdown</span>(i); &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Insert &quot;it&quot; into the heap</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">insert</span><span class="params">(<span class="type">const</span> E&amp; it)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">Assert</span>(n &lt; maxsize, <span class="string">&quot;Heap is full&quot;</span>);</span><br><span class="line">    <span class="type">int</span> curr = n++;             <span class="comment">//这里先使用n再递增。因为一共n个元素，下标由0至n-1，故新增元素下标是递增前的n</span></span><br><span class="line">    Heap[curr] = it;            <span class="comment">// Start at end of heap</span></span><br><span class="line">    <span class="comment">// Now sift up until curr&#x27;s parent &gt; curr</span></span><br><span class="line">    <span class="keyword">while</span> ((curr!=<span class="number">0</span>) &amp;&amp;</span><br><span class="line">           (Comp::<span class="built_in">prior</span>(Heap[curr], Heap[<span class="built_in">parent</span>(curr)]))) &#123;</span><br><span class="line">      <span class="built_in">swap</span>(Heap, curr, <span class="built_in">parent</span>(curr));</span><br><span class="line">      curr = <span class="built_in">parent</span>(curr);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// Remove first value</span></span><br><span class="line">  <span class="function">E <span class="title">removefirst</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">Assert</span> (n &gt; <span class="number">0</span>, <span class="string">&quot;Heap is empty&quot;</span>);</span><br><span class="line">    <span class="built_in">swap</span>(Heap, <span class="number">0</span>, --n);       <span class="comment">// Swap first with last value</span></span><br><span class="line">    <span class="keyword">if</span> (n != <span class="number">0</span>) <span class="built_in">siftdown</span>(<span class="number">0</span>);  <span class="comment">// Siftdown new root val</span></span><br><span class="line">    <span class="keyword">return</span> Heap[n];             <span class="comment">// Return deleted value</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Remove and return element at specified position</span></span><br><span class="line">  <span class="function">E <span class="title">remove</span><span class="params">(<span class="type">int</span> pos)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">Assert</span>((pos &gt;= <span class="number">0</span>) &amp;&amp; (pos &lt; n), <span class="string">&quot;Bad position&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (pos == (n<span class="number">-1</span>)) n--; <span class="comment">// Last element, no work to do</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="built_in">swap</span>(Heap, pos, --n);          <span class="comment">// Swap with last value</span></span><br><span class="line">      <span class="keyword">while</span> ((pos != <span class="number">0</span>) &amp;&amp;</span><br><span class="line">             (Comp::<span class="built_in">prior</span>(Heap[pos], Heap[<span class="built_in">parent</span>(pos)]))) &#123;</span><br><span class="line">        <span class="built_in">swap</span>(Heap, pos, <span class="built_in">parent</span>(pos)); <span class="comment">// Push up large key</span></span><br><span class="line">        pos = <span class="built_in">parent</span>(pos);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (n != <span class="number">0</span>) <span class="built_in">siftdown</span>(pos);     <span class="comment">// Push down small key</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Heap[n];</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></details>
-<p>  在上面的实现中，注意到<code>siftdown</code>函数是将当前结点与子结点比较并进行适当地移动。单独将该函数拿出来分析。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Helper function to put element in its correct place</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">siftdown</span><span class="params">(<span class="type">int</span> pos)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">while</span> (!<span class="built_in">isLeaf</span>(pos)) &#123; <span class="comment">// Stop if pos is a leaf</span></span><br><span class="line">    <span class="type">int</span> j = <span class="built_in">leftchild</span>(pos);  <span class="type">int</span> rc = <span class="built_in">rightchild</span>(pos);</span><br><span class="line">    <span class="keyword">if</span> ((rc &lt; n) &amp;&amp; Comp::<span class="built_in">prior</span>(Heap[rc], Heap[j]))</span><br><span class="line">      j = rc;            <span class="comment">// Set j to greater child&#x27;s value</span></span><br><span class="line">    <span class="keyword">if</span> (Comp::<span class="built_in">prior</span>(Heap[pos], Heap[j])) <span class="keyword">return</span>; <span class="comment">// Done</span></span><br><span class="line">    <span class="built_in">swap</span>(Heap, pos, j);</span><br><span class="line">    pos = j;             <span class="comment">// Move down</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  这个函数的思路是这样的：先获取pos的左右子结点，然后在第一个if语句中，通过Comp类的prior函数比较二者值的大小（如果第一个参数大于第二个参数，则返回True）。第二个if语句是判断当前pos处的值是否已经处在合适的位置，即其值比子结点中的值都大，如是，则意味着pos处的值已经在合适的位置上，因此直接结束循环，并返回；否则将二者中<b>较大的</b>值所在的位置与pos位置进行交换，最后将pos向下（值较大的位置）移动，如此循环，直至到达叶结点或者到达某个合适的分支结点。这样就实现了将元素放到合适的位置上。<br>
-  在建立过程中，这样的方法在最差情况下的时间代价为Θ(n)；在删除过程中，这样的方法在最差情况和平均情况下的时间代价为Θ(log n)（相关计算略）。这体现了堆数据机构的高效率。</p>
-]]></content>
       <categories>
         <category>数据结构</category>
       </categories>
@@ -1292,6 +1186,40 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </tags>
   </entry>
   <entry>
+    <title>数据结构 | 优先队列 堆</title>
+    <url>/post/7805a75e.html</url>
+    <content><![CDATA[<h2 id="一-优先队列">一 优先队列</h2>
+<p>  <b>优先队列</b>是一些按照重要性或优先级来组织的对象。按优先级组织的<a href="https://www.dawn-of-time.top/post/eb4efb69.html">二叉检索树</a>，其平均情况下插入和删除操作的总时间代价为Θ(nlog n)，但这可能回导致二叉检索树不平衡，降低性能。这样一来，<b>堆</b>数据结构应运而生。</p>
+<hr>
+<h2 id="二-堆">二 堆</h2>
+<p>  <b>堆</b>由以下两条性质来定义：</p>
+<ul>
+<li>它是一棵<b>完全二叉树</b>；</li>
+<li>其中存储的数据<b>局部有序</b>。</li>
+</ul>
+<p>  注意到堆和二叉检索树的区别。二叉检索树定义了一组完全排序的结点，而堆的排序是局部的——<b>堆的兄弟结点之间并无必然联系</b>。</p>
+<div class="note info flat"><p>  根据局部有序的不同，有以下两种堆：</p>
+<ul>
+<li><b>最大堆</b>-任意一个结点存储的值都大于或等于其任意一个子结点存储的值。</li>
+<li><b>最小堆</b>-任意一个结点存储的值都小于或等于其任意一个子结点存储的值。</li>
+</ul>
+<p>  这两种堆都各有所长。下文都以最大堆为例。</p>
+</div>
+<details class="toggle"><summary class="toggle-button" style>单击此处查看最大堆的类声明及其成员函数的实现</summary><div class="toggle-content"><p>  下面是从教材中摘录的最大堆的类声明及其成员函数的实现。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// From the software distribution accompanying the textbook</span></span><br><span class="line"><span class="comment">// &quot;A Practical Introduction to Data Structures and Algorithm Analysis,</span></span><br><span class="line"><span class="comment">// Third Edition (C++)&quot; by Clifford A. Shaffer.</span></span><br><span class="line"><span class="comment">// Source code Copyright (C) 2007-2011 by Clifford A. Shaffer.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Heap class</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E, <span class="keyword">typename</span> Comp&gt; <span class="keyword">class</span> <span class="title class_">heap</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  E* Heap;          <span class="comment">// Pointer to the heap array</span></span><br><span class="line">  <span class="type">int</span> maxsize;         <span class="comment">// Maximum size of the heap</span></span><br><span class="line">  <span class="type">int</span> n;               <span class="comment">// Number of elements now in the heap</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// Helper function to put element in its correct place</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">siftdown</span><span class="params">(<span class="type">int</span> pos)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (!<span class="built_in">isLeaf</span>(pos)) &#123; <span class="comment">// Stop if pos is a leaf</span></span><br><span class="line">      <span class="type">int</span> j = <span class="built_in">leftchild</span>(pos);  <span class="type">int</span> rc = <span class="built_in">rightchild</span>(pos);</span><br><span class="line">      <span class="keyword">if</span> ((rc &lt; n) &amp;&amp; Comp::<span class="built_in">prior</span>(Heap[rc], Heap[j]))</span><br><span class="line">        j = rc;            <span class="comment">// Set j to greater child&#x27;s value</span></span><br><span class="line">      <span class="keyword">if</span> (Comp::<span class="built_in">prior</span>(Heap[pos], Heap[j])) <span class="keyword">return</span>; <span class="comment">// Done</span></span><br><span class="line">      <span class="built_in">swap</span>(Heap, pos, j);</span><br><span class="line">      pos = j;             <span class="comment">// Move down</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">heap</span>(E* h, <span class="type">int</span> num, <span class="type">int</span> max)     <span class="comment">// Constructor</span></span><br><span class="line">    &#123; Heap = h;  n = num;  maxsize = max;  <span class="built_in">buildHeap</span>(); &#125;</span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">size</span><span class="params">()</span> <span class="type">const</span>       <span class="comment">// Return current heap size</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">return</span> n; &#125;</span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">isLeaf</span><span class="params">(<span class="type">int</span> pos)</span> <span class="type">const</span> <span class="comment">// True if pos is a leaf</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">return</span> (pos &gt;= n/<span class="number">2</span>) &amp;&amp; (pos &lt; n); &#125;</span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">leftchild</span><span class="params">(<span class="type">int</span> pos)</span> <span class="type">const</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">return</span> <span class="number">2</span>*pos + <span class="number">1</span>; &#125;    <span class="comment">// Return leftchild position</span></span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">rightchild</span><span class="params">(<span class="type">int</span> pos)</span> <span class="type">const</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">return</span> <span class="number">2</span>*pos + <span class="number">2</span>; &#125;    <span class="comment">// Return rightchild position</span></span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">parent</span><span class="params">(<span class="type">int</span> pos)</span> <span class="type">const</span>  <span class="comment">// Return parent position</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">return</span> (pos<span class="number">-1</span>)/<span class="number">2</span>; &#125;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">buildHeap</span><span class="params">()</span>           <span class="comment">// Heapify contents of Heap</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">for</span> (<span class="type">int</span> i=n/<span class="number">2</span><span class="number">-1</span>; i&gt;=<span class="number">0</span>; i--) <span class="built_in">siftdown</span>(i); &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Insert &quot;it&quot; into the heap</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">insert</span><span class="params">(<span class="type">const</span> E&amp; it)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">Assert</span>(n &lt; maxsize, <span class="string">&quot;Heap is full&quot;</span>);</span><br><span class="line">    <span class="type">int</span> curr = n++;             <span class="comment">//这里先使用n再递增。因为一共n个元素，下标由0至n-1，故新增元素下标是递增前的n</span></span><br><span class="line">    Heap[curr] = it;            <span class="comment">// Start at end of heap</span></span><br><span class="line">    <span class="comment">// Now sift up until curr&#x27;s parent &gt; curr</span></span><br><span class="line">    <span class="keyword">while</span> ((curr!=<span class="number">0</span>) &amp;&amp;</span><br><span class="line">           (Comp::<span class="built_in">prior</span>(Heap[curr], Heap[<span class="built_in">parent</span>(curr)]))) &#123;</span><br><span class="line">      <span class="built_in">swap</span>(Heap, curr, <span class="built_in">parent</span>(curr));</span><br><span class="line">      curr = <span class="built_in">parent</span>(curr);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// Remove first value</span></span><br><span class="line">  <span class="function">E <span class="title">removefirst</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">Assert</span> (n &gt; <span class="number">0</span>, <span class="string">&quot;Heap is empty&quot;</span>);</span><br><span class="line">    <span class="built_in">swap</span>(Heap, <span class="number">0</span>, --n);       <span class="comment">// Swap first with last value</span></span><br><span class="line">    <span class="keyword">if</span> (n != <span class="number">0</span>) <span class="built_in">siftdown</span>(<span class="number">0</span>);  <span class="comment">// Siftdown new root val</span></span><br><span class="line">    <span class="keyword">return</span> Heap[n];             <span class="comment">// Return deleted value</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Remove and return element at specified position</span></span><br><span class="line">  <span class="function">E <span class="title">remove</span><span class="params">(<span class="type">int</span> pos)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">Assert</span>((pos &gt;= <span class="number">0</span>) &amp;&amp; (pos &lt; n), <span class="string">&quot;Bad position&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (pos == (n<span class="number">-1</span>)) n--; <span class="comment">// Last element, no work to do</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="built_in">swap</span>(Heap, pos, --n);          <span class="comment">// Swap with last value</span></span><br><span class="line">      <span class="keyword">while</span> ((pos != <span class="number">0</span>) &amp;&amp;</span><br><span class="line">             (Comp::<span class="built_in">prior</span>(Heap[pos], Heap[<span class="built_in">parent</span>(pos)]))) &#123;</span><br><span class="line">        <span class="built_in">swap</span>(Heap, pos, <span class="built_in">parent</span>(pos)); <span class="comment">// Push up large key</span></span><br><span class="line">        pos = <span class="built_in">parent</span>(pos);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (n != <span class="number">0</span>) <span class="built_in">siftdown</span>(pos);     <span class="comment">// Push down small key</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Heap[n];</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></details>
+<p>  在上面的实现中，注意到<code>siftdown</code>函数是将当前结点与子结点比较并进行适当地移动。单独将该函数拿出来分析。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Helper function to put element in its correct place</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">siftdown</span><span class="params">(<span class="type">int</span> pos)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">while</span> (!<span class="built_in">isLeaf</span>(pos)) &#123; <span class="comment">// Stop if pos is a leaf</span></span><br><span class="line">    <span class="type">int</span> j = <span class="built_in">leftchild</span>(pos);  <span class="type">int</span> rc = <span class="built_in">rightchild</span>(pos);</span><br><span class="line">    <span class="keyword">if</span> ((rc &lt; n) &amp;&amp; Comp::<span class="built_in">prior</span>(Heap[rc], Heap[j]))</span><br><span class="line">      j = rc;            <span class="comment">// Set j to greater child&#x27;s value</span></span><br><span class="line">    <span class="keyword">if</span> (Comp::<span class="built_in">prior</span>(Heap[pos], Heap[j])) <span class="keyword">return</span>; <span class="comment">// Done</span></span><br><span class="line">    <span class="built_in">swap</span>(Heap, pos, j);</span><br><span class="line">    pos = j;             <span class="comment">// Move down</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  这个函数的思路是这样的：先获取pos的左右子结点，然后在第一个if语句中，通过Comp类的prior函数比较二者值的大小（如果第一个参数大于第二个参数，则返回True）。第二个if语句是判断当前pos处的值是否已经处在合适的位置，即其值比子结点中的值都大，如是，则意味着pos处的值已经在合适的位置上，因此直接结束循环，并返回；否则将二者中<b>较大的</b>值所在的位置与pos位置进行交换，最后将pos向下（值较大的位置）移动，如此循环，直至到达叶结点或者到达某个合适的分支结点。这样就实现了将元素放到合适的位置上。<br>
+  在建立过程中，这样的方法在最差情况下的时间代价为Θ(n)；在删除过程中，这样的方法在最差情况和平均情况下的时间代价为Θ(log n)（相关计算略）。这体现了堆数据机构的高效率。</p>
+]]></content>
+      <categories>
+        <category>数据结构</category>
+      </categories>
+      <tags>
+        <tag>Data Structures</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数据结构 | Huffman编码树</title>
     <url>/post/d476fbe4.html</url>
     <content><![CDATA[<!-- 让表格居中显示的风格 -->
@@ -1304,7 +1232,7 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
   margin-right: auto;
 }
 </style>
-<h1>一 建立Huffman编码树</h1>
+<h2 id="一-建立Huffman编码树">一 建立Huffman编码树</h2>
 <p>  <b>Huffman编码</b>将为字符分配代码。代码长度取决于<b>对应字母的相对使用频率或者“权重”</b>，因此它是一种<b>变长编码</b>。它的得到源于称为<b>Huffman编码树</b>的<b>满二叉树</b>。这棵树的每个叶结点对应一个字母，叶结点的权重就是对应字母的出现频率——这样设计的目的是按照最小外部路径权重建立一棵树，亦即对于给定叶结点集合具有加权路径长度（<b>叶结点的权重乘以深度</b>）之和最小的二叉树。简单地说，<b>权重大的叶结点深度小</b>。</p>
 <p>  建立n个结点的Huffman树很简单：</p>
 <ul>
@@ -1322,7 +1250,7 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
 <p>  Huffman树的建立方法是<b>贪心算法</b>（总是做出在当前看来是最好的选择，不从整体最优上加以考虑的算法）的一个例子。它总是选择当前权重最小的两棵子树相结合，简化了算法。</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Build a Huffman tree from a collection of frequencies</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt; <span class="function">HuffTree&lt;E&gt;*</span></span><br><span class="line"><span class="function"><span class="title">buildHuff</span><span class="params">(HuffTree&lt;E&gt;** TreeArray, <span class="type">int</span> count)</span> </span>&#123;</span><br><span class="line">  heap&lt;HuffTree&lt;E&gt;*,minTreeComp&gt;* forest =</span><br><span class="line">    <span class="keyword">new</span> heap&lt;HuffTree&lt;E&gt;*, minTreeComp&gt;(TreeArray,</span><br><span class="line">                                        count, count); </span><br><span class="line">  HuffTree&lt;<span class="type">char</span>&gt; *temp1, *temp2, *temp3 = <span class="literal">NULL</span>;</span><br><span class="line">  <span class="keyword">while</span> (forest-&gt;<span class="built_in">size</span>() &gt; <span class="number">1</span>) &#123;</span><br><span class="line">    temp1 = forest-&gt;<span class="built_in">removefirst</span>();   <span class="comment">// Pull first two trees  </span></span><br><span class="line">    temp2 = forest-&gt;<span class="built_in">removefirst</span>();   <span class="comment">//   off the list</span></span><br><span class="line">    temp3 = <span class="keyword">new</span> <span class="built_in">HuffTree</span>&lt;E&gt;(temp1, temp2);</span><br><span class="line">    forest-&gt;<span class="built_in">insert</span>(temp3);  <span class="comment">// Put the new tree back on list</span></span><br><span class="line">    <span class="keyword">delete</span> temp1;        <span class="comment">// Must delete the remnants</span></span><br><span class="line">    <span class="keyword">delete</span> temp2;        <span class="comment">//   of the trees we created</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> temp3;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></details>
 <hr>
-<h1>二 Huffman编码</h1>
+<h2 id="二-Huffman编码">二 Huffman编码</h2>
 <p>  从根结点开始，分别把<code>0</code>或者<code>1</code>标于树的每条边上——其中，<code>0</code>对应于连接左子结点的那条边，<code>1</code>对应于连接右子结点的那条边。例如对图F1，它的被标记的Huffman树如图F2所示，并可以得到字母编码如表T1所示。<br>
 <img src="/post/d476fbe4/data-structures-007-F2.jpg" alt="F2.被标记的Huffman树示例" title="被标记的Huffman树示例"></p>
 <div class="center">
@@ -1393,6 +1321,78 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </categories>
       <tags>
         <tag>Data Structures</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>博客基建 | 博客搭建更新日志</title>
+    <url>/post/b74865a7.html</url>
+    <content><![CDATA[<h2 id="2023-7-23更新日志">2023-7-23更新日志</h2>
+<h3 id="1-重要更新">1 重要更新</h3>
+<h4 id="1-1-新增页面-友链">1.1 新增页面-友链</h4>
+<blockquote>
+<p>  置身于信息世界的广阔天地，踽踽独行难媲集思广益。未来立足于过往，每一位奋斗者都值得被铭记。您现在可以在<code>友链</code>页面查看同行者，他们的不断探究和经验分享促成了如今博客的繁花似锦。</p>
+</blockquote>
+<h3 id="2-其它更新">2 其它更新</h3>
+<h4 id="2-1-优化感官-页面简化">2.1 优化感官-页面简化</h4>
+<blockquote>
+<p>  此前的页面背景过于纷繁复杂，降低了访客的视觉体验；同时过多的资源加载降低了网页载入速率，延长了访客的等待时间。这不符合博客的工具性。因此，本次更新通过放弃部分效果以获得更直观清晰的访问体验。</p>
+</blockquote>
+<hr>
+<h2 id="2023-5-10更新日志">2023-5-10更新日志</h2>
+<h3 id="1-重要更新-2">1 重要更新</h3>
+<h4 id="1-1-新增功能-搜索">1.1 新增功能-搜索</h4>
+<blockquote>
+<p>  您现在可以单击导航栏的<code>放大镜</code>按钮唤起搜索弹窗，输入关键词以查找相关博文。</p>
+</blockquote>
+<h4 id="1-2-优化功能-评论">1.2 优化功能-评论</h4>
+<blockquote>
+<p>  为了提供更方便的评论服务，评论系统由Valine变更为Waline。<br>
+  您现在可以单击评论栏底部的<code>登录</code>按钮进入登录页面登录您的账号，以享受个性化的评论服务。您可选用的登录方式包括但不仅限于<b>QQ/微博/Github</b>。</p>
+</blockquote>
+<div class="note info flat"><ul>
+<li>如果您在昵称处输入了您的QQ账号，您的头像将设置为与QQ相同；</li>
+<li>如果您在邮箱处输入了您的QQ邮箱，您的昵称和头像将设置为与QQ相同；</li>
+<li>如果您采用QQ登录，您的昵称和头像将设置为与QQ相同。</li>
+</ul>
+</div>
+<h3 id="2-其它更新-2">2 其它更新</h3>
+<h4 id="2-1-优化感官-加载速率">2.1 优化感官-加载速率</h4>
+<blockquote>
+<p>  博客加载速度过慢致使访问体验降低。因此，本次更新通过尝试不同的部署进一步优化了博客加载速率。加载速率具有地区差异性。</p>
+</blockquote>
+<div class="note success flat"><p>  以下为您提供了三个链接，您可以尝试访问其中任意一个，收藏其中加载速率较快的一个。</p>
+<ul>
+<li><a href="https://www.dawn-of-time.top/">https://www.dawn-of-time.top/</a><b>（推荐）</b></li>
+<li><a href="https://netlify.dawn-of-time.top/">https://netlify.dawn-of-time.top/</a></li>
+<li><a href="https://dawn-of-time.github.io/">https://dawn-of-time.github.io/</a><b>（不推荐）</b></li>
+</ul>
+</div>
+<hr>
+<h2 id="2023-5-9更新日志">2023-5-9更新日志</h2>
+<h3 id="1-重要更新-3">1 重要更新</h3>
+<h4 id="1-1-新增功能-评论">1.1 新增功能-评论</h4>
+<blockquote>
+<p>  评论功能的作用包括但不限于：</p>
+<ul>
+<li>向我提出疑问、修改建议或者告知侵权内容（如果有）；</li>
+<li>与我和其他访客交流有关博文内容的学习经验。</li>
+</ul>
+<p>  <b>评论内容应当遵循至少以下规定：</b></p>
+<ul>
+<li>一 严禁散布谣言，谎报险情、疫情、警情或者以其他方法故意扰乱公共秩序；</li>
+<li>二 严禁分享除与博文内容相关的第三方链接，包括但不限于广告、刷单、赌博等；</li>
+<li>三 严禁挑衅、辱骂、诋毁、攻击作者和其他访客；</li>
+<li>四 严禁谈论政治话题。</li>
+</ul>
+</blockquote>
+ <div class="note danger flat"><p>  本规定即日起执行。若有违反者，我将依据以上规定删除有关评论。<br>
+  未尽事宜，后续补充。</p>
+</div>]]></content>
+      <categories>
+        <category>博客基建</category>
+      </categories>
+      <tags>
+        <tag>Update</tag>
       </tags>
   </entry>
 </search>
