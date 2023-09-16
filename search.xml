@@ -363,6 +363,58 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </tags>
   </entry>
   <entry>
+    <title>C语言 | 递归实践：汉诺塔问题 青蛙跳台阶问题</title>
+    <url>/post/6290815e.html</url>
+    <content><![CDATA[<h2 id="一-递归的含义及其两个必要条件">一 递归的含义及其两个必要条件</h2>
+<h3 id="（一）-递归的含义">（一） 递归的含义</h3>
+<p>  递归，是指一种通过重复将问题分解为同类的子问题而解决问题的方法。它将大事化小，能够大大减少程序的代码量。</p>
+<h3 id="（二）-递归的两个必要条件">（二） 递归的两个必要条件</h3>
+<p>  1 存在限制条件，当满足这个限制条件的时候，递归便不再继续；<br>
+  2 每次递归调用之后越来越接近这个限制条件。</p>
+<hr>
+<h2 id="二-汉诺塔问题">二 汉诺塔问题</h2>
+<h3 id="（一）-问题内容">（一） 问题内容</h3>
+<div class="note info flat"><ul>
+<li><b>BASE</b>-在一块铜板装置上，有三根杆(编号A、B、C)，在A杆自下而上、由大到小按顺序放置若干个金盘。（如图F1所示）</li>
+<li><b>GOAL</b>-把A杆上的金盘全部移到C杆上，并仍保持原有顺序叠好。</li>
+<li><b>RULE</b>-每次只能移动一个盘子，并且在移动过程中三根杆上都始终保持大盘在下，小盘在上，操作过程中盘子可以置于A、B、C任一杆上。</li>
+</ul>
+</div>
+<p><img src="/post/6290815e/C-Language-005-F1.jpg" alt="F1.汉诺塔问题" title="F1.汉诺塔问题"></p>
+<h3 id="（二）-解决思路">（二） 解决思路</h3>
+<p>  为了满足<code>大盘在下，小盘在上</code>的规则，当金盘进入C杆时，其顺序也应当是<code>先大盘，后小盘</code>。以4个金盘为例，不妨基于C杆考察此问题：<br>
+  <b>第1轮转移</b> 当第一个金盘进入C杆时，其余盘应按照从小到大置于B杆；（如图F2.a所示）<br>
+  <b>第2轮转移</b> 当第二个金盘进入C杆时，其余盘应按照从小到大置于A杆；（如图F2.b所示）<br>
+  <b>第3轮转移</b> 当第三个金盘进入C杆时，其余盘应按照从小到大置于B杆；（如图F2.c所示）<br>
+  <b>第4轮转移</b> 当第四个金盘进入C杆时，达到目标。（如图F2.d所示）<br>
+<img src="/post/6290815e/C-Language-005-F2.jpg" alt="F2.汉诺塔问题" title="F2.汉诺塔问题操作流程示例"><br>
+  注意到，总是需要将A杆（或B杆）上的n个金盘中的n-1个转移到B杆（或A杆），然后将第n个金盘转移到C杆。并且在转移n-1个金盘的过程中，也同样遵循上述规律，即将A杆（或B杆）上的n-1个金盘中的n-2个转移到C杆，然后将第n-1金盘转移到B杆（或A杆）。这样一来，不难发现该问题可以分解为同类的子类问题，并且符合递归的必要条件——其限制条件是转移前A杆和B杆的金盘数目都为0；并且每轮结束时，金盘数目都<code>减1</code>，越来越接近限制条件。<br>
+  基于以上思路进行程序设计。</p>
+<h3 id="（三）-解决办法">（三） 解决办法</h3>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//函数的传入参数n是A杆放置的金盘数目。</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">TOH</span><span class="params">(<span class="type">int</span> n)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//定义返回结果为操作次数。</span></span><br><span class="line">	<span class="type">static</span> <span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//1.递归限制条件：</span></span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">0</span>)</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//2.递归部分：</span></span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//2.1.将A杆（或B杆）最底盘之上的n-1个盘子移动至B杆（或A杆）上。</span></span><br><span class="line">		ret += TOH(n - <span class="number">1</span>);</span><br><span class="line">		<span class="comment">//2.2.将最底盘移动至C杆上。</span></span><br><span class="line">		ret += <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">return</span> ret;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="三-青蛙跳台阶问题">三 青蛙跳台阶问题</h2>
+<h3 id="（一）-问题内容-2">（一） 问题内容</h3>
+<div class="note info flat"><ul>
+<li><b>BASE</b>-有一只青蛙处于若干阶台阶底层。</li>
+<li><b>GOAL</b>-青蛙恰好到达台阶顶层。</li>
+<li><b>RULE</b>-青蛙每次跳跃的台阶数仅能为1或2。</li>
+</ul>
+</div>
+<h3 id="（二）-解决思路-2">（二） 解决思路</h3>
+<p>  注意到<code>青蛙每次跳跃的台阶数仅能为1或2</code>，设跳跃的次数为M，台阶数为N，那么当进行第M次跳跃时，也仅能跳跃1阶或2阶；当进行第M-1次跳跃时，已经跳跃的台阶数是N-1或N-2。类似地，当进行第M-2次跳跃时，已经跳跃的台阶数是N-1-1或N-1-2或N-2-1或N-2-2。据此就可以知道，<b>跳跃N<code>(N≥3)</code>阶台阶的跳法总是跳跃N-1阶台阶的跳法与跳跃N-2阶台阶的跳法之和；当N=1时，仅有1种跳法；当N=2时，仅有两种跳法。</b>这便符合了递归的必要条件——其限制条件是跳跃前剩余台阶数为1或2；并且每次跳跃结束时，台阶数目都<code>减1</code>或<code>减2</code>，越来越接近限制条件。<br>
+  基于以上思路进行程序设计。</p>
+<h3 id="（三）-解决办法-2">（三） 解决办法</h3>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//函数的传入参数n是台阶数目。</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">CS</span><span class="params">(<span class="type">int</span> n)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//定义返回结果为跳法数目。</span></span><br><span class="line">	<span class="type">static</span> <span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//1.递归限制条件：</span></span><br><span class="line">	<span class="comment">//1.1.台阶数为1时，有1种跳法。</span></span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//1.2.台阶数为2时，有2种跳法。</span></span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (n == <span class="number">2</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//2.递归部分：</span></span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//跳跃n阶台阶的跳法总是跳跃n-1阶台阶的跳法与跳跃n-2阶台阶的跳法之和。</span></span><br><span class="line">		ret = CS(n - <span class="number">1</span>) + CS(n - <span class="number">2</span>);</span><br><span class="line">		<span class="keyword">return</span> ret;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>C语言</category>
+      </categories>
+      <tags>
+        <tag>C</tag>
+        <tag>Exploration</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C语言 | 函数scanf()的使用</title>
     <url>/post/13be382b.html</url>
     <content><![CDATA[<h2 id="一-函数scanf-的基本含义">一 函数scanf()的基本含义</h2>
@@ -423,58 +475,6 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       <tags>
         <tag>C</tag>
         <tag>Fallibility</tag>
-        <tag>Exploration</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C语言 | 递归实践：汉诺塔问题 青蛙跳台阶问题</title>
-    <url>/post/6290815e.html</url>
-    <content><![CDATA[<h2 id="一-递归的含义及其两个必要条件">一 递归的含义及其两个必要条件</h2>
-<h3 id="（一）-递归的含义">（一） 递归的含义</h3>
-<p>  递归，是指一种通过重复将问题分解为同类的子问题而解决问题的方法。它将大事化小，能够大大减少程序的代码量。</p>
-<h3 id="（二）-递归的两个必要条件">（二） 递归的两个必要条件</h3>
-<p>  1 存在限制条件，当满足这个限制条件的时候，递归便不再继续；<br>
-  2 每次递归调用之后越来越接近这个限制条件。</p>
-<hr>
-<h2 id="二-汉诺塔问题">二 汉诺塔问题</h2>
-<h3 id="（一）-问题内容">（一） 问题内容</h3>
-<div class="note info flat"><ul>
-<li><b>BASE</b>-在一块铜板装置上，有三根杆(编号A、B、C)，在A杆自下而上、由大到小按顺序放置若干个金盘。（如图F1所示）</li>
-<li><b>GOAL</b>-把A杆上的金盘全部移到C杆上，并仍保持原有顺序叠好。</li>
-<li><b>RULE</b>-每次只能移动一个盘子，并且在移动过程中三根杆上都始终保持大盘在下，小盘在上，操作过程中盘子可以置于A、B、C任一杆上。</li>
-</ul>
-</div>
-<p><img src="/post/6290815e/C-Language-005-F1.jpg" alt="F1.汉诺塔问题" title="F1.汉诺塔问题"></p>
-<h3 id="（二）-解决思路">（二） 解决思路</h3>
-<p>  为了满足<code>大盘在下，小盘在上</code>的规则，当金盘进入C杆时，其顺序也应当是<code>先大盘，后小盘</code>。以4个金盘为例，不妨基于C杆考察此问题：<br>
-  <b>第1轮转移</b> 当第一个金盘进入C杆时，其余盘应按照从小到大置于B杆；（如图F2.a所示）<br>
-  <b>第2轮转移</b> 当第二个金盘进入C杆时，其余盘应按照从小到大置于A杆；（如图F2.b所示）<br>
-  <b>第3轮转移</b> 当第三个金盘进入C杆时，其余盘应按照从小到大置于B杆；（如图F2.c所示）<br>
-  <b>第4轮转移</b> 当第四个金盘进入C杆时，达到目标。（如图F2.d所示）<br>
-<img src="/post/6290815e/C-Language-005-F2.jpg" alt="F2.汉诺塔问题" title="F2.汉诺塔问题操作流程示例"><br>
-  注意到，总是需要将A杆（或B杆）上的n个金盘中的n-1个转移到B杆（或A杆），然后将第n个金盘转移到C杆。并且在转移n-1个金盘的过程中，也同样遵循上述规律，即将A杆（或B杆）上的n-1个金盘中的n-2个转移到C杆，然后将第n-1金盘转移到B杆（或A杆）。这样一来，不难发现该问题可以分解为同类的子类问题，并且符合递归的必要条件——其限制条件是转移前A杆和B杆的金盘数目都为0；并且每轮结束时，金盘数目都<code>减1</code>，越来越接近限制条件。<br>
-  基于以上思路进行程序设计。</p>
-<h3 id="（三）-解决办法">（三） 解决办法</h3>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//函数的传入参数n是A杆放置的金盘数目。</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">TOH</span><span class="params">(<span class="type">int</span> n)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//定义返回结果为操作次数。</span></span><br><span class="line">	<span class="type">static</span> <span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//1.递归限制条件：</span></span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">0</span>)</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//2.递归部分：</span></span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//2.1.将A杆（或B杆）最底盘之上的n-1个盘子移动至B杆（或A杆）上。</span></span><br><span class="line">		ret += TOH(n - <span class="number">1</span>);</span><br><span class="line">		<span class="comment">//2.2.将最底盘移动至C杆上。</span></span><br><span class="line">		ret += <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">return</span> ret;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="三-青蛙跳台阶问题">三 青蛙跳台阶问题</h2>
-<h3 id="（一）-问题内容-2">（一） 问题内容</h3>
-<div class="note info flat"><ul>
-<li><b>BASE</b>-有一只青蛙处于若干阶台阶底层。</li>
-<li><b>GOAL</b>-青蛙恰好到达台阶顶层。</li>
-<li><b>RULE</b>-青蛙每次跳跃的台阶数仅能为1或2。</li>
-</ul>
-</div>
-<h3 id="（二）-解决思路-2">（二） 解决思路</h3>
-<p>  注意到<code>青蛙每次跳跃的台阶数仅能为1或2</code>，设跳跃的次数为M，台阶数为N，那么当进行第M次跳跃时，也仅能跳跃1阶或2阶；当进行第M-1次跳跃时，已经跳跃的台阶数是N-1或N-2。类似地，当进行第M-2次跳跃时，已经跳跃的台阶数是N-1-1或N-1-2或N-2-1或N-2-2。据此就可以知道，<b>跳跃N<code>(N≥3)</code>阶台阶的跳法总是跳跃N-1阶台阶的跳法与跳跃N-2阶台阶的跳法之和；当N=1时，仅有1种跳法；当N=2时，仅有两种跳法。</b>这便符合了递归的必要条件——其限制条件是跳跃前剩余台阶数为1或2；并且每次跳跃结束时，台阶数目都<code>减1</code>或<code>减2</code>，越来越接近限制条件。<br>
-  基于以上思路进行程序设计。</p>
-<h3 id="（三）-解决办法-2">（三） 解决办法</h3>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//函数的传入参数n是台阶数目。</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">CS</span><span class="params">(<span class="type">int</span> n)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//定义返回结果为跳法数目。</span></span><br><span class="line">	<span class="type">static</span> <span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//1.递归限制条件：</span></span><br><span class="line">	<span class="comment">//1.1.台阶数为1时，有1种跳法。</span></span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//1.2.台阶数为2时，有2种跳法。</span></span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (n == <span class="number">2</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//2.递归部分：</span></span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//跳跃n阶台阶的跳法总是跳跃n-1阶台阶的跳法与跳跃n-2阶台阶的跳法之和。</span></span><br><span class="line">		ret = CS(n - <span class="number">1</span>) + CS(n - <span class="number">2</span>);</span><br><span class="line">		<span class="keyword">return</span> ret;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>C语言</category>
-      </categories>
-      <tags>
-        <tag>C</tag>
         <tag>Exploration</tag>
       </tags>
   </entry>
@@ -671,68 +671,6 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </tags>
   </entry>
   <entry>
-    <title>数据结构 | 抽象数据类型和数据结构</title>
-    <url>/post/4c4fa0a7.html</url>
-    <content><![CDATA[<h2 id="一-抽象数据类型">一 抽象数据类型</h2>
-<p>  <code>数据类型</code>是指一个<b>类型</b>和定义在这个类型上的一组<b>操作</b>。<br>
-  <code>抽象数据类型（ADT，Abstract Data Type）</code>对数据类型的抽象描述。它并不关注数据类型的实现方式，转而关注数据类型的操作。</p>
-<details class="toggle"><summary class="toggle-button" style>单击此处进一步体会二者差异</summary><div class="toggle-content"><p>  以下给出了数据类型和抽象数据类型的表示示例：<br>
-<b>数据类型示例 - 整数（Integer）</b></p>
-<ul>
-<li>名称：整数（Integer）</li>
-<li>描述：表示整数值的基本数据类型。</li>
-<li>内部表示：在内存中以二进制补码形式存储。</li>
-<li>支持的操作：
-<ul>
-<li>加法、减法、乘法、除法等基本数学运算。</li>
-<li>比较操作（大于、小于、等于等）。</li>
-<li>转换为其他数据类型（例如，转换为浮点数）。</li>
-</ul>
-</li>
-</ul>
-<p><b>抽象数据类型示例 - 栈（Stack）</b></p>
-<ul>
-<li>名称：栈（Stack）</li>
-<li>描述：表示一个具有后进先出（LIFO）特性的抽象数据类型。</li>
-<li>支持的操作：
-<ul>
-<li><b>push(item)</b>: 将元素压入栈顶。</li>
-<li><b>pop()</b>: 弹出栈顶元素并返回。</li>
-<li><b>peek()</b>: 查看栈顶元素，不进行弹出操作。</li>
-<li><b>isEmpty()</b>: 检查栈是否为空。</li>
-<li><b>size()</b>: 返回栈中元素的数量。</li>
-</ul>
-</li>
-</ul>
-<p>  注意到栈定义了一组操作，但并未规定其具体实现方式。不同的数据结构（如数组、链表）可以用来支持栈的操作，但只需要关注栈的操作。这再次表明，<b>抽象数据类型不必关心实现细节</b>。</p>
-</div></details>
-<hr>
-<h2 id="二-数据结构">二 数据结构</h2>
-<p>  <b>数据结构</b>是指相互之间存在<b>一种或多种特定关系</b>的数据元素的集合。它研究的是就是如何按一定的逻辑结构，把数据组织起来，并选择适当的存储表示方法<b>把逻辑结构组织好的数据</b>存储到计算机的存储器里。</p>
-<div class="note info flat"><p><b>请注意</b>：<br>
-  <b>数据结构</b>-常指存储在计算机内存中的数据。<br>
-  <b>文件结构</b>-常指外存储器（如磁盘驱动器、CD）中数据的组织。</p>
-</div>
-<p>  诸如数组、栈、队列、链表等都是常用的数据结构。数据结构一般包含以下几种常用运算：</p>
-<ul>
-<li><b>检索</b>。检索就是在数据结构里查找满足一定条件的节点。一般是给定一个某字段的值，找具有该字段值的节点。</li>
-<li><b>插入</b>。往数据结构中增加新的节点。</li>
-<li><b>删除</b>。把指定的结点从数据结构中去掉。</li>
-<li><b>更新</b>。改变指定节点的一个或多个字段的值。</li>
-<li><b>排序</b>。把节点按某种指定的顺序重新排列。例如递增或递减。</li>
-</ul>
-<hr>
-<h2 id="三-数据项、数据结构和抽象数据类型的关系">三 数据项、数据结构和抽象数据类型的关系</h2>
-<p>  数据项有<b>逻辑形式</b>和<b>物理形式</b>两个方面。<b>ADT定义了数据类型的逻辑形式，数据结构是实现数据类型的物理形式。</b>这是因为我们强调过ADT关注操作而不关注实现，因而ADT用以阐释数据项的逻辑形式。我们注意到在数据结构的研究内容中，提到了<b>把逻辑结构组织好的数据</b>，这就是ADT的作用。而数据结构关注的恰好就是如何存储，亦即如何实现，因而数据结构用以阐释数据项的物理形式。</p>
-]]></content>
-      <categories>
-        <category>数据结构</category>
-      </categories>
-      <tags>
-        <tag>Data Structures</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>数据结构 | 线性表：顺序表 链表</title>
     <url>/post/a09aaff5.html</url>
     <content><![CDATA[<!-- 让表格居中显示的风格 -->
@@ -794,9 +732,9 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
 <h4 id="1-定义">1 定义</h4>
 <p>  教材指出，单链表中的结点类定义如下：</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// From the software distribution accompanying the textbook</span></span><br><span class="line"><span class="comment">// &quot;A Practical Introduction to Data Structures and Algorithm Analysis,</span></span><br><span class="line"><span class="comment">// Third Edition (C++)&quot; by Clifford A. Shaffer.</span></span><br><span class="line"><span class="comment">// Source code Copyright (C) 2007-2011 by Clifford A. Shaffer.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Singly linked list node</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt; <span class="keyword">class</span> <span class="title class_">Link</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  E element;      <span class="comment">// Value for this node</span></span><br><span class="line">  Link *next;        <span class="comment">// Pointer to next node in list</span></span><br><span class="line">  <span class="comment">// Constructors</span></span><br><span class="line">  <span class="built_in">Link</span>(<span class="type">const</span> E&amp; elemval, Link* nextval =<span class="literal">NULL</span>)</span><br><span class="line">    &#123; element = elemval;  next = nextval; &#125;</span><br><span class="line">  <span class="built_in">Link</span>(Link* nextval =<span class="literal">NULL</span>) &#123; next = nextval; &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>  注意到，在该类中，结点只有一个指向表中下一结点的指针，所以称为<b>单链表</b>（或称<b>单向表</b>），如图F1所示。<br>
-<img src="/post/a09aaff5/data-structures-002-F1.jpg" alt="F1.单链表示例" title="F1.单链表示例"><br>
-  图中：</p>
+<p>  注意到，在该类中，结点只有一个指向表中下一结点的指针，所以称为<b>单链表</b>（或称<b>单向表</b>），如图F2所示。<br>
+<img src="/post/a09aaff5/data-structures-002-F2.jpg" alt="F2.单链表示例" title="F2.单链表示例"><br>
+  图F2中：</p>
 <ul>
 <li>链表中的第一个结点通过名为<code>head</code>的指针访问；</li>
 <li>最后一个结点通过名为<code>tail</code>的指针访问；</li>
@@ -883,6 +821,68 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
 <hr>
 <h2 id="四-元素的副本-or-指向元素的指针">四 元素的副本 or 指向元素的指针</h2>
 <p>  这是在需要在线性表中添加重复元素时需要考虑的问题，选择何种方式依赖于实际应用。一般来说，元素越大且重复越多，使用指向元素的指针更好，这样可以防止浪费空间来创建大量副本（多个表元素可以通过一个指针指向同一条记录，大大节省了空间）。</p>
+]]></content>
+      <categories>
+        <category>数据结构</category>
+      </categories>
+      <tags>
+        <tag>Data Structures</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据结构 | 抽象数据类型和数据结构</title>
+    <url>/post/4c4fa0a7.html</url>
+    <content><![CDATA[<h2 id="一-抽象数据类型">一 抽象数据类型</h2>
+<p>  <code>数据类型</code>是指一个<b>类型</b>和定义在这个类型上的一组<b>操作</b>。<br>
+  <code>抽象数据类型（ADT，Abstract Data Type）</code>对数据类型的抽象描述。它并不关注数据类型的实现方式，转而关注数据类型的操作。</p>
+<details class="toggle"><summary class="toggle-button" style>单击此处进一步体会二者差异</summary><div class="toggle-content"><p>  以下给出了数据类型和抽象数据类型的表示示例：<br>
+<b>数据类型示例 - 整数（Integer）</b></p>
+<ul>
+<li>名称：整数（Integer）</li>
+<li>描述：表示整数值的基本数据类型。</li>
+<li>内部表示：在内存中以二进制补码形式存储。</li>
+<li>支持的操作：
+<ul>
+<li>加法、减法、乘法、除法等基本数学运算。</li>
+<li>比较操作（大于、小于、等于等）。</li>
+<li>转换为其他数据类型（例如，转换为浮点数）。</li>
+</ul>
+</li>
+</ul>
+<p><b>抽象数据类型示例 - 栈（Stack）</b></p>
+<ul>
+<li>名称：栈（Stack）</li>
+<li>描述：表示一个具有后进先出（LIFO）特性的抽象数据类型。</li>
+<li>支持的操作：
+<ul>
+<li><b>push(item)</b>: 将元素压入栈顶。</li>
+<li><b>pop()</b>: 弹出栈顶元素并返回。</li>
+<li><b>peek()</b>: 查看栈顶元素，不进行弹出操作。</li>
+<li><b>isEmpty()</b>: 检查栈是否为空。</li>
+<li><b>size()</b>: 返回栈中元素的数量。</li>
+</ul>
+</li>
+</ul>
+<p>  注意到栈定义了一组操作，但并未规定其具体实现方式。不同的数据结构（如数组、链表）可以用来支持栈的操作，但只需要关注栈的操作。这再次表明，<b>抽象数据类型不必关心实现细节</b>。</p>
+</div></details>
+<hr>
+<h2 id="二-数据结构">二 数据结构</h2>
+<p>  <b>数据结构</b>是指相互之间存在<b>一种或多种特定关系</b>的数据元素的集合。它研究的是就是如何按一定的逻辑结构，把数据组织起来，并选择适当的存储表示方法<b>把逻辑结构组织好的数据</b>存储到计算机的存储器里。</p>
+<div class="note info flat"><p><b>请注意</b>：<br>
+  <b>数据结构</b>-常指存储在计算机内存中的数据。<br>
+  <b>文件结构</b>-常指外存储器（如磁盘驱动器、CD）中数据的组织。</p>
+</div>
+<p>  诸如数组、栈、队列、链表等都是常用的数据结构。数据结构一般包含以下几种常用运算：</p>
+<ul>
+<li><b>检索</b>。检索就是在数据结构里查找满足一定条件的节点。一般是给定一个某字段的值，找具有该字段值的节点。</li>
+<li><b>插入</b>。往数据结构中增加新的节点。</li>
+<li><b>删除</b>。把指定的结点从数据结构中去掉。</li>
+<li><b>更新</b>。改变指定节点的一个或多个字段的值。</li>
+<li><b>排序</b>。把节点按某种指定的顺序重新排列。例如递增或递减。</li>
+</ul>
+<hr>
+<h2 id="三-数据项、数据结构和抽象数据类型的关系">三 数据项、数据结构和抽象数据类型的关系</h2>
+<p>  数据项有<b>逻辑形式</b>和<b>物理形式</b>两个方面。<b>ADT定义了数据类型的逻辑形式，数据结构是实现数据类型的物理形式。</b>这是因为我们强调过ADT关注操作而不关注实现，因而ADT用以阐释数据项的逻辑形式。我们注意到在数据结构的研究内容中，提到了<b>把逻辑结构组织好的数据</b>，这就是ADT的作用。而数据结构关注的恰好就是如何存储，亦即如何实现，因而数据结构用以阐释数据项的物理形式。</p>
 ]]></content>
       <categories>
         <category>数据结构</category>
@@ -1021,6 +1021,78 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </categories>
       <tags>
         <tag>Data Structures</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>博客基建 | 博客搭建更新日志</title>
+    <url>/post/b74865a7.html</url>
+    <content><![CDATA[<h2 id="2023-7-23更新日志">2023-7-23更新日志</h2>
+<h3 id="1-重要更新">1 重要更新</h3>
+<h4 id="1-1-新增页面-友链">1.1 新增页面-友链</h4>
+<blockquote>
+<p>  置身于信息世界的广阔天地，踽踽独行难媲集思广益。未来立足于过往，每一位奋斗者都值得被铭记。您现在可以在<code>友链</code>页面查看同行者，他们的不断探究和经验分享促成了如今博客的繁花似锦。</p>
+</blockquote>
+<h3 id="2-其它更新">2 其它更新</h3>
+<h4 id="2-1-优化感官-页面简化">2.1 优化感官-页面简化</h4>
+<blockquote>
+<p>  此前的页面背景过于纷繁复杂，降低了访客的视觉体验；同时过多的资源加载降低了网页载入速率，延长了访客的等待时间。这不符合博客的工具性。因此，本次更新通过放弃部分效果以获得更直观清晰的访问体验。</p>
+</blockquote>
+<hr>
+<h2 id="2023-5-10更新日志">2023-5-10更新日志</h2>
+<h3 id="1-重要更新-2">1 重要更新</h3>
+<h4 id="1-1-新增功能-搜索">1.1 新增功能-搜索</h4>
+<blockquote>
+<p>  您现在可以单击导航栏的<code>放大镜</code>按钮唤起搜索弹窗，输入关键词以查找相关博文。</p>
+</blockquote>
+<h4 id="1-2-优化功能-评论">1.2 优化功能-评论</h4>
+<blockquote>
+<p>  为了提供更方便的评论服务，评论系统由Valine变更为Waline。<br>
+  您现在可以单击评论栏底部的<code>登录</code>按钮进入登录页面登录您的账号，以享受个性化的评论服务。您可选用的登录方式包括但不仅限于<b>QQ/微博/Github</b>。</p>
+</blockquote>
+<div class="note info flat"><ul>
+<li>如果您在昵称处输入了您的QQ账号，您的头像将设置为与QQ相同；</li>
+<li>如果您在邮箱处输入了您的QQ邮箱，您的昵称和头像将设置为与QQ相同；</li>
+<li>如果您采用QQ登录，您的昵称和头像将设置为与QQ相同。</li>
+</ul>
+</div>
+<h3 id="2-其它更新-2">2 其它更新</h3>
+<h4 id="2-1-优化感官-加载速率">2.1 优化感官-加载速率</h4>
+<blockquote>
+<p>  博客加载速度过慢致使访问体验降低。因此，本次更新通过尝试不同的部署进一步优化了博客加载速率。加载速率具有地区差异性。</p>
+</blockquote>
+<div class="note success flat"><p>  以下为您提供了三个链接，您可以尝试访问其中任意一个，收藏其中加载速率较快的一个。</p>
+<ul>
+<li><a href="https://www.dawn-of-time.top/">https://www.dawn-of-time.top/</a><b>（推荐）</b></li>
+<li><a href="https://netlify.dawn-of-time.top/">https://netlify.dawn-of-time.top/</a></li>
+<li><a href="https://dawn-of-time.github.io/">https://dawn-of-time.github.io/</a><b>（不推荐）</b></li>
+</ul>
+</div>
+<hr>
+<h2 id="2023-5-9更新日志">2023-5-9更新日志</h2>
+<h3 id="1-重要更新-3">1 重要更新</h3>
+<h4 id="1-1-新增功能-评论">1.1 新增功能-评论</h4>
+<blockquote>
+<p>  评论功能的作用包括但不限于：</p>
+<ul>
+<li>向我提出疑问、修改建议或者告知侵权内容（如果有）；</li>
+<li>与我和其他访客交流有关博文内容的学习经验。</li>
+</ul>
+<p>  <b>评论内容应当遵循至少以下规定：</b></p>
+<ul>
+<li>一 严禁散布谣言，谎报险情、疫情、警情或者以其他方法故意扰乱公共秩序；</li>
+<li>二 严禁分享除与博文内容相关的第三方链接，包括但不限于广告、刷单、赌博等；</li>
+<li>三 严禁挑衅、辱骂、诋毁、攻击作者和其他访客；</li>
+<li>四 严禁谈论政治话题。</li>
+</ul>
+</blockquote>
+ <div class="note danger flat"><p>  本规定即日起执行。若有违反者，我将依据以上规定删除有关评论。<br>
+  未尽事宜，后续补充。</p>
+</div>]]></content>
+      <categories>
+        <category>博客基建</category>
+      </categories>
+      <tags>
+        <tag>Update</tag>
       </tags>
   </entry>
   <entry>
@@ -1321,78 +1393,6 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </categories>
       <tags>
         <tag>Data Structures</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>博客基建 | 博客搭建更新日志</title>
-    <url>/post/b74865a7.html</url>
-    <content><![CDATA[<h2 id="2023-7-23更新日志">2023-7-23更新日志</h2>
-<h3 id="1-重要更新">1 重要更新</h3>
-<h4 id="1-1-新增页面-友链">1.1 新增页面-友链</h4>
-<blockquote>
-<p>  置身于信息世界的广阔天地，踽踽独行难媲集思广益。未来立足于过往，每一位奋斗者都值得被铭记。您现在可以在<code>友链</code>页面查看同行者，他们的不断探究和经验分享促成了如今博客的繁花似锦。</p>
-</blockquote>
-<h3 id="2-其它更新">2 其它更新</h3>
-<h4 id="2-1-优化感官-页面简化">2.1 优化感官-页面简化</h4>
-<blockquote>
-<p>  此前的页面背景过于纷繁复杂，降低了访客的视觉体验；同时过多的资源加载降低了网页载入速率，延长了访客的等待时间。这不符合博客的工具性。因此，本次更新通过放弃部分效果以获得更直观清晰的访问体验。</p>
-</blockquote>
-<hr>
-<h2 id="2023-5-10更新日志">2023-5-10更新日志</h2>
-<h3 id="1-重要更新-2">1 重要更新</h3>
-<h4 id="1-1-新增功能-搜索">1.1 新增功能-搜索</h4>
-<blockquote>
-<p>  您现在可以单击导航栏的<code>放大镜</code>按钮唤起搜索弹窗，输入关键词以查找相关博文。</p>
-</blockquote>
-<h4 id="1-2-优化功能-评论">1.2 优化功能-评论</h4>
-<blockquote>
-<p>  为了提供更方便的评论服务，评论系统由Valine变更为Waline。<br>
-  您现在可以单击评论栏底部的<code>登录</code>按钮进入登录页面登录您的账号，以享受个性化的评论服务。您可选用的登录方式包括但不仅限于<b>QQ/微博/Github</b>。</p>
-</blockquote>
-<div class="note info flat"><ul>
-<li>如果您在昵称处输入了您的QQ账号，您的头像将设置为与QQ相同；</li>
-<li>如果您在邮箱处输入了您的QQ邮箱，您的昵称和头像将设置为与QQ相同；</li>
-<li>如果您采用QQ登录，您的昵称和头像将设置为与QQ相同。</li>
-</ul>
-</div>
-<h3 id="2-其它更新-2">2 其它更新</h3>
-<h4 id="2-1-优化感官-加载速率">2.1 优化感官-加载速率</h4>
-<blockquote>
-<p>  博客加载速度过慢致使访问体验降低。因此，本次更新通过尝试不同的部署进一步优化了博客加载速率。加载速率具有地区差异性。</p>
-</blockquote>
-<div class="note success flat"><p>  以下为您提供了三个链接，您可以尝试访问其中任意一个，收藏其中加载速率较快的一个。</p>
-<ul>
-<li><a href="https://www.dawn-of-time.top/">https://www.dawn-of-time.top/</a><b>（推荐）</b></li>
-<li><a href="https://netlify.dawn-of-time.top/">https://netlify.dawn-of-time.top/</a></li>
-<li><a href="https://dawn-of-time.github.io/">https://dawn-of-time.github.io/</a><b>（不推荐）</b></li>
-</ul>
-</div>
-<hr>
-<h2 id="2023-5-9更新日志">2023-5-9更新日志</h2>
-<h3 id="1-重要更新-3">1 重要更新</h3>
-<h4 id="1-1-新增功能-评论">1.1 新增功能-评论</h4>
-<blockquote>
-<p>  评论功能的作用包括但不限于：</p>
-<ul>
-<li>向我提出疑问、修改建议或者告知侵权内容（如果有）；</li>
-<li>与我和其他访客交流有关博文内容的学习经验。</li>
-</ul>
-<p>  <b>评论内容应当遵循至少以下规定：</b></p>
-<ul>
-<li>一 严禁散布谣言，谎报险情、疫情、警情或者以其他方法故意扰乱公共秩序；</li>
-<li>二 严禁分享除与博文内容相关的第三方链接，包括但不限于广告、刷单、赌博等；</li>
-<li>三 严禁挑衅、辱骂、诋毁、攻击作者和其他访客；</li>
-<li>四 严禁谈论政治话题。</li>
-</ul>
-</blockquote>
- <div class="note danger flat"><p>  本规定即日起执行。若有违反者，我将依据以上规定删除有关评论。<br>
-  未尽事宜，后续补充。</p>
-</div>]]></content>
-      <categories>
-        <category>博客基建</category>
-      </categories>
-      <tags>
-        <tag>Update</tag>
       </tags>
   </entry>
 </search>
