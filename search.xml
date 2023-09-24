@@ -1324,6 +1324,82 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </tags>
   </entry>
   <entry>
+    <title>数据结构 | 通用树</title>
+    <url>/post/487435bc.html</url>
+    <content><![CDATA[<!-- 让表格居中显示的风格 -->
+<style>
+.center 
+{
+  width: auto;
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+<div class="note info flat"><p><b>一些术语</b>：</p>
+<ul>
+<li><b>通用树</b>（以下简称<b>树</b>）-由一个或一个以上结点组成的<b>有限集</b>，其中没有父结点的结点称为根结点。</li>
+<li><b>最左子结点</b>-子树从左到右排列，其中最左边的子树的根结点称为最左子结点。</li>
+<li><b>（结点M的）出度</b>-（结点M的）子结点数目。</li>
+<li><b>森林</b>-一棵或更多棵树的集合。</li>
+</ul>
+</div>
+<div class="note warning flat"><p>  注意到树和二叉树的主要区别：</p>
+<ul>
+<li>二叉树的出度至多为2，但树却是没有限制的；</li>
+<li>二叉树交换左右子结点得到的新树与原数不同，但树交换没有区别。</li>
+</ul>
+</div>
+<h2 id="一-树结点的ADT">一 树结点的ADT</h2>
+<p>  注意到树的出度是没有限制的，那么建立树类时就应该注意找到一种能够处理这种情况的方法。实现它一般来说可以采用数组或链表的形式，后者更为常见。</p>
+<details class="toggle"><summary class="toggle-button" style>单击此处查看树和树结点的类定义</summary><div class="toggle-content"><p>  下面是从教材中摘录的树和树结点的类定义。注意到其中的<code>leftmostChild</code>和<code>rightSibling</code>函数，使用它们可以很好的完成遍历操作。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// From the software distribution accompanying the textbook</span></span><br><span class="line"><span class="comment">// &quot;A Practical Introduction to Data Structures and Algorithm Analysis,</span></span><br><span class="line"><span class="comment">// Third Edition (C++)&quot; by Clifford A. Shaffer.</span></span><br><span class="line"><span class="comment">// Source code Copyright (C) 2007-2011 by Clifford A. Shaffer.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// General tree node ADT</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt; <span class="keyword">class</span> <span class="title class_">GTNode</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function">E <span class="title">value</span><span class="params">()</span></span>;                    <span class="comment">// Return node&#x27;s value</span></span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">isLeaf</span><span class="params">()</span></span>;                <span class="comment">// True if node is a leaf</span></span><br><span class="line">  <span class="function">GTNode* <span class="title">parent</span><span class="params">()</span></span>;             <span class="comment">// Return parent</span></span><br><span class="line">  <span class="function">GTNode* <span class="title">leftmostChild</span><span class="params">()</span></span>;      <span class="comment">// Return first child</span></span><br><span class="line">  <span class="function">GTNode* <span class="title">rightSibling</span><span class="params">()</span></span>;       <span class="comment">// Return right sibling</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">setValue</span><span class="params">(E&amp;)</span></span>;            <span class="comment">// Set node&#x27;s value</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">insertFirst</span><span class="params">(GTNode&lt;E&gt;*)</span></span>; <span class="comment">// Insert first child</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">insertNext</span><span class="params">(GTNode&lt;E&gt;*)</span></span>;  <span class="comment">// Insert next sibling</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">removeFirst</span><span class="params">()</span></span>;           <span class="comment">// Remove first child</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">removeNext</span><span class="params">()</span></span>;            <span class="comment">// Remove next sibling</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// General tree ADT</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt; <span class="keyword">class</span> <span class="title class_">GenTree</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">clear</span><span class="params">()</span></span>;                               <span class="comment">// Send all nodes to free store</span></span><br><span class="line">  <span class="function">GTNode&lt;E&gt;* <span class="title">root</span><span class="params">()</span></span>;                          <span class="comment">// Return the root of the tree</span></span><br><span class="line">  <span class="comment">// Combine two subtrees</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">newroot</span><span class="params">(E&amp;, GTNode&lt;E&gt;*, GTNode&lt;E&gt;*)</span></span>;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span></span>;                               <span class="comment">// Print a tree</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></details>
+<p>  这就是一种用链表的形式实现的树和树结点的类。</p>
+<hr>
+<h2 id="二-树的遍历">二 树的遍历</h2>
+<p>  树的遍历与<a href="https://www.dawn-of-time.top/post/eb4efb69.html">二叉树</a>类似，分为<b>前根遍历</b>、<b>中根遍历</b>、<b>后根遍历</b>。其中中根遍历因为子结点数目不确定的原因而难以定义，一般也不使用。<br>
+  遍历过程会使用到上面的<code>leftmostChild</code>和<code>rightSibling</code>函数，每当遍历子结点时，总是先调用<code>leftmostChild</code>函数访问最左子结点，然后对其调用<code>rightSibling</code>函数来依次访问最左子结点右边的兄弟结点，直到最右子结点（它右边的兄弟结点是<code>NULL</code>）。</p>
+<hr>
+<h2 id="三-父指针表示法">三 父指针表示法</h2>
+<p>  在解决“<b>任意给出两个不同的结点，判断它们是否在同一棵树中</b>”这样的问题时，仅凭上文的方法是无法解决的。一个有效的解决方法是使用<b>父指针表示法</b>——只需要顺着父指针链就能追溯到根结点，从而判断给定结点是否在同一棵树中。使用这种方法，每个结点只需要保存一个指针域指向其父结点。</p>
+<div class="note info flat"><p><b>一些术语</b>：</p>
+<ul>
+<li><b>不相交子集</b>-交集为空的两个集合。对于这样的集合，希望提供<b>判断两个结点是否在同一集合中</b>和<b>归并两个集合</b>的操作。</li>
+<li><b>并查算法</b>（也称<b>并查集</b>）-通过合并两个不相交子集来找出两个结点是否在同一个集合的过程。</li>
+</ul>
+</div>
+<p>  并查算法用一棵树表示一个集合。结点通常存储在<b>数组</b>中——每个数组元素表示一个结点，并存储该结点的<b>值</b>、<b>父指针</b>（用于区分不同的树）和<b>指向子树的指针</b>（如果有），这样便通过一个数组表示了一组树结构。这一节仅仅将目光聚焦在<b>父指针</b>上。</p>
+<details class="toggle"><summary class="toggle-button" style>单击此处查看树结点和树的父指针的实现</summary><div class="toggle-content"><p>  下面是从教材中摘录的树结点和树的父指针的实现。注意到其中的<code>UNION</code>函数执行归并操作。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// General tree representation for UNION/FIND</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ParPtrTree</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  <span class="type">int</span>* array;           <span class="comment">// Node array</span></span><br><span class="line">  <span class="type">int</span> size;             <span class="comment">// Size of node array</span></span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">FIND</span><span class="params">(<span class="type">int</span>)</span> <span class="type">const</span></span>;  <span class="comment">// Find root</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">ParPtrTree</span>(<span class="type">int</span>);                    <span class="comment">// Constructor</span></span><br><span class="line">  ~<span class="built_in">ParPtrTree</span>() &#123; <span class="keyword">delete</span> [] array; &#125;  <span class="comment">// Destructor</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">UNION</span><span class="params">(<span class="type">int</span>, <span class="type">int</span>)</span></span>;               <span class="comment">// Merge equivalences</span></span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">differ</span><span class="params">(<span class="type">int</span>, <span class="type">int</span>)</span></span>;              <span class="comment">// True if not in same tree</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">ParPtrTree::FIND</span><span class="params">(<span class="type">int</span> curr)</span> <span class="type">const</span> </span>&#123; <span class="comment">// Find root</span></span><br><span class="line">  <span class="keyword">while</span> (array[curr] != ROOT) curr = array[curr];</span><br><span class="line">  <span class="keyword">return</span> curr;  <span class="comment">// At root</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></details>
+<p>  图F1进一步形象地展示了父结点表示法，在这个数组中容纳了两棵树（实际上，对于有n个结点的集合，它对应的数组可以容纳<b>至多n棵无关的树</b>）。为了简明起见，父指针表示为父结点在数组中位置的下标值。树的根结点存储ROOT值，在图F1中表示为斜线。<br>
+<img src="/post/487435bc/data-structures-008-F1.jpg" alt="F1.父指针数组表示法" title="F1.父指针数组表示法"></p>
+<div class="note primary flat"><p>  父指针表示法并非是出于一般性目的的，它总是用来解决一些特定的问题，例如在本节开头提到的“<b>任意给出两个不同的结点，判断它们是否在同一棵树中</b>”。上面的实现中已经大致阐述了这个问题的解决思路及其核心算法——并查算法。在这个卡片中，我们要指出这个问题的一个重要应用——<b>解决等价类问题</b>。</p>
+<p>  以下给出了一些重要的术语阐释以便在后面的阅读中查阅：</p>
+<blockquote>
+<p><b>等价关系</b>-具有自反性、对称性和传递性的一种关系；<br>
+<b>等价类</b>-利用等价关系对一个集合进行划分的结果；<br>
+<b>等价对（的表示）</b>-如果图中某两个结点X，Y之间存在一条通路，就认为这两个结点是等价的，并将等价对表示为(X, Y)。如图F2所示，(A, B) (A, C)等等都是等价对；<br>
+<b>连通分支</b>-等价边（即图F2中相连的边）集合的子集。例如对图F2而言，它具有两个连通分支。</p>
+</blockquote>
+<p><img src="/post/487435bc/data-structures-008-F2.jpg" alt="F2.图示例" title="F2.图示例"></p>
+<p>  以图F2为例，我们来尝试解决一个等价类问题：<b>已知若干对等价对（如图F2所示），试将其划分为等价类。<b></b></b></p>
+<p>  这个问题的解决步骤是这样的：</p>
+<ul>
+<li><b>1</b> 将每一个结点独立（如图F3.a所示）；</li>
+<li><b>2</b> 输入一个等价关系（从结果而言，等价关系的输入顺序无关紧要，但是会影响问题处理效率，这里忽略顺序对效率的影响），并使用<code>differ</code>函数检查它们是否在同一等价类（即同一棵树）中。如果是，则不做处理；如果不是，则使用<code>UNION</code>函数归并两个等价类。</li>
+</ul>
+<p><img src="/post/487435bc/data-structures-008-F3.jpg" alt="F3.等价类问题处理示例" title="F3.等价类问题处理示例"></p>
+</div>
+<div class="note warning flat"><p>  未完待续。</p>
+</div>]]></content>
+      <categories>
+        <category>数据结构</category>
+      </categories>
+      <tags>
+        <tag>Data Structures</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>博客基建 | 博客搭建更新日志</title>
     <url>/post/b74865a7.html</url>
     <content><![CDATA[<h2 id="2023-7-23更新日志">2023-7-23更新日志</h2>
@@ -1393,82 +1469,6 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </categories>
       <tags>
         <tag>Update</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数据结构 | 通用树</title>
-    <url>/post/487435bc.html</url>
-    <content><![CDATA[<!-- 让表格居中显示的风格 -->
-<style>
-.center 
-{
-  width: auto;
-  display: table;
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>
-<div class="note info flat"><p><b>一些术语</b>：</p>
-<ul>
-<li><b>通用树</b>（以下简称<b>树</b>）-由一个或一个以上结点组成的<b>有限集</b>，其中没有父结点的结点称为根结点。</li>
-<li><b>最左子结点</b>-子树从左到右排列，其中最左边的子树的根结点称为最左子结点。</li>
-<li><b>（结点M的）出度</b>-（结点M的）子结点数目。</li>
-<li><b>森林</b>-一棵或更多棵树的集合。</li>
-</ul>
-</div>
-<div class="note warning flat"><p>  注意到树和二叉树的主要区别：</p>
-<ul>
-<li>二叉树的出度至多为2，但树却是没有限制的；</li>
-<li>二叉树交换左右子结点得到的新树与原数不同，但树交换没有区别。</li>
-</ul>
-</div>
-<h2 id="一-树结点的ADT">一 树结点的ADT</h2>
-<p>  注意到树的出度是没有限制的，那么建立树类时就应该注意找到一种能够处理这种情况的方法。实现它一般来说可以采用数组或链表的形式，后者更为常见。</p>
-<details class="toggle"><summary class="toggle-button" style>单击此处查看树和树结点的类定义</summary><div class="toggle-content"><p>  下面是从教材中摘录的树和树结点的类定义。注意到其中的<code>leftmostChild()</code>和<code>rightSibling()</code>函数，使用它们可以很好的完成遍历操作。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// From the software distribution accompanying the textbook</span></span><br><span class="line"><span class="comment">// &quot;A Practical Introduction to Data Structures and Algorithm Analysis,</span></span><br><span class="line"><span class="comment">// Third Edition (C++)&quot; by Clifford A. Shaffer.</span></span><br><span class="line"><span class="comment">// Source code Copyright (C) 2007-2011 by Clifford A. Shaffer.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// General tree node ADT</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt; <span class="keyword">class</span> <span class="title class_">GTNode</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function">E <span class="title">value</span><span class="params">()</span></span>;                    <span class="comment">// Return node&#x27;s value</span></span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">isLeaf</span><span class="params">()</span></span>;                <span class="comment">// True if node is a leaf</span></span><br><span class="line">  <span class="function">GTNode* <span class="title">parent</span><span class="params">()</span></span>;             <span class="comment">// Return parent</span></span><br><span class="line">  <span class="function">GTNode* <span class="title">leftmostChild</span><span class="params">()</span></span>;      <span class="comment">// Return first child</span></span><br><span class="line">  <span class="function">GTNode* <span class="title">rightSibling</span><span class="params">()</span></span>;       <span class="comment">// Return right sibling</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">setValue</span><span class="params">(E&amp;)</span></span>;            <span class="comment">// Set node&#x27;s value</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">insertFirst</span><span class="params">(GTNode&lt;E&gt;*)</span></span>; <span class="comment">// Insert first child</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">insertNext</span><span class="params">(GTNode&lt;E&gt;*)</span></span>;  <span class="comment">// Insert next sibling</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">removeFirst</span><span class="params">()</span></span>;           <span class="comment">// Remove first child</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">removeNext</span><span class="params">()</span></span>;            <span class="comment">// Remove next sibling</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// General tree ADT</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt; <span class="keyword">class</span> <span class="title class_">GenTree</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">clear</span><span class="params">()</span></span>;                               <span class="comment">// Send all nodes to free store</span></span><br><span class="line">  <span class="function">GTNode&lt;E&gt;* <span class="title">root</span><span class="params">()</span></span>;                          <span class="comment">// Return the root of the tree</span></span><br><span class="line">  <span class="comment">// Combine two subtrees</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">newroot</span><span class="params">(E&amp;, GTNode&lt;E&gt;*, GTNode&lt;E&gt;*)</span></span>;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span></span>;                               <span class="comment">// Print a tree</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></details>
-<p>  这就是一种用链表的形式实现的树和树结点的类。</p>
-<hr>
-<h2 id="二-树的遍历">二 树的遍历</h2>
-<p>  树的遍历与<a href="https://www.dawn-of-time.top/post/eb4efb69.html">二叉树</a>类似，分为<b>前根遍历</b>、<b>中根遍历</b>、<b>后根遍历</b>。其中中根遍历因为子结点数目不确定的原因而难以定义，一般也不使用。<br>
-  遍历过程会使用到上面的<code>leftmostChild</code>和<code>rightSibling</code>函数，每当遍历子结点时，总是先调用<code>leftmostChild</code>函数访问最左子结点，然后对其调用<code>rightSibling</code>函数来依次访问最左子结点右边的兄弟结点，直到最右子结点（它右边的兄弟结点是<code>NULL</code>）。</p>
-<hr>
-<h2 id="三-父指针表示法">三 父指针表示法</h2>
-<p>  在解决“<b>任意给出两个不同的结点，判断它们是否在同一棵树中</b>”这样的问题时，仅凭上文的方法是无法解决的。一个有效的解决方法是使用<b>父指针表示法</b>——只需要顺着父指针链就能追溯到根结点，从而判断给定结点是否在同一棵树中。使用这种方法，每个结点只需要保存一个指针域指向其父结点。</p>
-<div class="note info flat"><p><b>一些术语</b>：</p>
-<ul>
-<li><b>不相交子集</b>-交集为空的两个集合。对于这样的集合，希望提供<b>判断两个结点是否在同一集合中</b>和<b>归并两个集合</b>的操作。</li>
-<li><b>并查算法</b>（也称<b>并查集</b>）-通过合并两个不相交子集来找出两个结点是否在同一个集合的过程。</li>
-</ul>
-</div>
-<p>  并查算法用一棵树表示一个集合。结点通常存储在<b>数组</b>中——每个数组元素表示一个结点，并存储该结点的<b>值</b>、<b>父指针</b>（用于区分不同的树）和<b>指向子树的指针</b>（如果有），这样便通过一个数组表示了一组树结构。这一节仅仅将目光聚焦在<b>父指针</b>上。</p>
-<details class="toggle"><summary class="toggle-button" style>单击此处查看树结点和树的父指针的实现</summary><div class="toggle-content"><p>  下面是从教材中摘录的树结点和树的父指针的实现。注意到其中的<code>UNION</code>函数执行归并操作。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// General tree representation for UNION/FIND</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ParPtrTree</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  <span class="type">int</span>* array;           <span class="comment">// Node array</span></span><br><span class="line">  <span class="type">int</span> size;             <span class="comment">// Size of node array</span></span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">FIND</span><span class="params">(<span class="type">int</span>)</span> <span class="type">const</span></span>;  <span class="comment">// Find root</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">ParPtrTree</span>(<span class="type">int</span>);                    <span class="comment">// Constructor</span></span><br><span class="line">  ~<span class="built_in">ParPtrTree</span>() &#123; <span class="keyword">delete</span> [] array; &#125;  <span class="comment">// Destructor</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">UNION</span><span class="params">(<span class="type">int</span>, <span class="type">int</span>)</span></span>;               <span class="comment">// Merge equivalences</span></span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">differ</span><span class="params">(<span class="type">int</span>, <span class="type">int</span>)</span></span>;              <span class="comment">// True if not in same tree</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">ParPtrTree::FIND</span><span class="params">(<span class="type">int</span> curr)</span> <span class="type">const</span> </span>&#123; <span class="comment">// Find root</span></span><br><span class="line">  <span class="keyword">while</span> (array[curr] != ROOT) curr = array[curr];</span><br><span class="line">  <span class="keyword">return</span> curr;  <span class="comment">// At root</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></details>
-<p>  图F1进一步形象地展示了父结点表示法，在这个数组中容纳了两棵树（实际上，对于有n个结点的集合，它对应的数组可以容纳<b>至多n棵无关的树</b>）。为了简明起见，父指针表示为父结点在数组中位置的下标值。树的根结点存储ROOT值，在图F1中表示为斜线。<br>
-<img src="/post/487435bc/data-structures-008-F1.jpg" alt="F1.父指针数组表示法" title="F1.父指针数组表示法"></p>
-<div class="note primary flat"><p>  父指针表示法并非是出于一般性目的的，它总是用来解决一些特定的问题，例如在本节开头提到的“<b>任意给出两个不同的结点，判断它们是否在同一棵树中</b>”。上面的实现中已经大致阐述了这个问题的解决思路及其核心算法——并查算法。在这个卡片中，我们要指出这个问题的一个重要应用——<b>解决等价类问题</b>。</p>
-<p>  以下给出了一些重要的术语阐释以便在后面的阅读中查阅：</p>
-<blockquote>
-<p><b>等价关系</b>-具有自反性、对称性和传递性的一种关系；<br>
-<b>等价类</b>-利用等价关系对一个集合进行划分的结果；<br>
-<b>等价对（的表示）</b>-如果图中某两个结点X，Y之间存在一条通路，就认为这两个结点是等价的，并将等价对表示为(X, Y)。如图F2所示，(A, B) (A, C)等等都是等价对；<br>
-<b>连通分支</b>-等价边（即图F2中相连的边）集合的子集。例如对图F2而言，它具有两个连通分支。</p>
-</blockquote>
-<p><img src="/post/487435bc/data-structures-008-F2.jpg" alt="F2.图示例" title="F2.图示例"></p>
-<p>  以图F2为例，我们来尝试解决一个等价类问题：<b>已知若干对等价对（如图F2所示），试将其划分为等价类。<b></b></b></p>
-<p>  这个问题的解决步骤是这样的：</p>
-<ul>
-<li><b>1</b> 将每一个结点独立（如图F3.a所示）；</li>
-<li><b>2</b> 输入一个等价关系（从结果而言，等价关系的输入顺序无关紧要，但是会影响问题处理效率，这里忽略顺序对效率的影响），并使用<code>differ</code>函数检查它们是否在同一等价类（即同一棵树）中。如果是，则不做处理；如果不是，则使用<code>UNION</code>函数归并两个等价类。</li>
-</ul>
-<p><img src="/post/487435bc/data-structures-008-F3.jpg" alt="F3.等价类问题处理示例" title="F3.等价类问题处理示例"></p>
-</div>
-<div class="note warning flat"><p>  未完待续。</p>
-</div>]]></content>
-      <categories>
-        <category>数据结构</category>
-      </categories>
-      <tags>
-        <tag>Data Structures</tag>
       </tags>
   </entry>
 </search>
