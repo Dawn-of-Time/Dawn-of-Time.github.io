@@ -1,90 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>C语言 | 有符号整型与无符号整型 格式化输出十进制整型</title>
-    <url>/post/ddd0df44.html</url>
-    <content><![CDATA[<!-- 让表格居中显示的风格 -->
-<style>
-.center 
-{
-  width: auto;
-  display: table;
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>
-<div class="note warning flat"><p>  初学C语言时，对于整型的分类、存储和输出需厘清。</p>
-</div>
-<h2 id="一-有符号整型与无符号整型">一 有符号整型与无符号整型</h2>
-<h3 id="（一）-存储空间">（一） 存储空间</h3>
-<p>  长整型、基本整型、短整型分别在内存中占据不同的字节数。在64位系统中，长整型和基本整型占据4个字节（32位），短整型占据2个字节（16位）。</p>
-<div class="note info flat"><p>  为了节约内存空间，在定义整型变量时建议采用占据字节数尽可能小的类型。</p>
-</div>
-<h3 id="（二）-符号位-原码、反码、补码">（二） 符号位　原码、反码、补码</h3>
-<p>  在不加修饰的条件下，计算机默认整型为有符号整型。对于有符号整型而言，其对应二进制数的<b>最高位</b>是符号位，并且0表示正数，1表示负数。<br>
-  二进制数的表示方法分为3种：<b>原码、反码、补码</b>。计算机总是以补码的形式存储数。对于正数而言，原码、反码、补码均相同，三者均表示数的真值。<b>对于负数而言，原码除符号位以外的位表示绝对值，反码是对原码除符号位以外的位取反的结果，补码是反码加1的结果。</b>如下例：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> e = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> f = ~e;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数int：%d\n&quot;</span>, f); <span class="comment">//结果是 有符号数int：-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  在64位系统中，基本整型占据4个字节，因此变量e被赋值0后在内存中存储了32位0。按位取反后，32位0变为32位1。32位1的符号位是1，表示其为负数，其原码最高位（符号位）和最低位为1，其余位为0，所以真值为-1。</p>
-<div class="note primary flat"><p><b>为什么计算机要使用补码来存储负数？</b><br>
-  从原理上而言，加法和减法要依靠不同的电路实现，如果能将减法运算转化为加法运算，就能简化电路。同时，如果使用原码进行含负数的加法运算，其结果总是错误的。例如<code>(-2) + 1 = 1000 0010 + 0000 0001 = 1000 0011 = -3</code>（错误）。<br>
-  计算机中的计数是可溢出的。譬如对1字节而言，有符号数的最大值是<code>0111 1111</code>，即127，再加1将溢出，使得最高位同时表示数值和符号，结果是<code>1000 0000</code>，为负数的补码；其原码为<code>1000 0000</code>（最高位仍然同时表示数值和符号），即-128。<br>
-  一周共7天，周四至周六的计算可以是+2，也可以是-5，甚至可以是+9，-12，+17，-19等，这样的计算都是等价的，意味着对于可溢出系统而言，总能够使用加法代替减法运算。设可溢出系统的模为N（例如这里是7），那么加数和减数的和始终为N，这样的关系称为补数。<br>
-  类似地，对于1字节而言，其模是<code>1 0000 0000</code>，若计算<code>(-2) + 1</code>，那么首先将-2转化为其补数。先取-2的绝对值2，然后用模减之，即<code>1 0000 0000 - 0000 0010 = 1111 1110</code>。因此<code>(-2) + 1 = 1111 1110 + 0000 0001 = 1111 1111(补) = -1</code>（正确）。</p>
-</div>
-<h3 id="（三）-有符号整型与无符号整型的定义和区别">（三） 有符号整型与无符号整型的定义和区别</h3>
-<p>  不加修饰时，系统默认整型为有符号整型。无符号整型的表达在常量中为后缀U或u，在变量中则加关键字<code>unsigned</code>。它们的区别在于有符号整型的最高位是符号位，其余位表示数值，1字节的有符号整型的取值范围是[-128,127]；无符号整型每一位都表示数值，1字节的无符号整型的取值范围是[0,255]。</p>
-<hr>
-<h2 id="二-格式化输出十进制整型">二 格式化输出十进制整型</h2>
-<p>  在变量中，整型分为长整型、基本整型和短整型，它们各自又分为有符号整型和无符号整型。每一种类型都有各自的格式控制字符串。就十进制而言，它们的格式控制字符串如表T1所示。</p>
-<div class="center">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">整型类型</th>
-<th style="text-align:center">格式控制字符串</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">有符号长整型</td>
-<td style="text-align:center">“%ld”</td>
-</tr>
-<tr>
-<td style="text-align:center">无符号长整型</td>
-<td style="text-align:center">“%lu”</td>
-</tr>
-<tr>
-<td style="text-align:center">有符号基本整型</td>
-<td style="text-align:center">“%d”</td>
-</tr>
-<tr>
-<td style="text-align:center">无符号基本整型</td>
-<td style="text-align:center">“%u”</td>
-</tr>
-<tr>
-<td style="text-align:center">有符号短整型</td>
-<td style="text-align:center">“%hd”</td>
-</tr>
-<tr>
-<td style="text-align:center">无符号短整型</td>
-<td style="text-align:center">“%hu”</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p align="center">T1.十进制整型的格式控制字符串</p>
-<p>  以下就<b>有/无</b>符号<b>基本/短</b>整型为例，形象地体现了它们的区别。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;以下执行对0取反的操作：\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> a = <span class="number">0</span>;<span class="comment">//4字节，32位</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> b = ~a;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;无符号数int：%u\n&quot;</span>, b); <span class="comment">//结果是 无符号数int：4294967295</span></span><br><span class="line">    <span class="comment">//printf(&quot;%d\n&quot;, b);  //结果是 -1</span></span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> c = <span class="number">0</span>;<span class="comment">//2字节，16位</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> d = ~c;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;无符号数short：%hu\n&quot;</span>, d);  <span class="comment">//结果是 无符号数short：65535</span></span><br><span class="line">    <span class="comment">//printf(&quot;%hd\n&quot;, d);  //结果是 -1</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n以下是参照：\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> e = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> f = ~e;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数int：%d\n&quot;</span>, f); <span class="comment">//结果是 有符号数int：-1</span></span><br><span class="line"></span><br><span class="line">    <span class="type">short</span> g = <span class="number">0</span>;</span><br><span class="line">    <span class="type">short</span> h = ~g;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数short：%hd\n&quot;</span>, h);  <span class="comment">//结果是 有符号数short：-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>C语言</category>
-      </categories>
-      <tags>
-        <tag>C</tag>
-        <tag>Fallibility</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>C语言 | 常量与只读变量</title>
     <url>/post/f8f674bb.html</url>
     <content><![CDATA[<!-- 让表格居中显示的风格 -->
@@ -253,67 +169,87 @@
       </tags>
   </entry>
   <entry>
-    <title>C语言 | 函数scanf()的使用</title>
-    <url>/post/13be382b.html</url>
-    <content><![CDATA[<h2 id="一-函数scanf-的基本含义">一 函数scanf()的基本含义</h2>
-<p>  <code>scanf()</code>函数是这样定义的：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">scanf</span><span class="params">(格式字符串, 指针列表)</span>;</span><br></pre></td></tr></table></figure>
-<p>  它的返回值是成功读入的数据项数。如果遇到错误，返回值为0；如果遇到<code>end of file</code>（<code>end of file</code>在Windows系统中用<code>Ctrl+Z</code>代替），返回值为<code>EOF</code>（<code>EOF</code>是在<code>&lt;stdio.h&gt;</code>文件中宏定义的一个常量，值为-1）。可以从下例验证该结果。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 当以空格或换行为分隔输入a b c d后，换行输出0 0 0 0 0；</span></span><br><span class="line"><span class="comment">// 当以空格或换行为分隔输入1 2 3 4后，换行输出1 2 3 4 4；</span></span><br><span class="line"><span class="comment">// 当以空格为分隔输入1 2 ^Z 3 4之后，换行输出1 2 0 0 2（实际上无论在^Z后输入什么都没有意义）；</span></span><br><span class="line"><span class="comment">// 当以换行为分隔输入1 2 ^Z ^Z之后，换行输出1 2 0 0 2；</span></span><br><span class="line"><span class="comment">// 当以换行为分隔输入^Z ^Z ^Z时，输出0 0 0 0 -1；</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> c = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> d = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> num = <span class="built_in">scanf</span>(<span class="string">&quot;%d%d%d%d&quot;</span>, &amp;a, &amp;b, &amp;c, &amp;d);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d %d %d %d&quot;</span>, a, b, c, d, num);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<details class="toggle"><summary class="toggle-button" style>我对此存疑，但我目前无法解决这个问题。单击此处查看具体疑问</summary><div class="toggle-content"><ul>
-<li>
-<p><b>疑问一：是否输入过有效的内容影响退出时<code>^Z</code>所需次数。</b><br>
-  通过上例可以知道，在以换行为分隔输入时，如果输入过有效内容，2次<code>^Z</code>可以结束输入，否则需要3次。</p>
-</li>
-<li>
-<p><b>疑问二：不同的格式字符串可能会导致不同的结果。</b><br>
-  如下例所示。</p>
-</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> ch = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%c&quot;</span>, &amp;ch);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;a);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  在逐步调试下发现，以<code>&quot;%c&quot;</code>为格式字符串时需要2次<code>^Z</code>结束输入，而以<code>&quot;%d&quot;</code>为格式字符串时则需要3次<code>^Z</code>。<br>
-  更进一步的，我做了一些研究来观察是否每一次<code>^Z</code>都有作用。<br>
-–&gt; 对于<code>&quot;%c&quot;</code>为格式字符串的情形：<br>
-  在逐步调试下发现，如果以换行为分隔输入<code>^Z a</code>，观察到变量ch的值仍为0，这意味着第2次输入<code>^Z</code>无作用。</p>
-<p>–&gt; 对于<code>&quot;%d&quot;</code>为格式字符串的情形：<br>
-  在逐步调试下发现，如果以换行为分隔输入<code>^Z 1</code>，观察到变量a的值变为1，这意味着第1次输入<code>^Z</code>无作用；如果以换行为分隔输入<code>^Z ^Z 1</code>，观察到变量a的值仍为0，这意味着第3次输入<code>^Z</code>无作用。</p>
-<p>  得到这样的结果令人百思不得其解，但我目前的水平还无法解决该问题。先将这样的疑问留在此处，我会在以后的学习过程中寻找契机解决它。<b>如果有知之者，还望在评论区不吝赐教。另：我使用的是64位Windows系统下的Visio Studio 2022专业版。</b></p>
-</div></details>
+    <title>C语言 | 有符号整型与无符号整型 格式化输出十进制整型</title>
+    <url>/post/ddd0df44.html</url>
+    <content><![CDATA[<!-- 让表格居中显示的风格 -->
+<style>
+.center 
+{
+  width: auto;
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+<div class="note warning flat"><p>  初学C语言时，对于整型的分类、存储和输出需厘清。</p>
+</div>
+<h2 id="一-有符号整型与无符号整型">一 有符号整型与无符号整型</h2>
+<h3 id="（一）-存储空间">（一） 存储空间</h3>
+<p>  长整型、基本整型、短整型分别在内存中占据不同的字节数。在64位系统中，长整型和基本整型占据4个字节（32位），短整型占据2个字节（16位）。</p>
+<div class="note info flat"><p>  为了节约内存空间，在定义整型变量时建议采用占据字节数尽可能小的类型。</p>
+</div>
+<h3 id="（二）-符号位-原码、反码、补码">（二） 符号位　原码、反码、补码</h3>
+<p>  在不加修饰的条件下，计算机默认整型为有符号整型。对于有符号整型而言，其对应二进制数的<b>最高位</b>是符号位，并且0表示正数，1表示负数。<br>
+  二进制数的表示方法分为3种：<b>原码、反码、补码</b>。计算机总是以补码的形式存储数。对于正数而言，原码、反码、补码均相同，三者均表示数的真值。<b>对于负数而言，原码除符号位以外的位表示绝对值，反码是对原码除符号位以外的位取反的结果，补码是反码加1的结果。</b>如下例：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> e = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> f = ~e;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数int：%d\n&quot;</span>, f); <span class="comment">//结果是 有符号数int：-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  在64位系统中，基本整型占据4个字节，因此变量e被赋值0后在内存中存储了32位0。按位取反后，32位0变为32位1。32位1的符号位是1，表示其为负数，其原码最高位（符号位）和最低位为1，其余位为0，所以真值为-1。</p>
+<div class="note primary flat"><p><b>为什么计算机要使用补码来存储负数？</b><br>
+  从原理上而言，加法和减法要依靠不同的电路实现，如果能将减法运算转化为加法运算，就能简化电路。同时，如果使用原码进行含负数的加法运算，其结果总是错误的。例如<code>(-2) + 1 = 1000 0010 + 0000 0001 = 1000 0011 = -3</code>（错误）。<br>
+  计算机中的计数是可溢出的。譬如对1字节而言，有符号数的最大值是<code>0111 1111</code>，即127，再加1将溢出，使得最高位同时表示数值和符号，结果是<code>1000 0000</code>，为负数的补码；其原码为<code>1000 0000</code>（最高位仍然同时表示数值和符号），即-128。<br>
+  一周共7天，周四至周六的计算可以是+2，也可以是-5，甚至可以是+9，-12，+17，-19等，这样的计算都是等价的，意味着对于可溢出系统而言，总能够使用加法代替减法运算。设可溢出系统的模为N（例如这里是7），那么加数和减数的和始终为N，这样的关系称为补数。<br>
+  类似地，对于1字节而言，其模是<code>1 0000 0000</code>，若计算<code>(-2) + 1</code>，那么首先将-2转化为其补数。先取-2的绝对值2，然后用模减之，即<code>1 0000 0000 - 0000 0010 = 1111 1110</code>。因此<code>(-2) + 1 = 1111 1110 + 0000 0001 = 1111 1111(补) = -1</code>（正确）。</p>
+</div>
+<h3 id="（三）-有符号整型与无符号整型的定义和区别">（三） 有符号整型与无符号整型的定义和区别</h3>
+<p>  不加修饰时，系统默认整型为有符号整型。无符号整型的表达在常量中为后缀U或u，在变量中则加关键字<code>unsigned</code>。它们的区别在于有符号整型的最高位是符号位，其余位表示数值，1字节的有符号整型的取值范围是[-128,127]；无符号整型每一位都表示数值，1字节的无符号整型的取值范围是[0,255]。</p>
 <hr>
-<h2 id="二-格式字符串的说明">二 格式字符串的说明</h2>
-<h3 id="（一）-抑制符（跳过符）">（一） 抑制符（跳过符）</h3>
-<p>  在格式字符串中添加抑制符（<code>*</code>）使得读入的该数据被舍弃。如下例所示。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> num = <span class="built_in">scanf</span>(<span class="string">&quot;%d%*d%d&quot;</span>, &amp;a, &amp;b); <span class="comment">//输入1 2 3</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d %d&quot;</span>, a, b, num); <span class="comment">//得到 1 3 2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="（二）-域宽">（二） 域宽</h3>
-<p>  在格式字符串中添加十进制整数使以限制读入的数量。如果输入流数量超过域宽，则下次读入时从断点处开始。如下例所示。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%3d%4d&quot;</span>, &amp;a, &amp;b); <span class="comment">//输入123456789</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d&quot;</span>, a, b); <span class="comment">//得到123 4567 </span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  基本整型a读入的域宽是<code>3</code>，即读入<code>123</code>；基本整型b读入时，从断点处开始，即从<code>4</code>开始，其域宽为<code>4</code>，故读入<code>4567</code>。</p>
-<h3 id="（三）-空白字符">（三） 空白字符</h3>
-<p>  在格式字符串中所添加的空白字符<code>【空格（Space）、换行符（Newline）、制表符（Tab）】</code>和不添加的效果一致。如下例所示。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;a, &amp;b);     <span class="comment">//形式1</span></span><br><span class="line">	<span class="comment">//scanf(&quot;%d %d&quot;, &amp;a, &amp;b);  //形式2</span></span><br><span class="line">	<span class="comment">//scanf(&quot;%d\n%d&quot;, &amp;a, &amp;b); //形式3</span></span><br><span class="line">	<span class="comment">//scanf(&quot;%d\t%d&quot;, &amp;a, &amp;b); //形式4</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d&quot;</span>, a, b);	   <span class="comment">//以上4种形式的结果一致</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  在输入流中所添加的空白字符具有分隔两数据的功能，一般来说只读不存。但当以单字符形式读入时则取消了分隔功能，如下例所示。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">char</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="type">char</span> c = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%c%c%c&quot;</span>, &amp;a, &amp;b, &amp;c);<span class="comment">//输入m (Space) n</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%c %c %c&quot;</span>, a, b, c);<span class="comment">//得到m (Space) n，即a为字符m，b为空格字符，c为字符n</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  这意味着此时的空白字符不再具有分隔作用，而直接如同其他字符一般被读取和存储。</p>
-<h3 id="（四）-非空白字符">（四） 非空白字符</h3>
-<p>  在输入流中添加非空白字符意味着当在输入流中匹配到相同字符时不保存，未匹配到则停止读入（下次读入从断点处开始），如下例所示。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%dxy%d&quot;</span>, &amp;a, &amp;b);<span class="comment">//输入-情况1:123 456；情况2：123xy456</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d&quot;</span>, a, b);<span class="comment">//得到-情况1：123 0；情况2：123 456</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>在情况1下，当读入123并赋变量a后，由于未匹配到字符<code>x</code>，因此停止读取，故变量a为<code>123</code>，变量b仍为<code>0</code>；</li>
-<li>在情况2下，当读入123并赋变量a后，依次匹配并不保存字符<code>x</code> <code>y</code>，然后继续读入456并赋变量b，故变量a为<code>123</code>，变量b为<code>456</code>。</li>
-</ul>
-<hr>
-<h2 id="三-字符残留问题">三 字符残留问题</h2>
-<p>  考虑读入完全的情况，在读入完毕后，数据缓冲区仍残留换行符<code>\n</code>。可以从下例验证该结果。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">char</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> i = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//while (i &lt; 2)</span></span><br><span class="line">	<span class="comment">//&#123;</span></span><br><span class="line">	<span class="comment">//	scanf(&quot;%c&quot;, &amp;a);//i=0：输入a；i=1：（无法输入）</span></span><br><span class="line">	<span class="comment">//	printf(&quot;%c&quot;, a);//i=0：得到a；i=1：得到(Newline)</span></span><br><span class="line">	<span class="comment">//	i++;</span></span><br><span class="line">	<span class="comment">//&#125;</span></span><br><span class="line">	<span class="keyword">while</span> (i &lt; <span class="number">2</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%c&quot;</span>, &amp;a);<span class="comment">//i=0：输入a；i=1：b</span></span><br><span class="line">		<span class="keyword">while</span> (b = getchar() != <span class="string">&#x27;\n&#x27;</span>);<span class="comment">//用以除去换行符</span></span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%c\n&quot;</span>, a);<span class="comment">//i=0：得到a；i=1：得到b</span></span><br><span class="line">		i++;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<div class="note warning flat"><p>  除了采用上述办法解决字符残留问题外，还可以使用<code>fflush(stdin);</code>语句解决之。但是这在高版本的VS中不适用。</p>
-</div>]]></content>
+<h2 id="二-格式化输出十进制整型">二 格式化输出十进制整型</h2>
+<p>  在变量中，整型分为长整型、基本整型和短整型，它们各自又分为有符号整型和无符号整型。每一种类型都有各自的格式控制字符串。就十进制而言，它们的格式控制字符串如表T1所示。</p>
+<div class="center">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">整型类型</th>
+<th style="text-align:center">格式控制字符串</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">有符号长整型</td>
+<td style="text-align:center">“%ld”</td>
+</tr>
+<tr>
+<td style="text-align:center">无符号长整型</td>
+<td style="text-align:center">“%lu”</td>
+</tr>
+<tr>
+<td style="text-align:center">有符号基本整型</td>
+<td style="text-align:center">“%d”</td>
+</tr>
+<tr>
+<td style="text-align:center">无符号基本整型</td>
+<td style="text-align:center">“%u”</td>
+</tr>
+<tr>
+<td style="text-align:center">有符号短整型</td>
+<td style="text-align:center">“%hd”</td>
+</tr>
+<tr>
+<td style="text-align:center">无符号短整型</td>
+<td style="text-align:center">“%hu”</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p align="center">T1.十进制整型的格式控制字符串</p>
+<p>  以下就<b>有/无</b>符号<b>基本/短</b>整型为例，形象地体现了它们的区别。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;以下执行对0取反的操作：\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> a = <span class="number">0</span>;<span class="comment">//4字节，32位</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> b = ~a;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;无符号数int：%u\n&quot;</span>, b); <span class="comment">//结果是 无符号数int：4294967295</span></span><br><span class="line">    <span class="comment">//printf(&quot;%d\n&quot;, b);  //结果是 -1</span></span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> c = <span class="number">0</span>;<span class="comment">//2字节，16位</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> d = ~c;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;无符号数short：%hu\n&quot;</span>, d);  <span class="comment">//结果是 无符号数short：65535</span></span><br><span class="line">    <span class="comment">//printf(&quot;%hd\n&quot;, d);  //结果是 -1</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n以下是参照：\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> e = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> f = ~e;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数int：%d\n&quot;</span>, f); <span class="comment">//结果是 有符号数int：-1</span></span><br><span class="line"></span><br><span class="line">    <span class="type">short</span> g = <span class="number">0</span>;</span><br><span class="line">    <span class="type">short</span> h = ~g;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;有符号数short：%hd\n&quot;</span>, h);  <span class="comment">//结果是 有符号数short：-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
       <categories>
         <category>C语言</category>
       </categories>
       <tags>
         <tag>C</tag>
         <tag>Fallibility</tag>
-        <tag>Exploration</tag>
       </tags>
   </entry>
   <entry>
@@ -423,6 +359,70 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </categories>
       <tags>
         <tag>C</tag>
+        <tag>Exploration</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C语言 | 函数scanf()的使用</title>
+    <url>/post/13be382b.html</url>
+    <content><![CDATA[<h2 id="一-函数scanf-的基本含义">一 函数scanf()的基本含义</h2>
+<p>  <code>scanf()</code>函数是这样定义的：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">scanf</span><span class="params">(格式字符串, 指针列表)</span>;</span><br></pre></td></tr></table></figure>
+<p>  它的返回值是成功读入的数据项数。如果遇到错误，返回值为0；如果遇到<code>end of file</code>（<code>end of file</code>在Windows系统中用<code>Ctrl+Z</code>代替），返回值为<code>EOF</code>（<code>EOF</code>是在<code>&lt;stdio.h&gt;</code>文件中宏定义的一个常量，值为-1）。可以从下例验证该结果。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 当以空格或换行为分隔输入a b c d后，换行输出0 0 0 0 0；</span></span><br><span class="line"><span class="comment">// 当以空格或换行为分隔输入1 2 3 4后，换行输出1 2 3 4 4；</span></span><br><span class="line"><span class="comment">// 当以空格为分隔输入1 2 ^Z 3 4之后，换行输出1 2 0 0 2（实际上无论在^Z后输入什么都没有意义）；</span></span><br><span class="line"><span class="comment">// 当以换行为分隔输入1 2 ^Z ^Z之后，换行输出1 2 0 0 2；</span></span><br><span class="line"><span class="comment">// 当以换行为分隔输入^Z ^Z ^Z时，输出0 0 0 0 -1；</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> c = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> d = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> num = <span class="built_in">scanf</span>(<span class="string">&quot;%d%d%d%d&quot;</span>, &amp;a, &amp;b, &amp;c, &amp;d);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d %d %d %d&quot;</span>, a, b, c, d, num);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<details class="toggle"><summary class="toggle-button" style>我对此存疑，但我目前无法解决这个问题。单击此处查看具体疑问</summary><div class="toggle-content"><ul>
+<li>
+<p><b>疑问一：是否输入过有效的内容影响退出时<code>^Z</code>所需次数。</b><br>
+  通过上例可以知道，在以换行为分隔输入时，如果输入过有效内容，2次<code>^Z</code>可以结束输入，否则需要3次。</p>
+</li>
+<li>
+<p><b>疑问二：不同的格式字符串可能会导致不同的结果。</b><br>
+  如下例所示。</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> ch = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%c&quot;</span>, &amp;ch);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;a);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  在逐步调试下发现，以<code>&quot;%c&quot;</code>为格式字符串时需要2次<code>^Z</code>结束输入，而以<code>&quot;%d&quot;</code>为格式字符串时则需要3次<code>^Z</code>。<br>
+  更进一步的，我做了一些研究来观察是否每一次<code>^Z</code>都有作用。<br>
+–&gt; 对于<code>&quot;%c&quot;</code>为格式字符串的情形：<br>
+  在逐步调试下发现，如果以换行为分隔输入<code>^Z a</code>，观察到变量ch的值仍为0，这意味着第2次输入<code>^Z</code>无作用。</p>
+<p>–&gt; 对于<code>&quot;%d&quot;</code>为格式字符串的情形：<br>
+  在逐步调试下发现，如果以换行为分隔输入<code>^Z 1</code>，观察到变量a的值变为1，这意味着第1次输入<code>^Z</code>无作用；如果以换行为分隔输入<code>^Z ^Z 1</code>，观察到变量a的值仍为0，这意味着第3次输入<code>^Z</code>无作用。</p>
+<p>  得到这样的结果令人百思不得其解，但我目前的水平还无法解决该问题。先将这样的疑问留在此处，我会在以后的学习过程中寻找契机解决它。<b>如果有知之者，还望在评论区不吝赐教。另：我使用的是64位Windows系统下的Visio Studio 2022专业版。</b></p>
+</div></details>
+<hr>
+<h2 id="二-格式字符串的说明">二 格式字符串的说明</h2>
+<h3 id="（一）-抑制符（跳过符）">（一） 抑制符（跳过符）</h3>
+<p>  在格式字符串中添加抑制符（<code>*</code>）使得读入的该数据被舍弃。如下例所示。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> num = <span class="built_in">scanf</span>(<span class="string">&quot;%d%*d%d&quot;</span>, &amp;a, &amp;b); <span class="comment">//输入1 2 3</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d %d&quot;</span>, a, b, num); <span class="comment">//得到 1 3 2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="（二）-域宽">（二） 域宽</h3>
+<p>  在格式字符串中添加十进制整数使以限制读入的数量。如果输入流数量超过域宽，则下次读入时从断点处开始。如下例所示。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%3d%4d&quot;</span>, &amp;a, &amp;b); <span class="comment">//输入123456789</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d&quot;</span>, a, b); <span class="comment">//得到123 4567 </span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  基本整型a读入的域宽是<code>3</code>，即读入<code>123</code>；基本整型b读入时，从断点处开始，即从<code>4</code>开始，其域宽为<code>4</code>，故读入<code>4567</code>。</p>
+<h3 id="（三）-空白字符">（三） 空白字符</h3>
+<p>  在格式字符串中所添加的空白字符<code>【空格（Space）、换行符（Newline）、制表符（Tab）】</code>和不添加的效果一致。如下例所示。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;a, &amp;b);     <span class="comment">//形式1</span></span><br><span class="line">	<span class="comment">//scanf(&quot;%d %d&quot;, &amp;a, &amp;b);  //形式2</span></span><br><span class="line">	<span class="comment">//scanf(&quot;%d\n%d&quot;, &amp;a, &amp;b); //形式3</span></span><br><span class="line">	<span class="comment">//scanf(&quot;%d\t%d&quot;, &amp;a, &amp;b); //形式4</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d&quot;</span>, a, b);	   <span class="comment">//以上4种形式的结果一致</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  在输入流中所添加的空白字符具有分隔两数据的功能，一般来说只读不存。但当以单字符形式读入时则取消了分隔功能，如下例所示。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">char</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="type">char</span> c = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%c%c%c&quot;</span>, &amp;a, &amp;b, &amp;c);<span class="comment">//输入m (Space) n</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%c %c %c&quot;</span>, a, b, c);<span class="comment">//得到m (Space) n，即a为字符m，b为空格字符，c为字符n</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  这意味着此时的空白字符不再具有分隔作用，而直接如同其他字符一般被读取和存储。</p>
+<h3 id="（四）-非空白字符">（四） 非空白字符</h3>
+<p>  在输入流中添加非空白字符意味着当在输入流中匹配到相同字符时不保存，未匹配到则停止读入（下次读入从断点处开始），如下例所示。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%dxy%d&quot;</span>, &amp;a, &amp;b);<span class="comment">//输入-情况1:123 456；情况2：123xy456</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d %d&quot;</span>, a, b);<span class="comment">//得到-情况1：123 0；情况2：123 456</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在情况1下，当读入123并赋变量a后，由于未匹配到字符<code>x</code>，因此停止读取，故变量a为<code>123</code>，变量b仍为<code>0</code>；</li>
+<li>在情况2下，当读入123并赋变量a后，依次匹配并不保存字符<code>x</code> <code>y</code>，然后继续读入456并赋变量b，故变量a为<code>123</code>，变量b为<code>456</code>。</li>
+</ul>
+<hr>
+<h2 id="三-字符残留问题">三 字符残留问题</h2>
+<p>  考虑读入完全的情况，在读入完毕后，数据缓冲区仍残留换行符<code>\n</code>。可以从下例验证该结果。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> a = <span class="number">0</span>;</span><br><span class="line">	<span class="type">char</span> b = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> i = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//while (i &lt; 2)</span></span><br><span class="line">	<span class="comment">//&#123;</span></span><br><span class="line">	<span class="comment">//	scanf(&quot;%c&quot;, &amp;a);//i=0：输入a；i=1：（无法输入）</span></span><br><span class="line">	<span class="comment">//	printf(&quot;%c&quot;, a);//i=0：得到a；i=1：得到(Newline)</span></span><br><span class="line">	<span class="comment">//	i++;</span></span><br><span class="line">	<span class="comment">//&#125;</span></span><br><span class="line">	<span class="keyword">while</span> (i &lt; <span class="number">2</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%c&quot;</span>, &amp;a);<span class="comment">//i=0：输入a；i=1：b</span></span><br><span class="line">		<span class="keyword">while</span> (b = getchar() != <span class="string">&#x27;\n&#x27;</span>);<span class="comment">//用以除去换行符</span></span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%c\n&quot;</span>, a);<span class="comment">//i=0：得到a；i=1：得到b</span></span><br><span class="line">		i++;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<div class="note warning flat"><p>  除了采用上述办法解决字符残留问题外，还可以使用<code>fflush(stdin);</code>语句解决之。但是这在高版本的VS中不适用。</p>
+</div>]]></content>
+      <categories>
+        <category>C语言</category>
+      </categories>
+      <tags>
+        <tag>C</tag>
+        <tag>Fallibility</tag>
         <tag>Exploration</tag>
       </tags>
   </entry>
@@ -1046,6 +1046,144 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </tags>
   </entry>
   <entry>
+    <title>数据结构 | 优先队列 堆</title>
+    <url>/post/7805a75e.html</url>
+    <content><![CDATA[<h2 id="一-优先队列">一 优先队列</h2>
+<p>  <b>优先队列</b>是一些按照重要性或优先级来组织的对象。按优先级组织的<a href="https://www.dawn-of-time.top/post/eb4efb69.html">二叉检索树</a>，其平均情况下插入和删除操作的总时间代价为Θ(nlog n)，但这可能回导致二叉检索树不平衡，降低性能。这样一来，<b>堆</b>数据结构应运而生。</p>
+<hr>
+<h2 id="二-堆">二 堆</h2>
+<p>  <b>堆</b>由以下两条性质来定义：</p>
+<ul>
+<li>它是一棵<b>完全二叉树</b>；</li>
+<li>其中存储的数据<b>局部有序</b>。</li>
+</ul>
+<p>  注意到堆和二叉检索树的区别。二叉检索树定义了一组完全排序的结点，而堆的排序是局部的——<b>堆的兄弟结点之间并无必然联系</b>。</p>
+<div class="note info flat"><p>  根据局部有序的不同，有以下两种堆：</p>
+<ul>
+<li><b>最大堆</b>-任意一个结点存储的值都大于或等于其任意一个子结点存储的值。</li>
+<li><b>最小堆</b>-任意一个结点存储的值都小于或等于其任意一个子结点存储的值。</li>
+</ul>
+<p>  这两种堆都各有所长。下文都以最大堆为例。</p>
+</div>
+<details class="toggle"><summary class="toggle-button" style>单击此处查看最大堆的类声明及其成员函数的实现</summary><div class="toggle-content"><p>  下面是从教材中摘录的最大堆的类声明及其成员函数的实现。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// From the software distribution accompanying the textbook</span></span><br><span class="line"><span class="comment">// &quot;A Practical Introduction to Data Structures and Algorithm Analysis,</span></span><br><span class="line"><span class="comment">// Third Edition (C++)&quot; by Clifford A. Shaffer.</span></span><br><span class="line"><span class="comment">// Source code Copyright (C) 2007-2011 by Clifford A. Shaffer.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Heap class</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E, <span class="keyword">typename</span> Comp&gt; <span class="keyword">class</span> <span class="title class_">heap</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  E* Heap;          <span class="comment">// Pointer to the heap array</span></span><br><span class="line">  <span class="type">int</span> maxsize;         <span class="comment">// Maximum size of the heap</span></span><br><span class="line">  <span class="type">int</span> n;               <span class="comment">// Number of elements now in the heap</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// Helper function to put element in its correct place</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">siftdown</span><span class="params">(<span class="type">int</span> pos)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (!<span class="built_in">isLeaf</span>(pos)) &#123; <span class="comment">// Stop if pos is a leaf</span></span><br><span class="line">      <span class="type">int</span> j = <span class="built_in">leftchild</span>(pos);  <span class="type">int</span> rc = <span class="built_in">rightchild</span>(pos);</span><br><span class="line">      <span class="keyword">if</span> ((rc &lt; n) &amp;&amp; Comp::<span class="built_in">prior</span>(Heap[rc], Heap[j]))</span><br><span class="line">        j = rc;            <span class="comment">// Set j to greater child&#x27;s value</span></span><br><span class="line">      <span class="keyword">if</span> (Comp::<span class="built_in">prior</span>(Heap[pos], Heap[j])) <span class="keyword">return</span>; <span class="comment">// Done</span></span><br><span class="line">      <span class="built_in">swap</span>(Heap, pos, j);</span><br><span class="line">      pos = j;             <span class="comment">// Move down</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">heap</span>(E* h, <span class="type">int</span> num, <span class="type">int</span> max)     <span class="comment">// Constructor</span></span><br><span class="line">    &#123; Heap = h;  n = num;  maxsize = max;  <span class="built_in">buildHeap</span>(); &#125;</span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">size</span><span class="params">()</span> <span class="type">const</span>       <span class="comment">// Return current heap size</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">return</span> n; &#125;</span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">isLeaf</span><span class="params">(<span class="type">int</span> pos)</span> <span class="type">const</span> <span class="comment">// True if pos is a leaf</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">return</span> (pos &gt;= n/<span class="number">2</span>) &amp;&amp; (pos &lt; n); &#125;</span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">leftchild</span><span class="params">(<span class="type">int</span> pos)</span> <span class="type">const</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">return</span> <span class="number">2</span>*pos + <span class="number">1</span>; &#125;    <span class="comment">// Return leftchild position</span></span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">rightchild</span><span class="params">(<span class="type">int</span> pos)</span> <span class="type">const</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">return</span> <span class="number">2</span>*pos + <span class="number">2</span>; &#125;    <span class="comment">// Return rightchild position</span></span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">parent</span><span class="params">(<span class="type">int</span> pos)</span> <span class="type">const</span>  <span class="comment">// Return parent position</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">return</span> (pos<span class="number">-1</span>)/<span class="number">2</span>; &#125;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">buildHeap</span><span class="params">()</span>           <span class="comment">// Heapify contents of Heap</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">for</span> (<span class="type">int</span> i=n/<span class="number">2</span><span class="number">-1</span>; i&gt;=<span class="number">0</span>; i--) <span class="built_in">siftdown</span>(i); &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Insert &quot;it&quot; into the heap</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">insert</span><span class="params">(<span class="type">const</span> E&amp; it)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">Assert</span>(n &lt; maxsize, <span class="string">&quot;Heap is full&quot;</span>);</span><br><span class="line">    <span class="type">int</span> curr = n++;             <span class="comment">//这里先使用n再递增。因为一共n个元素，下标由0至n-1，故新增元素下标是递增前的n</span></span><br><span class="line">    Heap[curr] = it;            <span class="comment">// Start at end of heap</span></span><br><span class="line">    <span class="comment">// Now sift up until curr&#x27;s parent &gt; curr</span></span><br><span class="line">    <span class="keyword">while</span> ((curr!=<span class="number">0</span>) &amp;&amp;</span><br><span class="line">           (Comp::<span class="built_in">prior</span>(Heap[curr], Heap[<span class="built_in">parent</span>(curr)]))) &#123;</span><br><span class="line">      <span class="built_in">swap</span>(Heap, curr, <span class="built_in">parent</span>(curr));</span><br><span class="line">      curr = <span class="built_in">parent</span>(curr);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// Remove first value</span></span><br><span class="line">  <span class="function">E <span class="title">removefirst</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">Assert</span> (n &gt; <span class="number">0</span>, <span class="string">&quot;Heap is empty&quot;</span>);</span><br><span class="line">    <span class="built_in">swap</span>(Heap, <span class="number">0</span>, --n);       <span class="comment">// Swap first with last value</span></span><br><span class="line">    <span class="keyword">if</span> (n != <span class="number">0</span>) <span class="built_in">siftdown</span>(<span class="number">0</span>);  <span class="comment">// Siftdown new root val</span></span><br><span class="line">    <span class="keyword">return</span> Heap[n];             <span class="comment">// Return deleted value</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Remove and return element at specified position</span></span><br><span class="line">  <span class="function">E <span class="title">remove</span><span class="params">(<span class="type">int</span> pos)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">Assert</span>((pos &gt;= <span class="number">0</span>) &amp;&amp; (pos &lt; n), <span class="string">&quot;Bad position&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (pos == (n<span class="number">-1</span>)) n--; <span class="comment">// Last element, no work to do</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="built_in">swap</span>(Heap, pos, --n);          <span class="comment">// Swap with last value</span></span><br><span class="line">      <span class="keyword">while</span> ((pos != <span class="number">0</span>) &amp;&amp;</span><br><span class="line">             (Comp::<span class="built_in">prior</span>(Heap[pos], Heap[<span class="built_in">parent</span>(pos)]))) &#123;</span><br><span class="line">        <span class="built_in">swap</span>(Heap, pos, <span class="built_in">parent</span>(pos)); <span class="comment">// Push up large key</span></span><br><span class="line">        pos = <span class="built_in">parent</span>(pos);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (n != <span class="number">0</span>) <span class="built_in">siftdown</span>(pos);     <span class="comment">// Push down small key</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Heap[n];</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></details>
+<p>  在上面的实现中，注意到<code>siftdown</code>函数是将当前结点与子结点比较并进行适当地移动。单独将该函数拿出来分析。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Helper function to put element in its correct place</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">siftdown</span><span class="params">(<span class="type">int</span> pos)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">while</span> (!<span class="built_in">isLeaf</span>(pos)) &#123; <span class="comment">// Stop if pos is a leaf</span></span><br><span class="line">    <span class="type">int</span> j = <span class="built_in">leftchild</span>(pos);  <span class="type">int</span> rc = <span class="built_in">rightchild</span>(pos);</span><br><span class="line">    <span class="keyword">if</span> ((rc &lt; n) &amp;&amp; Comp::<span class="built_in">prior</span>(Heap[rc], Heap[j]))</span><br><span class="line">      j = rc;            <span class="comment">// Set j to greater child&#x27;s value</span></span><br><span class="line">    <span class="keyword">if</span> (Comp::<span class="built_in">prior</span>(Heap[pos], Heap[j])) <span class="keyword">return</span>; <span class="comment">// Done</span></span><br><span class="line">    <span class="built_in">swap</span>(Heap, pos, j);</span><br><span class="line">    pos = j;             <span class="comment">// Move down</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  这个函数的思路是这样的：先获取pos的左右子结点，然后在第一个if语句中，通过Comp类的prior函数比较二者值的大小（如果第一个参数大于第二个参数，则返回True）。第二个if语句是判断当前pos处的值是否已经处在合适的位置，即其值比子结点中的值都大，如是，则意味着pos处的值已经在合适的位置上，因此直接结束循环，并返回；否则将二者中<b>较大的</b>值所在的位置与pos位置进行交换，最后将pos向下（值较大的位置）移动，如此循环，直至到达叶结点或者到达某个合适的分支结点。这样就实现了将元素放到合适的位置上。<br>
+  在建立过程中，这样的方法在最差情况下的时间代价为Θ(n)；在删除过程中，这样的方法在最差情况和平均情况下的时间代价为Θ(log n)（相关计算略）。这体现了堆数据机构的高效率。</p>
+]]></content>
+      <categories>
+        <category>数据结构</category>
+      </categories>
+      <tags>
+        <tag>Data Structures</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据结构 | Huffman编码树</title>
+    <url>/post/d476fbe4.html</url>
+    <content><![CDATA[<!-- 让表格居中显示的风格 -->
+<style>
+.center 
+{
+  width: auto;
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+<h2 id="一-建立Huffman编码树">一 建立Huffman编码树</h2>
+<p>  <b>Huffman编码</b>将为字符分配代码。代码长度取决于<b>对应字母的相对使用频率或者“权重”</b>，因此它是一种<b>变长编码</b>。它的得到源于称为<b>Huffman编码树</b>的<b>满二叉树</b>。这棵树的每个叶结点对应一个字母，叶结点的权重就是对应字母的出现频率——这样设计的目的是按照最小外部路径权重建立一棵树，亦即对于给定叶结点集合具有加权路径长度（<b>叶结点的权重乘以深度</b>）之和最小的二叉树。简单地说，<b>权重大的叶结点深度小</b>。</p>
+<p>  建立n个结点的Huffman树很简单：</p>
+<ul>
+<li>创建n个初始的Huffman树，每棵树包含单一的叶结点；</li>
+<li>将这n棵树按照权重由小到大排为一列；</li>
+<li>把前两棵树（权重最小的两棵树）标记为Huffman树的叶结点，并标记为一个分支结点（这个结点的权重是这两个叶结点权重之和）的两个子结点，将形成的新树置于序列中适当的位置，使序列始终为升序。重复本步骤直至序列中只剩下一个元素。</li>
+</ul>
+<p>  图F1展示了一个建立过程（局部）。<br>
+<img src="/post/d476fbe4/data-structures-007-F1.jpg" alt="F1.建立Huffman树（局部）示例" title="F1.建立Huffman树（局部）示例"></p>
+<details class="toggle"><summary class="toggle-button" style>单击此处查看Huffman树结点的实现</summary><div class="toggle-content"><p>  下面是从教材中摘录的Huffman树结点的实现。在这个实现中有两个子类——叶结点类和分支结点类。将其分类是因为这两种结点的构造不一致。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// From the software distribution accompanying the textbook</span></span><br><span class="line"><span class="comment">// &quot;A Practical Introduction to Data Structures and Algorithm Analysis,</span></span><br><span class="line"><span class="comment">// Third Edition (C++)&quot; by Clifford A. Shaffer.</span></span><br><span class="line"><span class="comment">// Source code Copyright (C) 2007-2011 by Clifford A. Shaffer.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Huffman tree node abstract base class</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt; <span class="keyword">class</span> <span class="title class_">HuffNode</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="keyword">virtual</span> ~<span class="built_in">HuffNode</span>() &#123;&#125;                <span class="comment">// Base destructor</span></span><br><span class="line">  <span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">weight</span><span class="params">()</span> </span>= <span class="number">0</span>;             <span class="comment">// Return frequency</span></span><br><span class="line">  <span class="function"><span class="keyword">virtual</span> <span class="type">bool</span> <span class="title">isLeaf</span><span class="params">()</span> </span>= <span class="number">0</span>;            <span class="comment">// Determine type</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt;   <span class="comment">// Internal node subclass</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">IntlNode</span> : <span class="keyword">public</span> HuffNode&lt;E&gt; &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  HuffNode&lt;E&gt;* lc;   <span class="comment">// Left child</span></span><br><span class="line">  HuffNode&lt;E&gt;* rc;   <span class="comment">// Right child</span></span><br><span class="line">  <span class="type">int</span> wgt;              <span class="comment">// Subtree weight</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">IntlNode</span>(HuffNode&lt;E&gt;* l, HuffNode&lt;E&gt;* r)</span><br><span class="line">    &#123; wgt = l-&gt;<span class="built_in">weight</span>() + r-&gt;<span class="built_in">weight</span>(); lc = l; rc = r; &#125;</span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">weight</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> wgt; &#125;</span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">isLeaf</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="literal">false</span>; &#125;</span><br><span class="line">  <span class="function">HuffNode&lt;E&gt;* <span class="title">left</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> lc; &#125;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">setLeft</span><span class="params">(HuffNode&lt;E&gt;* b)</span></span></span><br><span class="line"><span class="function">    </span>&#123; lc = (HuffNode&lt;E&gt;*)b; &#125;</span><br><span class="line">  <span class="function">HuffNode&lt;E&gt;* <span class="title">right</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> rc; &#125;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">setRight</span><span class="params">(HuffNode&lt;E&gt;* b)</span></span></span><br><span class="line"><span class="function">    </span>&#123; rc = (HuffNode&lt;E&gt;*)b; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt;   <span class="comment">// Leaf node subclass</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">LeafNode</span> : <span class="keyword">public</span> HuffNode&lt;E&gt; &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  E it;			<span class="comment">// Value</span></span><br><span class="line">  <span class="type">int</span> wgt;		<span class="comment">// Weight</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">LeafNode</span>(<span class="type">const</span> E&amp; val, <span class="type">int</span> freq)   <span class="comment">// Constructor</span></span><br><span class="line">    &#123; it = val; wgt = freq; &#125;</span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">weight</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> wgt; &#125;</span><br><span class="line">  <span class="function">E <span class="title">val</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> it; &#125;</span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">isLeaf</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="literal">true</span>; &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></details>
+<details class="toggle"><summary class="toggle-button" style>单击此处查看Huffman树的类说明</summary><div class="toggle-content"><p>  下面是从教材中摘录的Huffman树的类说明。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// From the software distribution accompanying the textbook</span></span><br><span class="line"><span class="comment">// &quot;A Practical Introduction to Data Structures and Algorithm Analysis,</span></span><br><span class="line"><span class="comment">// Third Edition (C++)&quot; by Clifford A. Shaffer.</span></span><br><span class="line"><span class="comment">// Source code Copyright (C) 2007-2011 by Clifford A. Shaffer.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// HuffTree is a template of two parameters: the element</span></span><br><span class="line"><span class="comment">//  type being coded and a comparator for two such elements.</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">HuffTree</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  HuffNode&lt;E&gt;* Root;         <span class="comment">// Tree root</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">HuffTree</span>(E&amp; val, <span class="type">int</span> freq) <span class="comment">// Leaf constructor</span></span><br><span class="line">    &#123; Root = <span class="keyword">new</span> <span class="built_in">LeafNode</span>&lt;E&gt;(val, freq); &#125;</span><br><span class="line">  <span class="comment">// Internal node constructor</span></span><br><span class="line">  <span class="built_in">HuffTree</span>(HuffTree&lt;E&gt;* l, HuffTree&lt;E&gt;* r)</span><br><span class="line">    &#123; Root = <span class="keyword">new</span> <span class="built_in">IntlNode</span>&lt;E&gt;(l-&gt;<span class="built_in">root</span>(), r-&gt;<span class="built_in">root</span>()); &#125;</span><br><span class="line">  ~<span class="built_in">HuffTree</span>() &#123;&#125;                          <span class="comment">// Destructor</span></span><br><span class="line">  <span class="function">HuffNode&lt;E&gt;* <span class="title">root</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> Root; &#125;    <span class="comment">// Get root</span></span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">weight</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> Root-&gt;<span class="built_in">weight</span>(); &#125; <span class="comment">// Root weight</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></details>
+<details class="toggle"><summary class="toggle-button" style>单击此处查看Huffman树构造函数的实现</summary><div class="toggle-content"><p>  下面是从教材中摘录的Huffman树构造函数的实现。注意传入的参数中<code>HuffTree&lt;E&gt;** TreeArray</code>是一个数组（的首元素）——这个数组的内容是之前提到过的<b>初始的Huffman树，每棵树包含单一的叶结点</b>。</p>
+<p>  Huffman树的建立方法是<b>贪心算法</b>（总是做出在当前看来是最好的选择，不从整体最优上加以考虑的算法）的一个例子。它总是选择当前权重最小的两棵子树相结合，简化了算法。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Build a Huffman tree from a collection of frequencies</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt; <span class="function">HuffTree&lt;E&gt;*</span></span><br><span class="line"><span class="function"><span class="title">buildHuff</span><span class="params">(HuffTree&lt;E&gt;** TreeArray, <span class="type">int</span> count)</span> </span>&#123;</span><br><span class="line">  heap&lt;HuffTree&lt;E&gt;*,minTreeComp&gt;* forest =</span><br><span class="line">    <span class="keyword">new</span> heap&lt;HuffTree&lt;E&gt;*, minTreeComp&gt;(TreeArray,</span><br><span class="line">                                        count, count); </span><br><span class="line">  HuffTree&lt;<span class="type">char</span>&gt; *temp1, *temp2, *temp3 = <span class="literal">NULL</span>;</span><br><span class="line">  <span class="keyword">while</span> (forest-&gt;<span class="built_in">size</span>() &gt; <span class="number">1</span>) &#123;</span><br><span class="line">    temp1 = forest-&gt;<span class="built_in">removefirst</span>();   <span class="comment">// Pull first two trees  </span></span><br><span class="line">    temp2 = forest-&gt;<span class="built_in">removefirst</span>();   <span class="comment">//   off the list</span></span><br><span class="line">    temp3 = <span class="keyword">new</span> <span class="built_in">HuffTree</span>&lt;E&gt;(temp1, temp2);</span><br><span class="line">    forest-&gt;<span class="built_in">insert</span>(temp3);  <span class="comment">// Put the new tree back on list</span></span><br><span class="line">    <span class="keyword">delete</span> temp1;        <span class="comment">// Must delete the remnants</span></span><br><span class="line">    <span class="keyword">delete</span> temp2;        <span class="comment">//   of the trees we created</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> temp3;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></details>
+<hr>
+<h2 id="二-Huffman编码">二 Huffman编码</h2>
+<p>  从根结点开始，分别把<code>0</code>或者<code>1</code>标于树的每条边上——其中，<code>0</code>对应于连接左子结点的那条边，<code>1</code>对应于连接右子结点的那条边。例如对图F1，它的被标记的Huffman树如图F2所示，并可以得到字母编码如表T1所示。<br>
+<img src="/post/d476fbe4/data-structures-007-F2.jpg" alt="F2.被标记的Huffman树示例" title="F2.被标记的Huffman树示例"></p>
+<div class="center">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">字母</th>
+<th style="text-align:center">频率</th>
+<th style="text-align:center">编码</th>
+<th style="text-align:center">位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">C</td>
+<td style="text-align:center">32</td>
+<td style="text-align:center">1110</td>
+<td style="text-align:center">4</td>
+</tr>
+<tr>
+<td style="text-align:center">D</td>
+<td style="text-align:center">42</td>
+<td style="text-align:center">101</td>
+<td style="text-align:center">3</td>
+</tr>
+<tr>
+<td style="text-align:center">E</td>
+<td style="text-align:center">120</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">K</td>
+<td style="text-align:center">7</td>
+<td style="text-align:center">111101</td>
+<td style="text-align:center">6</td>
+</tr>
+<tr>
+<td style="text-align:center">L</td>
+<td style="text-align:center">42</td>
+<td style="text-align:center">110</td>
+<td style="text-align:center">3</td>
+</tr>
+<tr>
+<td style="text-align:center">M</td>
+<td style="text-align:center">24</td>
+<td style="text-align:center">11111</td>
+<td style="text-align:center">5</td>
+</tr>
+<tr>
+<td style="text-align:center">U</td>
+<td style="text-align:center">37</td>
+<td style="text-align:center">100</td>
+<td style="text-align:center">3</td>
+</tr>
+<tr>
+<td style="text-align:center">Z</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">111100</td>
+<td style="text-align:center">6</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p align="center">T1.对应于图F2字母的Huffman编码</p>]]></content>
+      <categories>
+        <category>数据结构</category>
+      </categories>
+      <tags>
+        <tag>Data Structures</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数据结构 | 二叉树</title>
     <url>/post/eb4efb69.html</url>
     <content><![CDATA[<h2 id="一-二叉树的定义与特性">一 二叉树的定义与特性</h2>
@@ -1200,144 +1338,6 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Find a node with the given key value</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Key, <span class="keyword">typename</span> E&gt;</span><br><span class="line">E BST&lt;Key, E&gt;::<span class="built_in">findhelp</span>(BSTNode&lt;Key, E&gt;* root,</span><br><span class="line">                              <span class="type">const</span> Key&amp; k) <span class="type">const</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (root == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;          <span class="comment">// Empty tree</span></span><br><span class="line">  <span class="keyword">if</span> (k &lt; root-&gt;<span class="built_in">key</span>())</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">findhelp</span>(root-&gt;<span class="built_in">left</span>(), k);   <span class="comment">// Check left</span></span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (k &gt; root-&gt;<span class="built_in">key</span>())</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">findhelp</span>(root-&gt;<span class="built_in">right</span>(), k);  <span class="comment">// Check right</span></span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">return</span> root-&gt;<span class="built_in">element</span>();  <span class="comment">// Found it</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><code>printhelp</code><b>函数</b>：</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Print out a BST</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Key, <span class="keyword">typename</span> E&gt;</span><br><span class="line"><span class="type">void</span> BST&lt;Key, E&gt;::</span><br><span class="line"><span class="built_in">printhelp</span>(BSTNode&lt;Key, E&gt;* root, <span class="type">int</span> level) <span class="type">const</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (root == <span class="literal">NULL</span>) <span class="keyword">return</span>;           <span class="comment">// Empty tree</span></span><br><span class="line">  <span class="built_in">printhelp</span>(root-&gt;<span class="built_in">left</span>(), level+<span class="number">1</span>);   <span class="comment">// Do left subtree</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>; i&lt;level; i++)         <span class="comment">// Indent to level</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;  &quot;</span>;</span><br><span class="line">  cout &lt;&lt; root-&gt;<span class="built_in">key</span>() &lt;&lt; <span class="string">&quot;\n&quot;</span>;        <span class="comment">// Print node value</span></span><br><span class="line">  <span class="built_in">printhelp</span>(root-&gt;<span class="built_in">right</span>(), level+<span class="number">1</span>);  <span class="comment">// Do right subtree</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>数据结构</category>
-      </categories>
-      <tags>
-        <tag>Data Structures</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数据结构 | 优先队列 堆</title>
-    <url>/post/7805a75e.html</url>
-    <content><![CDATA[<h2 id="一-优先队列">一 优先队列</h2>
-<p>  <b>优先队列</b>是一些按照重要性或优先级来组织的对象。按优先级组织的<a href="https://www.dawn-of-time.top/post/eb4efb69.html">二叉检索树</a>，其平均情况下插入和删除操作的总时间代价为Θ(nlog n)，但这可能回导致二叉检索树不平衡，降低性能。这样一来，<b>堆</b>数据结构应运而生。</p>
-<hr>
-<h2 id="二-堆">二 堆</h2>
-<p>  <b>堆</b>由以下两条性质来定义：</p>
-<ul>
-<li>它是一棵<b>完全二叉树</b>；</li>
-<li>其中存储的数据<b>局部有序</b>。</li>
-</ul>
-<p>  注意到堆和二叉检索树的区别。二叉检索树定义了一组完全排序的结点，而堆的排序是局部的——<b>堆的兄弟结点之间并无必然联系</b>。</p>
-<div class="note info flat"><p>  根据局部有序的不同，有以下两种堆：</p>
-<ul>
-<li><b>最大堆</b>-任意一个结点存储的值都大于或等于其任意一个子结点存储的值。</li>
-<li><b>最小堆</b>-任意一个结点存储的值都小于或等于其任意一个子结点存储的值。</li>
-</ul>
-<p>  这两种堆都各有所长。下文都以最大堆为例。</p>
-</div>
-<details class="toggle"><summary class="toggle-button" style>单击此处查看最大堆的类声明及其成员函数的实现</summary><div class="toggle-content"><p>  下面是从教材中摘录的最大堆的类声明及其成员函数的实现。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// From the software distribution accompanying the textbook</span></span><br><span class="line"><span class="comment">// &quot;A Practical Introduction to Data Structures and Algorithm Analysis,</span></span><br><span class="line"><span class="comment">// Third Edition (C++)&quot; by Clifford A. Shaffer.</span></span><br><span class="line"><span class="comment">// Source code Copyright (C) 2007-2011 by Clifford A. Shaffer.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Heap class</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E, <span class="keyword">typename</span> Comp&gt; <span class="keyword">class</span> <span class="title class_">heap</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  E* Heap;          <span class="comment">// Pointer to the heap array</span></span><br><span class="line">  <span class="type">int</span> maxsize;         <span class="comment">// Maximum size of the heap</span></span><br><span class="line">  <span class="type">int</span> n;               <span class="comment">// Number of elements now in the heap</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// Helper function to put element in its correct place</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">siftdown</span><span class="params">(<span class="type">int</span> pos)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (!<span class="built_in">isLeaf</span>(pos)) &#123; <span class="comment">// Stop if pos is a leaf</span></span><br><span class="line">      <span class="type">int</span> j = <span class="built_in">leftchild</span>(pos);  <span class="type">int</span> rc = <span class="built_in">rightchild</span>(pos);</span><br><span class="line">      <span class="keyword">if</span> ((rc &lt; n) &amp;&amp; Comp::<span class="built_in">prior</span>(Heap[rc], Heap[j]))</span><br><span class="line">        j = rc;            <span class="comment">// Set j to greater child&#x27;s value</span></span><br><span class="line">      <span class="keyword">if</span> (Comp::<span class="built_in">prior</span>(Heap[pos], Heap[j])) <span class="keyword">return</span>; <span class="comment">// Done</span></span><br><span class="line">      <span class="built_in">swap</span>(Heap, pos, j);</span><br><span class="line">      pos = j;             <span class="comment">// Move down</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">heap</span>(E* h, <span class="type">int</span> num, <span class="type">int</span> max)     <span class="comment">// Constructor</span></span><br><span class="line">    &#123; Heap = h;  n = num;  maxsize = max;  <span class="built_in">buildHeap</span>(); &#125;</span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">size</span><span class="params">()</span> <span class="type">const</span>       <span class="comment">// Return current heap size</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">return</span> n; &#125;</span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">isLeaf</span><span class="params">(<span class="type">int</span> pos)</span> <span class="type">const</span> <span class="comment">// True if pos is a leaf</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">return</span> (pos &gt;= n/<span class="number">2</span>) &amp;&amp; (pos &lt; n); &#125;</span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">leftchild</span><span class="params">(<span class="type">int</span> pos)</span> <span class="type">const</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">return</span> <span class="number">2</span>*pos + <span class="number">1</span>; &#125;    <span class="comment">// Return leftchild position</span></span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">rightchild</span><span class="params">(<span class="type">int</span> pos)</span> <span class="type">const</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">return</span> <span class="number">2</span>*pos + <span class="number">2</span>; &#125;    <span class="comment">// Return rightchild position</span></span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">parent</span><span class="params">(<span class="type">int</span> pos)</span> <span class="type">const</span>  <span class="comment">// Return parent position</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">return</span> (pos<span class="number">-1</span>)/<span class="number">2</span>; &#125;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">buildHeap</span><span class="params">()</span>           <span class="comment">// Heapify contents of Heap</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">for</span> (<span class="type">int</span> i=n/<span class="number">2</span><span class="number">-1</span>; i&gt;=<span class="number">0</span>; i--) <span class="built_in">siftdown</span>(i); &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Insert &quot;it&quot; into the heap</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">insert</span><span class="params">(<span class="type">const</span> E&amp; it)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">Assert</span>(n &lt; maxsize, <span class="string">&quot;Heap is full&quot;</span>);</span><br><span class="line">    <span class="type">int</span> curr = n++;             <span class="comment">//这里先使用n再递增。因为一共n个元素，下标由0至n-1，故新增元素下标是递增前的n</span></span><br><span class="line">    Heap[curr] = it;            <span class="comment">// Start at end of heap</span></span><br><span class="line">    <span class="comment">// Now sift up until curr&#x27;s parent &gt; curr</span></span><br><span class="line">    <span class="keyword">while</span> ((curr!=<span class="number">0</span>) &amp;&amp;</span><br><span class="line">           (Comp::<span class="built_in">prior</span>(Heap[curr], Heap[<span class="built_in">parent</span>(curr)]))) &#123;</span><br><span class="line">      <span class="built_in">swap</span>(Heap, curr, <span class="built_in">parent</span>(curr));</span><br><span class="line">      curr = <span class="built_in">parent</span>(curr);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// Remove first value</span></span><br><span class="line">  <span class="function">E <span class="title">removefirst</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">Assert</span> (n &gt; <span class="number">0</span>, <span class="string">&quot;Heap is empty&quot;</span>);</span><br><span class="line">    <span class="built_in">swap</span>(Heap, <span class="number">0</span>, --n);       <span class="comment">// Swap first with last value</span></span><br><span class="line">    <span class="keyword">if</span> (n != <span class="number">0</span>) <span class="built_in">siftdown</span>(<span class="number">0</span>);  <span class="comment">// Siftdown new root val</span></span><br><span class="line">    <span class="keyword">return</span> Heap[n];             <span class="comment">// Return deleted value</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Remove and return element at specified position</span></span><br><span class="line">  <span class="function">E <span class="title">remove</span><span class="params">(<span class="type">int</span> pos)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">Assert</span>((pos &gt;= <span class="number">0</span>) &amp;&amp; (pos &lt; n), <span class="string">&quot;Bad position&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (pos == (n<span class="number">-1</span>)) n--; <span class="comment">// Last element, no work to do</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="built_in">swap</span>(Heap, pos, --n);          <span class="comment">// Swap with last value</span></span><br><span class="line">      <span class="keyword">while</span> ((pos != <span class="number">0</span>) &amp;&amp;</span><br><span class="line">             (Comp::<span class="built_in">prior</span>(Heap[pos], Heap[<span class="built_in">parent</span>(pos)]))) &#123;</span><br><span class="line">        <span class="built_in">swap</span>(Heap, pos, <span class="built_in">parent</span>(pos)); <span class="comment">// Push up large key</span></span><br><span class="line">        pos = <span class="built_in">parent</span>(pos);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (n != <span class="number">0</span>) <span class="built_in">siftdown</span>(pos);     <span class="comment">// Push down small key</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Heap[n];</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></details>
-<p>  在上面的实现中，注意到<code>siftdown</code>函数是将当前结点与子结点比较并进行适当地移动。单独将该函数拿出来分析。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Helper function to put element in its correct place</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">siftdown</span><span class="params">(<span class="type">int</span> pos)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">while</span> (!<span class="built_in">isLeaf</span>(pos)) &#123; <span class="comment">// Stop if pos is a leaf</span></span><br><span class="line">    <span class="type">int</span> j = <span class="built_in">leftchild</span>(pos);  <span class="type">int</span> rc = <span class="built_in">rightchild</span>(pos);</span><br><span class="line">    <span class="keyword">if</span> ((rc &lt; n) &amp;&amp; Comp::<span class="built_in">prior</span>(Heap[rc], Heap[j]))</span><br><span class="line">      j = rc;            <span class="comment">// Set j to greater child&#x27;s value</span></span><br><span class="line">    <span class="keyword">if</span> (Comp::<span class="built_in">prior</span>(Heap[pos], Heap[j])) <span class="keyword">return</span>; <span class="comment">// Done</span></span><br><span class="line">    <span class="built_in">swap</span>(Heap, pos, j);</span><br><span class="line">    pos = j;             <span class="comment">// Move down</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  这个函数的思路是这样的：先获取pos的左右子结点，然后在第一个if语句中，通过Comp类的prior函数比较二者值的大小（如果第一个参数大于第二个参数，则返回True）。第二个if语句是判断当前pos处的值是否已经处在合适的位置，即其值比子结点中的值都大，如是，则意味着pos处的值已经在合适的位置上，因此直接结束循环，并返回；否则将二者中<b>较大的</b>值所在的位置与pos位置进行交换，最后将pos向下（值较大的位置）移动，如此循环，直至到达叶结点或者到达某个合适的分支结点。这样就实现了将元素放到合适的位置上。<br>
-  在建立过程中，这样的方法在最差情况下的时间代价为Θ(n)；在删除过程中，这样的方法在最差情况和平均情况下的时间代价为Θ(log n)（相关计算略）。这体现了堆数据机构的高效率。</p>
-]]></content>
-      <categories>
-        <category>数据结构</category>
-      </categories>
-      <tags>
-        <tag>Data Structures</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数据结构 | Huffman编码树</title>
-    <url>/post/d476fbe4.html</url>
-    <content><![CDATA[<!-- 让表格居中显示的风格 -->
-<style>
-.center 
-{
-  width: auto;
-  display: table;
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>
-<h2 id="一-建立Huffman编码树">一 建立Huffman编码树</h2>
-<p>  <b>Huffman编码</b>将为字符分配代码。代码长度取决于<b>对应字母的相对使用频率或者“权重”</b>，因此它是一种<b>变长编码</b>。它的得到源于称为<b>Huffman编码树</b>的<b>满二叉树</b>。这棵树的每个叶结点对应一个字母，叶结点的权重就是对应字母的出现频率——这样设计的目的是按照最小外部路径权重建立一棵树，亦即对于给定叶结点集合具有加权路径长度（<b>叶结点的权重乘以深度</b>）之和最小的二叉树。简单地说，<b>权重大的叶结点深度小</b>。</p>
-<p>  建立n个结点的Huffman树很简单：</p>
-<ul>
-<li>创建n个初始的Huffman树，每棵树包含单一的叶结点；</li>
-<li>将这n棵树按照权重由小到大排为一列；</li>
-<li>把前两棵树（权重最小的两棵树）标记为Huffman树的叶结点，并标记为一个分支结点（这个结点的权重是这两个叶结点权重之和）的两个子结点，将形成的新树置于序列中适当的位置，使序列始终为升序。重复本步骤直至序列中只剩下一个元素。</li>
-</ul>
-<p>  图F1展示了一个建立过程（局部）。<br>
-<img src="/post/d476fbe4/data-structures-007-F1.jpg" alt="F1.建立Huffman树（局部）示例" title="F1.建立Huffman树（局部）示例"></p>
-<details class="toggle"><summary class="toggle-button" style>单击此处查看Huffman树结点的实现</summary><div class="toggle-content"><p>  下面是从教材中摘录的Huffman树结点的实现。在这个实现中有两个子类——叶结点类和分支结点类。将其分类是因为这两种结点的构造不一致。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// From the software distribution accompanying the textbook</span></span><br><span class="line"><span class="comment">// &quot;A Practical Introduction to Data Structures and Algorithm Analysis,</span></span><br><span class="line"><span class="comment">// Third Edition (C++)&quot; by Clifford A. Shaffer.</span></span><br><span class="line"><span class="comment">// Source code Copyright (C) 2007-2011 by Clifford A. Shaffer.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Huffman tree node abstract base class</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt; <span class="keyword">class</span> <span class="title class_">HuffNode</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="keyword">virtual</span> ~<span class="built_in">HuffNode</span>() &#123;&#125;                <span class="comment">// Base destructor</span></span><br><span class="line">  <span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">weight</span><span class="params">()</span> </span>= <span class="number">0</span>;             <span class="comment">// Return frequency</span></span><br><span class="line">  <span class="function"><span class="keyword">virtual</span> <span class="type">bool</span> <span class="title">isLeaf</span><span class="params">()</span> </span>= <span class="number">0</span>;            <span class="comment">// Determine type</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt;   <span class="comment">// Internal node subclass</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">IntlNode</span> : <span class="keyword">public</span> HuffNode&lt;E&gt; &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  HuffNode&lt;E&gt;* lc;   <span class="comment">// Left child</span></span><br><span class="line">  HuffNode&lt;E&gt;* rc;   <span class="comment">// Right child</span></span><br><span class="line">  <span class="type">int</span> wgt;              <span class="comment">// Subtree weight</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">IntlNode</span>(HuffNode&lt;E&gt;* l, HuffNode&lt;E&gt;* r)</span><br><span class="line">    &#123; wgt = l-&gt;<span class="built_in">weight</span>() + r-&gt;<span class="built_in">weight</span>(); lc = l; rc = r; &#125;</span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">weight</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> wgt; &#125;</span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">isLeaf</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="literal">false</span>; &#125;</span><br><span class="line">  <span class="function">HuffNode&lt;E&gt;* <span class="title">left</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> lc; &#125;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">setLeft</span><span class="params">(HuffNode&lt;E&gt;* b)</span></span></span><br><span class="line"><span class="function">    </span>&#123; lc = (HuffNode&lt;E&gt;*)b; &#125;</span><br><span class="line">  <span class="function">HuffNode&lt;E&gt;* <span class="title">right</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> rc; &#125;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">setRight</span><span class="params">(HuffNode&lt;E&gt;* b)</span></span></span><br><span class="line"><span class="function">    </span>&#123; rc = (HuffNode&lt;E&gt;*)b; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt;   <span class="comment">// Leaf node subclass</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">LeafNode</span> : <span class="keyword">public</span> HuffNode&lt;E&gt; &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  E it;			<span class="comment">// Value</span></span><br><span class="line">  <span class="type">int</span> wgt;		<span class="comment">// Weight</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">LeafNode</span>(<span class="type">const</span> E&amp; val, <span class="type">int</span> freq)   <span class="comment">// Constructor</span></span><br><span class="line">    &#123; it = val; wgt = freq; &#125;</span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">weight</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> wgt; &#125;</span><br><span class="line">  <span class="function">E <span class="title">val</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> it; &#125;</span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">isLeaf</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="literal">true</span>; &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></details>
-<details class="toggle"><summary class="toggle-button" style>单击此处查看Huffman树的类说明</summary><div class="toggle-content"><p>  下面是从教材中摘录的Huffman树的类说明。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// From the software distribution accompanying the textbook</span></span><br><span class="line"><span class="comment">// &quot;A Practical Introduction to Data Structures and Algorithm Analysis,</span></span><br><span class="line"><span class="comment">// Third Edition (C++)&quot; by Clifford A. Shaffer.</span></span><br><span class="line"><span class="comment">// Source code Copyright (C) 2007-2011 by Clifford A. Shaffer.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// HuffTree is a template of two parameters: the element</span></span><br><span class="line"><span class="comment">//  type being coded and a comparator for two such elements.</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">HuffTree</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  HuffNode&lt;E&gt;* Root;         <span class="comment">// Tree root</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">HuffTree</span>(E&amp; val, <span class="type">int</span> freq) <span class="comment">// Leaf constructor</span></span><br><span class="line">    &#123; Root = <span class="keyword">new</span> <span class="built_in">LeafNode</span>&lt;E&gt;(val, freq); &#125;</span><br><span class="line">  <span class="comment">// Internal node constructor</span></span><br><span class="line">  <span class="built_in">HuffTree</span>(HuffTree&lt;E&gt;* l, HuffTree&lt;E&gt;* r)</span><br><span class="line">    &#123; Root = <span class="keyword">new</span> <span class="built_in">IntlNode</span>&lt;E&gt;(l-&gt;<span class="built_in">root</span>(), r-&gt;<span class="built_in">root</span>()); &#125;</span><br><span class="line">  ~<span class="built_in">HuffTree</span>() &#123;&#125;                          <span class="comment">// Destructor</span></span><br><span class="line">  <span class="function">HuffNode&lt;E&gt;* <span class="title">root</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> Root; &#125;    <span class="comment">// Get root</span></span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">weight</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> Root-&gt;<span class="built_in">weight</span>(); &#125; <span class="comment">// Root weight</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></details>
-<details class="toggle"><summary class="toggle-button" style>单击此处查看Huffman树构造函数的实现</summary><div class="toggle-content"><p>  下面是从教材中摘录的Huffman树构造函数的实现。注意传入的参数中<code>HuffTree&lt;E&gt;** TreeArray</code>是一个数组（的首元素）——这个数组的内容是之前提到过的<b>初始的Huffman树，每棵树包含单一的叶结点</b>。</p>
-<p>  Huffman树的建立方法是<b>贪心算法</b>（总是做出在当前看来是最好的选择，不从整体最优上加以考虑的算法）的一个例子。它总是选择当前权重最小的两棵子树相结合，简化了算法。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Build a Huffman tree from a collection of frequencies</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt; <span class="function">HuffTree&lt;E&gt;*</span></span><br><span class="line"><span class="function"><span class="title">buildHuff</span><span class="params">(HuffTree&lt;E&gt;** TreeArray, <span class="type">int</span> count)</span> </span>&#123;</span><br><span class="line">  heap&lt;HuffTree&lt;E&gt;*,minTreeComp&gt;* forest =</span><br><span class="line">    <span class="keyword">new</span> heap&lt;HuffTree&lt;E&gt;*, minTreeComp&gt;(TreeArray,</span><br><span class="line">                                        count, count); </span><br><span class="line">  HuffTree&lt;<span class="type">char</span>&gt; *temp1, *temp2, *temp3 = <span class="literal">NULL</span>;</span><br><span class="line">  <span class="keyword">while</span> (forest-&gt;<span class="built_in">size</span>() &gt; <span class="number">1</span>) &#123;</span><br><span class="line">    temp1 = forest-&gt;<span class="built_in">removefirst</span>();   <span class="comment">// Pull first two trees  </span></span><br><span class="line">    temp2 = forest-&gt;<span class="built_in">removefirst</span>();   <span class="comment">//   off the list</span></span><br><span class="line">    temp3 = <span class="keyword">new</span> <span class="built_in">HuffTree</span>&lt;E&gt;(temp1, temp2);</span><br><span class="line">    forest-&gt;<span class="built_in">insert</span>(temp3);  <span class="comment">// Put the new tree back on list</span></span><br><span class="line">    <span class="keyword">delete</span> temp1;        <span class="comment">// Must delete the remnants</span></span><br><span class="line">    <span class="keyword">delete</span> temp2;        <span class="comment">//   of the trees we created</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> temp3;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></details>
-<hr>
-<h2 id="二-Huffman编码">二 Huffman编码</h2>
-<p>  从根结点开始，分别把<code>0</code>或者<code>1</code>标于树的每条边上——其中，<code>0</code>对应于连接左子结点的那条边，<code>1</code>对应于连接右子结点的那条边。例如对图F1，它的被标记的Huffman树如图F2所示，并可以得到字母编码如表T1所示。<br>
-<img src="/post/d476fbe4/data-structures-007-F2.jpg" alt="F2.被标记的Huffman树示例" title="F2.被标记的Huffman树示例"></p>
-<div class="center">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">字母</th>
-<th style="text-align:center">频率</th>
-<th style="text-align:center">编码</th>
-<th style="text-align:center">位</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">C</td>
-<td style="text-align:center">32</td>
-<td style="text-align:center">1110</td>
-<td style="text-align:center">4</td>
-</tr>
-<tr>
-<td style="text-align:center">D</td>
-<td style="text-align:center">42</td>
-<td style="text-align:center">101</td>
-<td style="text-align:center">3</td>
-</tr>
-<tr>
-<td style="text-align:center">E</td>
-<td style="text-align:center">120</td>
-<td style="text-align:center">0</td>
-<td style="text-align:center">1</td>
-</tr>
-<tr>
-<td style="text-align:center">K</td>
-<td style="text-align:center">7</td>
-<td style="text-align:center">111101</td>
-<td style="text-align:center">6</td>
-</tr>
-<tr>
-<td style="text-align:center">L</td>
-<td style="text-align:center">42</td>
-<td style="text-align:center">110</td>
-<td style="text-align:center">3</td>
-</tr>
-<tr>
-<td style="text-align:center">M</td>
-<td style="text-align:center">24</td>
-<td style="text-align:center">11111</td>
-<td style="text-align:center">5</td>
-</tr>
-<tr>
-<td style="text-align:center">U</td>
-<td style="text-align:center">37</td>
-<td style="text-align:center">100</td>
-<td style="text-align:center">3</td>
-</tr>
-<tr>
-<td style="text-align:center">Z</td>
-<td style="text-align:center">2</td>
-<td style="text-align:center">111100</td>
-<td style="text-align:center">6</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p align="center">T1.对应于图F2字母的Huffman编码</p>]]></content>
       <categories>
         <category>数据结构</category>
       </categories>
