@@ -39,7 +39,7 @@ window.addEventListener('load', () => {
   }
 
   const searchClickFn = () => {
-    document.querySelector('#search-button > .search').addEventListener('click', openSearch)
+    btf.addEventListenerPjax(document.querySelector('#search-button > .search'), 'click', openSearch)
   }
 
   const searchFnOnce = () => {
@@ -95,11 +95,9 @@ window.addEventListener('load', () => {
 
   const searchBox = instantsearch.widgets.searchBox({
     container: '#algolia-search-input',
-    placeholder: '请在此输入关键词',
-    autofocus: true,
     showReset: false,
-    showSubmit: false, // 设为true 可以通过按钮搜索
-    searchAsYouType: true, // 新增 可以实现回车或点击按钮搜索，不会每次输入都搜索
+    showSubmit: false,
+    placeholder: GLOBAL_CONFIG.algolia.languages.input_placeholder,
     showLoadingIndicator: true
   })
 
