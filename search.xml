@@ -1428,50 +1428,6 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </tags>
   </entry>
   <entry>
-    <title>数据结构 | 内排序</title>
-    <url>/post/cf471eaa.html</url>
-    <content><![CDATA[<style>
-.center 
-{
-  width: auto;
-  display: table;
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>
-<div class="note info flat"><p><b>一些术语</b>：</p>
-<ul>
-<li><b>函数prior</b>-比较器类最重要的方法。如果返回值为真，说明排好序后第一个参数应该放在第二个参数之前。</li>
-<li><b>函数swap</b>-交换数组中（若未特殊说明，排序算法的输入都存储在数组中）的两条记录的内容。</li>
-<li><b>排序问题</b>-重排一组记录，使其关键码域的值<b>单调递增</b>（注意，不是严格的单调递增）。</li>
-<li><b>稳定的排序算法</b>-不会改变关键码值相同的记录的相对顺序的算法。</li>
-</ul>
-</div>
-<h2 id="一-三种交换排序算法">一 三种交换排序算法</h2>
-<h3 id="（一）-插入排序">（一） 插入排序</h3>
-<p>  <b>插入排序方法逐个处理待排序的记录。每条新记录与前面已排序的子序列进行比较，将它插入子序列中的正确位置。</b><br>
-  下面是从教材中摘录的插入排序的实现。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Insertion sort implementation</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E, <span class="keyword">typename</span> Comp&gt;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">inssort</span><span class="params">(E A[], <span class="type">int</span> n)</span> </span>&#123; <span class="comment">// Insertion Sort</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">1</span>; i&lt;n; i++)       <span class="comment">// Insert i&#x27;th record</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> j=i; (j&gt;<span class="number">0</span>) &amp;&amp; (Comp::<span class="built_in">prior</span>(A[j], A[j<span class="number">-1</span>])); j--)</span><br><span class="line">      <span class="built_in">swap</span>(A, j, j<span class="number">-1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><b>最佳情况</b>（关键码按照正序排列）：只需要比较n-1次，因此比较时间代价为Θ(n)；交换次数总是比较次数减去n-1（每一轮比较的最后一次比较无需交换），因此交换时间代价为0；</li>
-<li><b>最差情况</b>（关键码按照倒序排列）：需要依次做n-1,n,…,1次比较，总和约为n<sub>2</sub>/2，因此比较时间代价为Θ(n<sub>2</sub>)，交换时间代价为Θ(n<sub>2</sub>)；</li>
-</ul>
-<blockquote>
-<p>实际上，插入排序的时间代价与其无序程度——<b>逆置</b>总数目有关。逆置是指对于一个待排序记录的关键码值，前面记录的关键码值大于其的数目。逆置的总数目决定了比较和交换的次数。</p>
-</blockquote>
-<ul>
-<li><b>平均情况</b>（对于第i条记录，其前面的i-1条记录中有一半关键码值大于之）：比较次数约为最差情况的一半，即n<sub>2</sub>/4，因此比较时间代价为Θ(n<sub>2</sub>)，交换时间代价为Θ(n<sub>2</sub>)。</li>
-</ul>
-<div class="note warning flat"><p>  未完待续。</p>
-</div>]]></content>
-      <categories>
-        <category>数据结构</category>
-      </categories>
-      <tags>
-        <tag>Data Structures</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>博客基建 | 博客搭建更新日志</title>
     <url>/post/b74865a7.html</url>
     <content><![CDATA[<h2 id="2023-7-23更新日志">2023-7-23更新日志</h2>
@@ -1534,6 +1490,50 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </categories>
       <tags>
         <tag>Update</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据结构 | 内排序</title>
+    <url>/post/cf471eaa.html</url>
+    <content><![CDATA[<style>
+.center 
+{
+  width: auto;
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+<div class="note info flat"><p><b>一些术语</b>：</p>
+<ul>
+<li><b>函数prior</b>-比较器类最重要的方法。如果返回值为真，说明排好序后第一个参数应该放在第二个参数之前。</li>
+<li><b>函数swap</b>-交换数组中（若未特殊说明，排序算法的输入都存储在数组中）的两条记录的内容。</li>
+<li><b>排序问题</b>-重排一组记录，使其关键码域的值<b>单调递增</b>（注意，不是严格的单调递增）。</li>
+<li><b>稳定的排序算法</b>-不会改变关键码值相同的记录的相对顺序的算法。</li>
+</ul>
+</div>
+<h2 id="一-三种交换排序算法">一 三种交换排序算法</h2>
+<h3 id="（一）-插入排序">（一） 插入排序</h3>
+<p>  <b>插入排序方法逐个处理待排序的记录。每条新记录与前面已排序的子序列进行比较，将它插入子序列中的正确位置。</b><br>
+  下面是从教材中摘录的插入排序的实现。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Insertion sort implementation</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E, <span class="keyword">typename</span> Comp&gt;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">inssort</span><span class="params">(E A[], <span class="type">int</span> n)</span> </span>&#123; <span class="comment">// Insertion Sort</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">1</span>; i&lt;n; i++)       <span class="comment">// Insert i&#x27;th record</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> j=i; (j&gt;<span class="number">0</span>) &amp;&amp; (Comp::<span class="built_in">prior</span>(A[j], A[j<span class="number">-1</span>])); j--)</span><br><span class="line">      <span class="built_in">swap</span>(A, j, j<span class="number">-1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><b>最佳情况</b>（关键码按照正序排列）：只需要比较n-1次，因此比较时间代价为Θ(n)；交换次数总是比较次数减去n-1（每一轮比较的最后一次比较无需交换），因此交换时间代价为0；</li>
+<li><b>最差情况</b>（关键码按照倒序排列）：需要依次做n-1,n,…,1次比较，总和约为n<sub>2</sub>/2，因此比较时间代价为Θ(n<sub>2</sub>)，交换时间代价为Θ(n<sub>2</sub>)；</li>
+</ul>
+<blockquote>
+<p>实际上，插入排序的时间代价与其无序程度——<b>逆置</b>总数目有关。逆置是指对于一个待排序记录的关键码值，前面记录的关键码值大于其的数目。逆置的总数目决定了比较和交换的次数。</p>
+</blockquote>
+<ul>
+<li><b>平均情况</b>（对于第i条记录，其前面的i-1条记录中有一半关键码值大于之）：比较次数约为最差情况的一半，即n<sub>2</sub>/4，因此比较时间代价为Θ(n<sub>2</sub>)，交换时间代价为Θ(n<sub>2</sub>)。</li>
+</ul>
+<div class="note warning flat"><p>  未完待续。</p>
+</div>]]></content>
+      <categories>
+        <category>数据结构</category>
+      </categories>
+      <tags>
+        <tag>Data Structures</tag>
       </tags>
   </entry>
 </search>
