@@ -1,6 +1,6 @@
 @font-face {
     font-family: JetBrains Mono;
-    src: url('https://cdn.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono.min.css');
+    src: url('https://jsd.cdn.zzko.cn/npm/jetbrains-mono@1.0.6/css/jetbrains-mono.min.css');
 }
 
 body .katex {
@@ -12,5 +12,11 @@ body .katex {
 body .katex .mathnormal {
     font-family: JetBrains Mono;
     font-style: normal;
+    font-size: 100%;
+}
+
+body .katex .mathbf {
+    font-family: JetBrains Mono;
+    font-weight: bold;
     font-size: 100%;
 }
