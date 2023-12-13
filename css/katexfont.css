@@ -1,0 +1,16 @@
+@font-face {
+    font-family: JetBrains Mono;
+    src: url('https://cdn.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono.min.css');
+}
+
+body .katex {
+    font-family: JetBrains Mono;
+    font-style: normal;
+    font-size: 100%;
+}
+
+body .katex .mathnormal {
+    font-family: JetBrains Mono;
+    font-style: normal;
+    font-size: 100%;
+}
