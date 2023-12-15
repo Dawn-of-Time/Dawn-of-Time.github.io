@@ -253,8 +253,8 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
   const loadWaline = async () => {
     if (typeof Waline === 'object') initWaline()
     else {
-      await getCSS('https://unpkg.com/@waline/client/dist/waline.css')
-      await getScript('https://unpkg.com/@waline/client/dist/waline.js')
+      await getCSS('https://unpkg.com/@waline/client@v2/dist/waline.css')
+      await getScript('https://unpkg.com/@waline/client@v2/dist/waline.mjs')
       initWaline()
     }
   }
