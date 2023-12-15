@@ -1,173 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>C语言 | 常量与只读变量</title>
-    <url>/post/f8f674bb.html</url>
-    <content><![CDATA[<!-- 让表格居中显示的风格 -->
-<style>
-.center 
-{
-  width: auto;
-  display: table;
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>
-<h2 id="一-常量的分类">一　常量的分类</h2>
-<h3 id="（一）数值型常量">（一）数值型常量</h3>
-<h4 id="1-整型常量">1.整型常量</h4>
-<p>  整型常量是有且仅包含<strong>八进制、十六进制、十进制</strong>三种进制的整型常数，按照数值范围大小分为<strong>长整型和短整型</strong>。长整型和短整型各自又可分为<strong>有符号整型和无符号整型</strong>。<br>
-  各进制的表达示例和<strong>无符号短整型</strong>数值范围如表T1所示。当数值大小超过短整型数值范围时，必须用长整型来表示，在数值后缀<code>L</code>或<code>l</code>。</p>
-<div class="center">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">进制</th>
-<th style="text-align:center">表达实例</th>
-<th style="text-align:center">数值范围</th>
-<th style="text-align:center">备注</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">八进制</td>
-<td style="text-align:center"><code>011</code> <code>0277777L</code></td>
-<td style="text-align:center">[0,0177777]</td>
-<td style="text-align:center">必须以<code>0</code>作为前缀</td>
-</tr>
-<tr>
-<td style="text-align:center">十进制</td>
-<td style="text-align:center"><code>269</code> <code>75535L</code></td>
-<td style="text-align:center">[0,65535]</td>
-<td style="text-align:center">没有前缀</td>
-</tr>
-<tr>
-<td style="text-align:center">十六进制</td>
-<td style="text-align:center"><code>0XAB</code> <code>0X1FFFFL</code></td>
-<td style="text-align:center">[0x0,0xFFFF]</td>
-<td style="text-align:center">必须以<code>0X</code>或<code>0x</code>作为前缀</td>
-</tr>
-</tbody>
-</table>
-<p><strong>注：表达实例中的整型均为无符号整型，此处省略后缀<code>U</code>或<code>u</code>。</strong></p>
-</div>
-<p align="center">T1.整型常数的分类、表达实例和数值范围</p>
-<div class="note info flat"><ul>
-<li>不加限定的情况下，计算机默认整型是有符号整型。如果要表达无符号整型，需要后缀<code>U</code>或<code>u</code>；</li>
-<li>八进制数和十六进制数极少用于表达有符号整型。表达有符号整型常用十进制，十进制有符号短整型的范围是[-32768,32767]，超出该范围时也应当用长整型的方式表达（后缀<code>L</code>或<code>l</code>）。</li>
-</ul>
-</div>
-<h4 id="2-实型常量（浮点型常量）">2.实型常量（浮点型常量）</h4>
-<p>  实型常量（浮点型常量）的表达形式有且仅包含<strong>十进制数形式、指数形式</strong>。例如：<code>0.0</code> <code>-2.3</code>；<code>56e5</code> <code>28E3</code>等。</p>
-<div class="note warning flat"><p>用指数形式表达时有如下规定：</p>
-<ul>
-<li><code>e</code>或<code>E</code>前必须有数字；</li>
-<li><code>e</code>或<code>E</code>后的指数必须为整数。</li>
-</ul>
-</div>
-<h3 id="（二）字符型常量">（二）字符型常量</h3>
-<h4 id="1-字符常量">1.字符常量</h4>
-<p>  使用单引号<code>''</code>括起<strong>单个</strong>字符称为字符常量，例如<code>'A'</code> <code>'@'</code>。特殊地，单引号内以反斜杠<code>\</code>前缀的字符称为<strong>转义字符</strong>。常用转义字符如表T2所示。</p>
-<details class="toggle"><summary class="toggle-button" style>单击此处查看表T2</summary><div class="toggle-content"><div class="center">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">转义字符</th>
-<th style="text-align:center">含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">\n</td>
-<td style="text-align:center">换行</td>
-</tr>
-<tr>
-<td style="text-align:center">\t</td>
-<td style="text-align:center">水平制表</td>
-</tr>
-<tr>
-<td style="text-align:center">\v</td>
-<td style="text-align:center">垂直制表（影响打印机执行操作）</td>
-</tr>
-<tr>
-<td style="text-align:center">\b</td>
-<td style="text-align:center">退格</td>
-</tr>
-<tr>
-<td style="text-align:center">\r</td>
-<td style="text-align:center">回车</td>
-</tr>
-<tr>
-<td style="text-align:center">\f</td>
-<td style="text-align:center">换页（影响打印机执行操作）</td>
-</tr>
-<tr>
-<td style="text-align:center">\\</td>
-<td style="text-align:center">反斜杠符</td>
-</tr>
-<tr>
-<td style="text-align:center">\’</td>
-<td style="text-align:center">单引号符</td>
-</tr>
-<tr>
-<td style="text-align:center">\&quot;</td>
-<td style="text-align:center">双引号符</td>
-</tr>
-<tr>
-<td style="text-align:center">\?</td>
-<td style="text-align:center">在书写连续多个问号时使用，防止他们被解析成三字母</td>
-</tr>
-<tr>
-<td style="text-align:center">\a</td>
-<td style="text-align:center">鸣铃</td>
-</tr>
-<tr>
-<td style="text-align:center">\ddd</td>
-<td style="text-align:center">1-3位八进制数所代表的字符，遵循ASCII码</td>
-</tr>
-<tr>
-<td style="text-align:center">\xhh</td>
-<td style="text-align:center">1-2位十六进制数所代表的字符，遵循ASCII码</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p align="center">T2.常用转义字符表</p></div></details>
-<h4 id="2-字符串常量">2.字符串常量</h4>
-<p>  使用双引号<code>&quot;&quot;</code>括起<strong>若干个</strong>字符称为字符串常量。存储时，系统会自动在其末尾添加<code>\0</code>作为结束标志。</p>
-<div class="note info flat"><ul>
-<li><code>&quot;&quot;</code>也是字符串，其长度为0，称为空串；</li>
-<li>结束标志<code>'\0'</code>源于转义字符<code>'\ddd'</code>，它在ASCII码表中对应<code>BLANK/NULL</code>。</li>
-</ul>
-</div>
-<div class="note warning flat"><p>结束标志的存在非常重要，下例指出了其重要性：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">char</span> arr1[] = <span class="string">&#x27;abc&#x27;</span>;</span><br><span class="line">  <span class="type">char</span> arr2[] = &#123;<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>&#125;;</span><br><span class="line">  <span class="type">char</span> arr3[] = &#123;<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;\0&#x27;</span>&#125;;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, arr1); <span class="comment">//结果是abc</span></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, arr2); <span class="comment">//结果是一串乱码</span></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, arr3); <span class="comment">//结果是abc</span></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  进一步研究发现，<code>arr2</code>因为缺少结束标志，在格式化输出的过程中，当字符<code>'c'</code>输出后，将在其后随机生成一个字符，直至随机生成的字符是结束标志<code>'\0'</code>。</p>
-</div>
-<h3 id="（三）符号常量">（三）符号常量</h3>
-<p>  使用符号代替常量值。它使用宏定义命令<code>#define</code>来定义：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> 符号名称 常量值 <span class="comment">//例如#define PI 3.14</span></span></span><br></pre></td></tr></table></figure>
-<h3 id="（四）枚举常量">（四）枚举常量</h3>
-<p>  枚举常量使用关键字<code>enum</code>来定义：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">Color</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  RED,  <span class="comment">//默认为0</span></span><br><span class="line">  YELLOW, <span class="comment">//默认为1</span></span><br><span class="line">  BLUE  <span class="comment">//默认为2</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>  也可以自定义常量值。除非自定义，否则常量值总是递增的。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">Color</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  RED,  <span class="comment">//默认为0</span></span><br><span class="line">  YELLOW = <span class="number">5</span>,</span><br><span class="line">  BLUE,  <span class="comment">//值为6</span></span><br><span class="line">  GREEN,  <span class="comment">//值为7</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="二-与只读变量的区别">二　与只读变量的区别</h2>
-<p>  只读变量使用<code>const</code>来定义：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> PI = <span class="number">3.14</span>; </span><br></pre></td></tr></table></figure>
-<p>  只读变量是变量添加关键字<code>const</code>构成的，它和其它变量都存放在一个普通的区域，但是由编译器限定不允许被修改。而常量则存放在只读区域。他们有着本质的区别。下例将这样的区别更形象地体现。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> N 5</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">//const int n = 5;</span></span><br><span class="line">  <span class="comment">//char arr1[n] = &#123;0&#125;; //报错</span></span><br><span class="line">  <span class="type">char</span> arr2[N] = &#123;<span class="number">0</span>&#125;;   <span class="comment">//正确</span></span><br><span class="line">  <span class="type">char</span> arr3[<span class="number">5</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>C语言</category>
-      </categories>
-      <tags>
-        <tag>C</tag>
-        <tag>Fallibility</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>C语言 | 有符号整型与无符号整型 格式化输出十进制整型</title>
     <url>/post/ddd0df44.html</url>
     <content><![CDATA[<!-- 让表格居中显示的风格 -->
@@ -365,6 +198,173 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </tags>
   </entry>
   <entry>
+    <title>C语言 | 常量与只读变量</title>
+    <url>/post/f8f674bb.html</url>
+    <content><![CDATA[<!-- 让表格居中显示的风格 -->
+<style>
+.center 
+{
+  width: auto;
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+<h2 id="一-常量的分类">一　常量的分类</h2>
+<h3 id="（一）数值型常量">（一）数值型常量</h3>
+<h4 id="1-整型常量">1.整型常量</h4>
+<p>  整型常量是有且仅包含<strong>八进制、十六进制、十进制</strong>三种进制的整型常数，按照数值范围大小分为<strong>长整型和短整型</strong>。长整型和短整型各自又可分为<strong>有符号整型和无符号整型</strong>。<br>
+  各进制的表达示例和<strong>无符号短整型</strong>数值范围如表T1所示。当数值大小超过短整型数值范围时，必须用长整型来表示，在数值后缀<code>L</code>或<code>l</code>。</p>
+<div class="center">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">进制</th>
+<th style="text-align:center">表达实例</th>
+<th style="text-align:center">数值范围</th>
+<th style="text-align:center">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">八进制</td>
+<td style="text-align:center"><code>011</code> <code>0277777L</code></td>
+<td style="text-align:center">[0,0177777]</td>
+<td style="text-align:center">必须以<code>0</code>作为前缀</td>
+</tr>
+<tr>
+<td style="text-align:center">十进制</td>
+<td style="text-align:center"><code>269</code> <code>75535L</code></td>
+<td style="text-align:center">[0,65535]</td>
+<td style="text-align:center">没有前缀</td>
+</tr>
+<tr>
+<td style="text-align:center">十六进制</td>
+<td style="text-align:center"><code>0XAB</code> <code>0X1FFFFL</code></td>
+<td style="text-align:center">[0x0,0xFFFF]</td>
+<td style="text-align:center">必须以<code>0X</code>或<code>0x</code>作为前缀</td>
+</tr>
+</tbody>
+</table>
+<p><strong>注：表达实例中的整型均为无符号整型，此处省略后缀<code>U</code>或<code>u</code>。</strong></p>
+</div>
+<p align="center">T1.整型常数的分类、表达实例和数值范围</p>
+<div class="note info flat"><ul>
+<li>不加限定的情况下，计算机默认整型是有符号整型。如果要表达无符号整型，需要后缀<code>U</code>或<code>u</code>；</li>
+<li>八进制数和十六进制数极少用于表达有符号整型。表达有符号整型常用十进制，十进制有符号短整型的范围是[-32768,32767]，超出该范围时也应当用长整型的方式表达（后缀<code>L</code>或<code>l</code>）。</li>
+</ul>
+</div>
+<h4 id="2-实型常量（浮点型常量）">2.实型常量（浮点型常量）</h4>
+<p>  实型常量（浮点型常量）的表达形式有且仅包含<strong>十进制数形式、指数形式</strong>。例如：<code>0.0</code> <code>-2.3</code>；<code>56e5</code> <code>28E3</code>等。</p>
+<div class="note warning flat"><p>用指数形式表达时有如下规定：</p>
+<ul>
+<li><code>e</code>或<code>E</code>前必须有数字；</li>
+<li><code>e</code>或<code>E</code>后的指数必须为整数。</li>
+</ul>
+</div>
+<h3 id="（二）字符型常量">（二）字符型常量</h3>
+<h4 id="1-字符常量">1.字符常量</h4>
+<p>  使用单引号<code>''</code>括起<strong>单个</strong>字符称为字符常量，例如<code>'A'</code> <code>'@'</code>。特殊地，单引号内以反斜杠<code>\</code>前缀的字符称为<strong>转义字符</strong>。常用转义字符如表T2所示。</p>
+<details class="toggle"><summary class="toggle-button" style>单击此处查看表T2</summary><div class="toggle-content"><div class="center">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">转义字符</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">\n</td>
+<td style="text-align:center">换行</td>
+</tr>
+<tr>
+<td style="text-align:center">\t</td>
+<td style="text-align:center">水平制表</td>
+</tr>
+<tr>
+<td style="text-align:center">\v</td>
+<td style="text-align:center">垂直制表（影响打印机执行操作）</td>
+</tr>
+<tr>
+<td style="text-align:center">\b</td>
+<td style="text-align:center">退格</td>
+</tr>
+<tr>
+<td style="text-align:center">\r</td>
+<td style="text-align:center">回车</td>
+</tr>
+<tr>
+<td style="text-align:center">\f</td>
+<td style="text-align:center">换页（影响打印机执行操作）</td>
+</tr>
+<tr>
+<td style="text-align:center">\\</td>
+<td style="text-align:center">反斜杠符</td>
+</tr>
+<tr>
+<td style="text-align:center">\’</td>
+<td style="text-align:center">单引号符</td>
+</tr>
+<tr>
+<td style="text-align:center">\&quot;</td>
+<td style="text-align:center">双引号符</td>
+</tr>
+<tr>
+<td style="text-align:center">\?</td>
+<td style="text-align:center">在书写连续多个问号时使用，防止他们被解析成三字母</td>
+</tr>
+<tr>
+<td style="text-align:center">\a</td>
+<td style="text-align:center">鸣铃</td>
+</tr>
+<tr>
+<td style="text-align:center">\ddd</td>
+<td style="text-align:center">1-3位八进制数所代表的字符，遵循ASCII码</td>
+</tr>
+<tr>
+<td style="text-align:center">\xhh</td>
+<td style="text-align:center">1-2位十六进制数所代表的字符，遵循ASCII码</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p align="center">T2.常用转义字符表</p></div></details>
+<h4 id="2-字符串常量">2.字符串常量</h4>
+<p>  使用双引号<code>&quot;&quot;</code>括起<strong>若干个</strong>字符称为字符串常量。存储时，系统会自动在其末尾添加<code>\0</code>作为结束标志。</p>
+<div class="note info flat"><ul>
+<li><code>&quot;&quot;</code>也是字符串，其长度为0，称为空串；</li>
+<li>结束标志<code>'\0'</code>源于转义字符<code>'\ddd'</code>，它在ASCII码表中对应<code>BLANK/NULL</code>。</li>
+</ul>
+</div>
+<div class="note warning flat"><p>结束标志的存在非常重要，下例指出了其重要性：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">char</span> arr1[] = <span class="string">&#x27;abc&#x27;</span>;</span><br><span class="line">  <span class="type">char</span> arr2[] = &#123;<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>&#125;;</span><br><span class="line">  <span class="type">char</span> arr3[] = &#123;<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;\0&#x27;</span>&#125;;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, arr1); <span class="comment">//结果是abc</span></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, arr2); <span class="comment">//结果是一串乱码</span></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, arr3); <span class="comment">//结果是abc</span></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  进一步研究发现，<code>arr2</code>因为缺少结束标志，在格式化输出的过程中，当字符<code>'c'</code>输出后，将在其后随机生成一个字符，直至随机生成的字符是结束标志<code>'\0'</code>。</p>
+</div>
+<h3 id="（三）符号常量">（三）符号常量</h3>
+<p>  使用符号代替常量值。它使用宏定义命令<code>#define</code>来定义：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> 符号名称 常量值 <span class="comment">//例如#define PI 3.14</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="（四）枚举常量">（四）枚举常量</h3>
+<p>  枚举常量使用关键字<code>enum</code>来定义：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">Color</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  RED,  <span class="comment">//默认为0</span></span><br><span class="line">  YELLOW, <span class="comment">//默认为1</span></span><br><span class="line">  BLUE  <span class="comment">//默认为2</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>  也可以自定义常量值。除非自定义，否则常量值总是递增的。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">Color</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  RED,  <span class="comment">//默认为0</span></span><br><span class="line">  YELLOW = <span class="number">5</span>,</span><br><span class="line">  BLUE,  <span class="comment">//值为6</span></span><br><span class="line">  GREEN,  <span class="comment">//值为7</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="二-与只读变量的区别">二　与只读变量的区别</h2>
+<p>  只读变量使用<code>const</code>来定义：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> PI = <span class="number">3.14</span>; </span><br></pre></td></tr></table></figure>
+<p>  只读变量是变量添加关键字<code>const</code>构成的，它和其它变量都存放在一个普通的区域，但是由编译器限定不允许被修改。而常量则存放在只读区域。他们有着本质的区别。下例将这样的区别更形象地体现。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> N 5</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">//const int n = 5;</span></span><br><span class="line">  <span class="comment">//char arr1[n] = &#123;0&#125;; //报错</span></span><br><span class="line">  <span class="type">char</span> arr2[N] = &#123;<span class="number">0</span>&#125;;   <span class="comment">//正确</span></span><br><span class="line">  <span class="type">char</span> arr3[<span class="number">5</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>C语言</category>
+      </categories>
+      <tags>
+        <tag>C</tag>
+        <tag>Fallibility</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C语言 | 函数scanf的使用</title>
     <url>/post/13be382b.html</url>
     <content><![CDATA[<h2 id="一-函数scanf的基本含义">一　函数scanf的基本含义</h2>
@@ -435,6 +435,31 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </tags>
   </entry>
   <entry>
+    <title>ORC | 运筹学计算器</title>
+    <url>/post/9ca67f0b.html</url>
+    <content><![CDATA[<!-- 让表格居中显示的风格 -->
+<style>
+.center 
+{
+  width: auto;
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+<div class="note primary flat"><ul>
+<li>github（国外）：<a href="https://github.com/Dawn-of-Time/Operations-Research-Calculator">https://github.com/Dawn-of-Time/Operations-Research-Calculator</a></li>
+<li>gitee（国内）：<a href="https://gitee.com/dawn-of-time/orc">https://gitee.com/dawn-of-time/orc</a></li>
+</ul>
+</div>]]></content>
+      <categories>
+        <category>ORC</category>
+      </categories>
+      <tags>
+        <tag>ORC</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C语言 | 递归实践：汉诺塔问题 青蛙跳台阶问题</title>
     <url>/post/6290815e.html</url>
     <content><![CDATA[<h2 id="一-递归的含义及其两个必要条件">一　递归的含义及其两个必要条件</h2>
@@ -491,31 +516,6 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       <tags>
         <tag>C</tag>
         <tag>Exploration</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ORC | 运筹学计算器</title>
-    <url>/post/9ca67f0b.html</url>
-    <content><![CDATA[<!-- 让表格居中显示的风格 -->
-<style>
-.center 
-{
-  width: auto;
-  display: table;
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>
-<div class="note primary flat"><ul>
-<li>github（国外）：<a href="https://github.com/Dawn-of-Time/Operations-Research-Calculator">https://github.com/Dawn-of-Time/Operations-Research-Calculator</a></li>
-<li>gitee（国内）：<a href="https://gitee.com/dawn-of-time/orc">https://gitee.com/dawn-of-time/orc</a></li>
-</ul>
-</div>]]></content>
-      <categories>
-        <category>ORC</category>
-      </categories>
-      <tags>
-        <tag>ORC</tag>
       </tags>
   </entry>
   <entry>
@@ -908,54 +908,6 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </tags>
   </entry>
   <entry>
-    <title>数据结构 | 字典</title>
-    <url>/post/83bf63d8.html</url>
-    <content><![CDATA[<div class="note info flat"><p>  本博文中引入的：</p>
-<ul>
-<li>类<code>AList</code>-参见<a href="https://www.dawn-of-time.top/post/a09aaff5.html">数据结构 | 线性表：顺序表 链表</a>。</li>
-</ul>
-</div>
-<div class="note info flat"><p><strong>一些术语</strong>：</p>
-<ul>
-<li><strong>关键码</strong>-数据元素中能起<strong>标识</strong>作用的数据项。</li>
-<li><strong>可比对象</strong>-如果一个集合的两个元素x和y在给定的关系下有xRy或yRx，则称x和y是可比的。</li>
-<li><strong>偏序</strong>-如果一个二元关系是反对称的和传递的（例如小于、等于、大于等二元关系），那么这个关系就称为一个偏序。</li>
-<li><strong>全序</strong>-如果偏序中每一对不同元素都是可比的，则称该偏序为全序。</li>
-<li><strong>键值对</strong>-字典的基本元素，包含一条记录及其相关的关键码。</li>
-</ul>
-</div>
-<p>  为了实现检索功能，要求检索关键码是<strong>可比的</strong>，也就是说，对于至少两个关键码，必须能够正确地确定他们是否相等，这样便能顺利找出与关键码值相匹配的记录。一般而言，<strong>要求能对关键码定义一个全序</strong>，这样能更好地组织数据库、更有效地检索数据。实际上，大多数数据类型都拥有自然顺序，比如intger，float，double等。</p>
-<details class="toggle"><summary class="toggle-button" style>单击此处查看字典的抽象类声明</summary><div class="toggle-content"><p>  下面是从教材中摘录的字典的抽象类声明。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// The Dictionary abstract class.</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Key, <span class="keyword">typename</span> E&gt;</span><br><span class="line"><span class="keyword">class</span>  <span class="title class_">Dictionary</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  <span class="type">void</span> <span class="keyword">operator</span> =(<span class="type">const</span> Dictionary&amp;) &#123;&#125;</span><br><span class="line">  <span class="built_in">Dictionary</span>(<span class="type">const</span> Dictionary&amp;) &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">Dictionary</span>() &#123;&#125;          <span class="comment">// Default constructor</span></span><br><span class="line">  <span class="keyword">virtual</span> ~<span class="built_in">Dictionary</span>() &#123;&#125; <span class="comment">// Base destructor</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// Reinitialize dictionary</span></span><br><span class="line">  <span class="keyword">virtual</span> <span class="type">void</span> <span class="built_in">clear</span>() = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Insert a record</span></span><br><span class="line">  <span class="comment">// k: The key for the record being inserted.</span></span><br><span class="line">  <span class="comment">// e: The record being inserted.</span></span><br><span class="line">  <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">insert</span><span class="params">(<span class="type">const</span> Key&amp; k, <span class="type">const</span> E&amp; e)</span> </span>= <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Remove and return a record.</span></span><br><span class="line">  <span class="comment">// k: The key of the record to be removed.</span></span><br><span class="line">  <span class="comment">// Return: A maching record. If multiple records match</span></span><br><span class="line">  <span class="comment">// &quot;k&quot;, remove an arbitrary one. Return NULL if no record</span></span><br><span class="line">  <span class="comment">// with key &quot;k&quot; exists.</span></span><br><span class="line">  <span class="function"><span class="keyword">virtual</span> E <span class="title">remove</span><span class="params">(<span class="type">const</span> Key&amp; k)</span> </span>= <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Remove and return an arbitrary record from dictionary.</span></span><br><span class="line">  <span class="comment">// Return: The record removed, or NULL if none exists.</span></span><br><span class="line">  <span class="function"><span class="keyword">virtual</span> E <span class="title">removeAny</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Return: A record matching &quot;k&quot; (NULL if none exists).</span></span><br><span class="line">  <span class="comment">// If multiple records match, return an arbitrary one.</span></span><br><span class="line">  <span class="comment">// k: The key of the record to find</span></span><br><span class="line">  <span class="function"><span class="keyword">virtual</span> E <span class="title">find</span><span class="params">(<span class="type">const</span> Key&amp; k)</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Return the number of records in the dictionary.</span></span><br><span class="line">  <span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">size</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></details>
-<p>  注意函数<code>removeAny</code>的作用。它完全任意地选择一条记录进行删除并返回该记录的操作，允许用户随意遍历整个字典。如果没有这个函数，用户将无法获取关键码未知的记录。下面的函数可以得到字典的所有记录：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span> (dict.size &gt; <span class="number">0</span>) &#123;</span><br><span class="line">  it = dict.<span class="built_in">removeAny</span>();</span><br><span class="line">  <span class="built_in">doSomething</span>(it);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  下面来构造一个键值对类。</p>
-<details class="toggle"><summary class="toggle-button" style>单击此处查看键值对的实现</summary><div class="toggle-content"><p>  下面是从教材中摘录的键值对的实现。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Container for a key-value pair</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Key, <span class="keyword">typename</span> E&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">KVpair</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  Key k;</span><br><span class="line">  E e;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="comment">// Constructors</span></span><br><span class="line">  <span class="built_in">KVpair</span>() &#123;&#125;</span><br><span class="line">  <span class="built_in">KVpair</span>(Key kval, E eval)</span><br><span class="line">    &#123; k = kval; e = eval; &#125;</span><br><span class="line">  <span class="built_in">KVpair</span>(<span class="type">const</span> KVpair&amp; o)  <span class="comment">// Copy constructor</span></span><br><span class="line">    &#123; k = o.k; e = o.e; &#125;</span><br><span class="line"></span><br><span class="line">  <span class="type">void</span> <span class="keyword">operator</span> =(<span class="type">const</span> KVpair&amp; o) <span class="comment">// Assignment operator</span></span><br><span class="line">    &#123; k = o.k; e = o.e; &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Data member access functions</span></span><br><span class="line">  <span class="function">Key <span class="title">key</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> k; &#125;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">setKey</span><span class="params">(Key ink)</span> </span>&#123; k = ink; &#125;</span><br><span class="line">  <span class="function">E <span class="title">value</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> e; &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></details>
-<p>  顺序表和链表都可以用以实现字典。教材中使用的是顺序表（链表的实现与其十分相似，不再赘述），并采用了两种顺序表来实现它——<strong>无序顺序表</strong>和<strong>有序顺序表</strong>。</p>
-<details class="toggle"><summary class="toggle-button" style>单击此处查看使用无序顺序表实现的字典的实现</summary><div class="toggle-content"><p>  下面是从教材中摘录的使用无序顺序表实现的字典的实现。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Dictionary implemented with an unsorted array-based list</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Key, <span class="keyword">typename</span> E&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">UALdict</span> : <span class="keyword">public</span> Dictionary&lt;Key, E&gt; &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  AList&lt;KVpair&lt;Key,E&gt; &gt;* list;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">UALdict</span>(<span class="type">int</span> size=defaultSize)   <span class="comment">// Constructor</span></span><br><span class="line">    &#123; list = <span class="keyword">new</span> AList&lt;KVpair&lt;Key,E&gt; &gt;(size); &#125;</span><br><span class="line">  ~<span class="built_in">UALdict</span>() &#123; <span class="keyword">delete</span> list; &#125;         <span class="comment">// Destructor</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">clear</span><span class="params">()</span> </span>&#123; list-&gt;<span class="built_in">clear</span>(); &#125;     <span class="comment">// Reinitialize</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// Insert an element: append to list</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">insert</span><span class="params">(<span class="type">const</span> Key&amp;k, <span class="type">const</span> E&amp; e)</span> </span>&#123;</span><br><span class="line">    <span class="function">KVpair&lt;Key,E&gt; <span class="title">temp</span><span class="params">(k, e)</span></span>;</span><br><span class="line">    list-&gt;<span class="built_in">append</span>(temp);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Use sequential search to find the element to remove</span></span><br><span class="line">  <span class="function">E <span class="title">remove</span><span class="params">(<span class="type">const</span> Key&amp; k)</span> </span>&#123;</span><br><span class="line">    E temp = <span class="built_in">find</span>(k); <span class="comment">// &quot;find&quot; will set list position</span></span><br><span class="line">    <span class="keyword">if</span>(temp != <span class="literal">NULL</span>) list-&gt;<span class="built_in">remove</span>();</span><br><span class="line">    <span class="keyword">return</span> temp;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function">E <span class="title">removeAny</span><span class="params">()</span> </span>&#123; <span class="comment">// Remove the last element</span></span><br><span class="line">    <span class="built_in">Assert</span>(<span class="built_in">size</span>() != <span class="number">0</span>, <span class="string">&quot;Dictionary is empty&quot;</span>);</span><br><span class="line">    list-&gt;<span class="built_in">moveToEnd</span>();</span><br><span class="line">    list-&gt;<span class="built_in">prev</span>();</span><br><span class="line">    KVpair&lt;Key,E&gt; e = list-&gt;<span class="built_in">remove</span>();</span><br><span class="line">    <span class="keyword">return</span> e.<span class="built_in">value</span>();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Find &quot;k&quot; using sequential search</span></span><br><span class="line">  <span class="function">E <span class="title">find</span><span class="params">(<span class="type">const</span> Key&amp; k)</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(list-&gt;<span class="built_in">moveToStart</span>();</span><br><span class="line">        list-&gt;<span class="built_in">currPos</span>() &lt; list-&gt;<span class="built_in">length</span>(); list-&gt;<span class="built_in">next</span>()) &#123;</span><br><span class="line">      KVpair&lt;Key,E&gt; temp = list-&gt;<span class="built_in">getValue</span>();</span><br><span class="line">      <span class="keyword">if</span> (k == temp.<span class="built_in">key</span>())</span><br><span class="line">        <span class="keyword">return</span> temp.<span class="built_in">value</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>; <span class="comment">// &quot;k&quot; does not appear in dictionary</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">size</span><span class="params">()</span> <span class="comment">// Return list size</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">return</span> list-&gt;<span class="built_in">length</span>(); &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></details>
-<p>  使用有序线性表来实现时，不能直接继承List ADT。这是因为原本的List ADT在插入元素时实际上是在表末添加元素。为了保证有序线性表的有序性，需要重新定义insert函数。其余函数不变，可以直接使用AList中的函数。</p>
-<details class="toggle"><summary class="toggle-button" style>单击此处查看有序顺序表的实现</summary><div class="toggle-content"><p>  下面是从教材中摘录的有序顺序表的实现。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Sorted array-based list</span></span><br><span class="line"><span class="comment">// Inherit from AList as a protected base class</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Key, <span class="keyword">typename</span> E&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SAList</span>: <span class="keyword">protected</span> AList&lt;KVpair&lt;Key,E&gt; &gt; &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">SAList</span>(<span class="type">int</span> size=defaultSize) :</span><br><span class="line">    AList&lt;KVpair&lt;Key,E&gt; &gt;(size) &#123;&#125;</span><br><span class="line"></span><br><span class="line">  ~<span class="built_in">SAList</span>() &#123;&#125;                    <span class="comment">// Destructor</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// Redefine insert function to keep values sorted</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">insert</span><span class="params">(KVpair&lt;Key,E&gt;&amp; it)</span> </span>&#123; <span class="comment">// Insert at right</span></span><br><span class="line">    KVpair&lt;Key,E&gt; curr;</span><br><span class="line">    <span class="keyword">for</span> (<span class="built_in">moveToStart</span>(); <span class="built_in">currPos</span>() &lt; <span class="built_in">length</span>(); <span class="built_in">next</span>()) &#123;</span><br><span class="line">      curr = <span class="built_in">getValue</span>();</span><br><span class="line">      <span class="keyword">if</span>(curr.<span class="built_in">key</span>() &gt; it.<span class="built_in">key</span>())</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    AList&lt;KVpair&lt;Key,E&gt; &gt;::<span class="built_in">insert</span>(it); <span class="comment">// Do AList insert</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// With the exception of append, all remaining methods are</span></span><br><span class="line">  <span class="comment">// exposed from AList. Append is not available to SAlist</span></span><br><span class="line">  <span class="comment">// class users since it has not been explicitly exposed.</span></span><br><span class="line">  AList&lt;KVpair&lt;Key,E&gt; &gt;::clear;</span><br><span class="line">  AList&lt;KVpair&lt;Key,E&gt; &gt;::remove;</span><br><span class="line">  AList&lt;KVpair&lt;Key,E&gt; &gt;::moveToStart;</span><br><span class="line">  AList&lt;KVpair&lt;Key,E&gt; &gt;::moveToEnd;</span><br><span class="line">  AList&lt;KVpair&lt;Key,E&gt; &gt;::prev;</span><br><span class="line">  AList&lt;KVpair&lt;Key,E&gt; &gt;::next;</span><br><span class="line">  AList&lt;KVpair&lt;Key,E&gt; &gt;::length;</span><br><span class="line">  AList&lt;KVpair&lt;Key,E&gt; &gt;::currPos;</span><br><span class="line">  AList&lt;KVpair&lt;Key,E&gt; &gt;::moveToPos;</span><br><span class="line">  AList&lt;KVpair&lt;Key,E&gt; &gt;::getValue;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></details>
-<details class="toggle"><summary class="toggle-button" style>单击此处查看使用有序顺序表实现的字典的实现</summary><div class="toggle-content"><p>  下面是从教材中摘录的使用有序顺序表实现的字典的实现。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Dictionary implemented with a sorted array-based list</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Key, <span class="keyword">typename</span> E&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SALdict</span> : <span class="keyword">public</span> Dictionary&lt;Key, E&gt; &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  SAList&lt;Key,E&gt;* list;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">SALdict</span>(<span class="type">int</span> size=defaultSize)   <span class="comment">// Constructor</span></span><br><span class="line">    &#123; list = <span class="keyword">new</span> <span class="built_in">SAList</span>&lt;Key,E&gt;(size); &#125;</span><br><span class="line">  ~<span class="built_in">SALdict</span>() &#123; <span class="keyword">delete</span> list; &#125;         <span class="comment">// Destructor</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">clear</span><span class="params">()</span> </span>&#123; list-&gt;<span class="built_in">clear</span>(); &#125;     <span class="comment">// Reinitialize</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// Insert an element: Keep elements sorted</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">insert</span><span class="params">(<span class="type">const</span> Key&amp;k, <span class="type">const</span> E&amp; e)</span> </span>&#123;</span><br><span class="line">    <span class="function">KVpair&lt;Key,E&gt; <span class="title">temp</span><span class="params">(k, e)</span></span>;</span><br><span class="line">    list-&gt;<span class="built_in">insert</span>(temp);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Use sequential search to find the element to remove</span></span><br><span class="line">  <span class="function">E <span class="title">remove</span><span class="params">(<span class="type">const</span> Key&amp; k)</span> </span>&#123;</span><br><span class="line">    E temp = <span class="built_in">find</span>(k);</span><br><span class="line">    <span class="keyword">if</span> (temp != <span class="literal">NULL</span>) list-&gt;<span class="built_in">remove</span>();</span><br><span class="line">    <span class="keyword">return</span> temp;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function">E <span class="title">removeAny</span><span class="params">()</span> </span>&#123; <span class="comment">// Remove the last element</span></span><br><span class="line">    <span class="built_in">Assert</span>(<span class="built_in">size</span>() != <span class="number">0</span>, <span class="string">&quot;Dictionary is empty&quot;</span>);</span><br><span class="line">    list-&gt;<span class="built_in">moveToEnd</span>();</span><br><span class="line">    list-&gt;<span class="built_in">prev</span>();</span><br><span class="line">    KVpair&lt;Key,E&gt; e = list-&gt;<span class="built_in">remove</span>();</span><br><span class="line">    <span class="keyword">return</span> e.<span class="built_in">value</span>();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Find &quot;K&quot; using binary search</span></span><br><span class="line">  <span class="function">E <span class="title">find</span><span class="params">(<span class="type">const</span> Key&amp; k)</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> l = <span class="number">-1</span>;</span><br><span class="line">    <span class="type">int</span> r = list-&gt;<span class="built_in">length</span>();</span><br><span class="line">    <span class="keyword">while</span> (l+<span class="number">1</span> != r) &#123; <span class="comment">// Stop when l and r meet</span></span><br><span class="line">      <span class="type">int</span> i = (l+r)/<span class="number">2</span>; <span class="comment">// Check middle of remaining subarray</span></span><br><span class="line">      list-&gt;<span class="built_in">moveToPos</span>(i);</span><br><span class="line">      KVpair&lt;Key,E&gt; temp = list-&gt;<span class="built_in">getValue</span>();</span><br><span class="line">      <span class="keyword">if</span> (k &lt; temp.<span class="built_in">key</span>()) r = i;        <span class="comment">// In left</span></span><br><span class="line">      <span class="keyword">if</span> (k == temp.<span class="built_in">key</span>()) <span class="keyword">return</span> temp.<span class="built_in">value</span>(); <span class="comment">// Found it</span></span><br><span class="line">      <span class="keyword">if</span> (k &gt; temp.<span class="built_in">key</span>()) l = i;        <span class="comment">// In right</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>; <span class="comment">// &quot;k&quot; does not appear in dictionary</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">size</span><span class="params">()</span> <span class="comment">// Return list size</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">return</span> list-&gt;<span class="built_in">length</span>(); &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></details>
-<p>  使用无序顺序表实现字典时，<code>insert</code>和<code>removeAny</code>操作需要常数时间，<code>find</code>和<code>remove</code>操作则需要<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Theta(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">Θ</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>。而使用有序顺序表实现时，注意到<code>insert</code>操作时间代价变为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Theta(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">Θ</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>，<code>find</code>操作时间代价变为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><mi>log</mi><mo>⁡</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Theta(\log n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">Θ</span><span class="mopen">(</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>。这是因为使用有序顺序表实现时，函数<code>find</code>的实现使用了二分法来检索——这种方法相比依次查找效率高得多。因此，<strong>选用哪一种方式实现，取决于插入操作和查询操作的相对次数</strong>。</p>
-<div class="note warning flat"><p>  使用有序顺序表实现字典时，一个比较关键的地方是<strong>对关键码进行比较</strong>。这在关键码是int类型时很容易实现。但是，关键码也可能是字符串指针等等。有以下两个办法解决这个问题：</p>
-<ul>
-<li><strong>使用特殊的比较方法</strong>-重载<code>==</code> <code>&lt;=</code> <code>&gt;=</code>运算符，但是由于它没有体现在接口中，常常被忽略。</li>
-<li><strong>传入一个较泛化的比较函数</strong>-让用户自己定义比较类来比较关键码。该定义作为模板的一个参数，在使用字典时，必须将这个定义传入。这样的设计称为“<strong>策略</strong>”设计模式，因为用户要明确提供做某些操作的策略。</li>
-<li><strong>将关键码与值绑定</strong>-某些情况下，利用比较类从记录中抽取关键码，比存储键值对更合适。博主认为，这是说关键码的确定来源于记录，记录的相对大小（由用户定义）确定了关键码的相对大小（由用户定义），这使得关键码和记录的相对大小总是一致，这样能更好地管理以有序顺序表实现的字典。（若有误，还望在评论区指出，谢谢！）</li>
-</ul>
-</div>]]></content>
-      <categories>
-        <category>数据结构</category>
-      </categories>
-      <tags>
-        <tag>Data Structures</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>数据结构 | 栈 队列</title>
     <url>/post/d7d38339.html</url>
     <content><![CDATA[<div class="note info flat"><p>  本博文中引入的：</p>
@@ -1192,6 +1144,54 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </tags>
   </entry>
   <entry>
+    <title>数据结构 | 字典</title>
+    <url>/post/83bf63d8.html</url>
+    <content><![CDATA[<div class="note info flat"><p>  本博文中引入的：</p>
+<ul>
+<li>类<code>AList</code>-参见<a href="https://www.dawn-of-time.top/post/a09aaff5.html">数据结构 | 线性表：顺序表 链表</a>。</li>
+</ul>
+</div>
+<div class="note info flat"><p><strong>一些术语</strong>：</p>
+<ul>
+<li><strong>关键码</strong>-数据元素中能起<strong>标识</strong>作用的数据项。</li>
+<li><strong>可比对象</strong>-如果一个集合的两个元素x和y在给定的关系下有xRy或yRx，则称x和y是可比的。</li>
+<li><strong>偏序</strong>-如果一个二元关系是反对称的和传递的（例如小于、等于、大于等二元关系），那么这个关系就称为一个偏序。</li>
+<li><strong>全序</strong>-如果偏序中每一对不同元素都是可比的，则称该偏序为全序。</li>
+<li><strong>键值对</strong>-字典的基本元素，包含一条记录及其相关的关键码。</li>
+</ul>
+</div>
+<p>  为了实现检索功能，要求检索关键码是<strong>可比的</strong>，也就是说，对于至少两个关键码，必须能够正确地确定他们是否相等，这样便能顺利找出与关键码值相匹配的记录。一般而言，<strong>要求能对关键码定义一个全序</strong>，这样能更好地组织数据库、更有效地检索数据。实际上，大多数数据类型都拥有自然顺序，比如intger，float，double等。</p>
+<details class="toggle"><summary class="toggle-button" style>单击此处查看字典的抽象类声明</summary><div class="toggle-content"><p>  下面是从教材中摘录的字典的抽象类声明。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// The Dictionary abstract class.</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Key, <span class="keyword">typename</span> E&gt;</span><br><span class="line"><span class="keyword">class</span>  <span class="title class_">Dictionary</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  <span class="type">void</span> <span class="keyword">operator</span> =(<span class="type">const</span> Dictionary&amp;) &#123;&#125;</span><br><span class="line">  <span class="built_in">Dictionary</span>(<span class="type">const</span> Dictionary&amp;) &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">Dictionary</span>() &#123;&#125;          <span class="comment">// Default constructor</span></span><br><span class="line">  <span class="keyword">virtual</span> ~<span class="built_in">Dictionary</span>() &#123;&#125; <span class="comment">// Base destructor</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// Reinitialize dictionary</span></span><br><span class="line">  <span class="keyword">virtual</span> <span class="type">void</span> <span class="built_in">clear</span>() = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Insert a record</span></span><br><span class="line">  <span class="comment">// k: The key for the record being inserted.</span></span><br><span class="line">  <span class="comment">// e: The record being inserted.</span></span><br><span class="line">  <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">insert</span><span class="params">(<span class="type">const</span> Key&amp; k, <span class="type">const</span> E&amp; e)</span> </span>= <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Remove and return a record.</span></span><br><span class="line">  <span class="comment">// k: The key of the record to be removed.</span></span><br><span class="line">  <span class="comment">// Return: A maching record. If multiple records match</span></span><br><span class="line">  <span class="comment">// &quot;k&quot;, remove an arbitrary one. Return NULL if no record</span></span><br><span class="line">  <span class="comment">// with key &quot;k&quot; exists.</span></span><br><span class="line">  <span class="function"><span class="keyword">virtual</span> E <span class="title">remove</span><span class="params">(<span class="type">const</span> Key&amp; k)</span> </span>= <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Remove and return an arbitrary record from dictionary.</span></span><br><span class="line">  <span class="comment">// Return: The record removed, or NULL if none exists.</span></span><br><span class="line">  <span class="function"><span class="keyword">virtual</span> E <span class="title">removeAny</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Return: A record matching &quot;k&quot; (NULL if none exists).</span></span><br><span class="line">  <span class="comment">// If multiple records match, return an arbitrary one.</span></span><br><span class="line">  <span class="comment">// k: The key of the record to find</span></span><br><span class="line">  <span class="function"><span class="keyword">virtual</span> E <span class="title">find</span><span class="params">(<span class="type">const</span> Key&amp; k)</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Return the number of records in the dictionary.</span></span><br><span class="line">  <span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">size</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></details>
+<p>  注意函数<code>removeAny</code>的作用。它完全任意地选择一条记录进行删除并返回该记录的操作，允许用户随意遍历整个字典。如果没有这个函数，用户将无法获取关键码未知的记录。下面的函数可以得到字典的所有记录：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span> (dict.size &gt; <span class="number">0</span>) &#123;</span><br><span class="line">  it = dict.<span class="built_in">removeAny</span>();</span><br><span class="line">  <span class="built_in">doSomething</span>(it);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  下面来构造一个键值对类。</p>
+<details class="toggle"><summary class="toggle-button" style>单击此处查看键值对的实现</summary><div class="toggle-content"><p>  下面是从教材中摘录的键值对的实现。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Container for a key-value pair</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Key, <span class="keyword">typename</span> E&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">KVpair</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  Key k;</span><br><span class="line">  E e;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="comment">// Constructors</span></span><br><span class="line">  <span class="built_in">KVpair</span>() &#123;&#125;</span><br><span class="line">  <span class="built_in">KVpair</span>(Key kval, E eval)</span><br><span class="line">    &#123; k = kval; e = eval; &#125;</span><br><span class="line">  <span class="built_in">KVpair</span>(<span class="type">const</span> KVpair&amp; o)  <span class="comment">// Copy constructor</span></span><br><span class="line">    &#123; k = o.k; e = o.e; &#125;</span><br><span class="line"></span><br><span class="line">  <span class="type">void</span> <span class="keyword">operator</span> =(<span class="type">const</span> KVpair&amp; o) <span class="comment">// Assignment operator</span></span><br><span class="line">    &#123; k = o.k; e = o.e; &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Data member access functions</span></span><br><span class="line">  <span class="function">Key <span class="title">key</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> k; &#125;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">setKey</span><span class="params">(Key ink)</span> </span>&#123; k = ink; &#125;</span><br><span class="line">  <span class="function">E <span class="title">value</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> e; &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></details>
+<p>  顺序表和链表都可以用以实现字典。教材中使用的是顺序表（链表的实现与其十分相似，不再赘述），并采用了两种顺序表来实现它——<strong>无序顺序表</strong>和<strong>有序顺序表</strong>。</p>
+<details class="toggle"><summary class="toggle-button" style>单击此处查看使用无序顺序表实现的字典的实现</summary><div class="toggle-content"><p>  下面是从教材中摘录的使用无序顺序表实现的字典的实现。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Dictionary implemented with an unsorted array-based list</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Key, <span class="keyword">typename</span> E&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">UALdict</span> : <span class="keyword">public</span> Dictionary&lt;Key, E&gt; &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  AList&lt;KVpair&lt;Key,E&gt; &gt;* list;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">UALdict</span>(<span class="type">int</span> size=defaultSize)   <span class="comment">// Constructor</span></span><br><span class="line">    &#123; list = <span class="keyword">new</span> AList&lt;KVpair&lt;Key,E&gt; &gt;(size); &#125;</span><br><span class="line">  ~<span class="built_in">UALdict</span>() &#123; <span class="keyword">delete</span> list; &#125;         <span class="comment">// Destructor</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">clear</span><span class="params">()</span> </span>&#123; list-&gt;<span class="built_in">clear</span>(); &#125;     <span class="comment">// Reinitialize</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// Insert an element: append to list</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">insert</span><span class="params">(<span class="type">const</span> Key&amp;k, <span class="type">const</span> E&amp; e)</span> </span>&#123;</span><br><span class="line">    <span class="function">KVpair&lt;Key,E&gt; <span class="title">temp</span><span class="params">(k, e)</span></span>;</span><br><span class="line">    list-&gt;<span class="built_in">append</span>(temp);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Use sequential search to find the element to remove</span></span><br><span class="line">  <span class="function">E <span class="title">remove</span><span class="params">(<span class="type">const</span> Key&amp; k)</span> </span>&#123;</span><br><span class="line">    E temp = <span class="built_in">find</span>(k); <span class="comment">// &quot;find&quot; will set list position</span></span><br><span class="line">    <span class="keyword">if</span>(temp != <span class="literal">NULL</span>) list-&gt;<span class="built_in">remove</span>();</span><br><span class="line">    <span class="keyword">return</span> temp;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function">E <span class="title">removeAny</span><span class="params">()</span> </span>&#123; <span class="comment">// Remove the last element</span></span><br><span class="line">    <span class="built_in">Assert</span>(<span class="built_in">size</span>() != <span class="number">0</span>, <span class="string">&quot;Dictionary is empty&quot;</span>);</span><br><span class="line">    list-&gt;<span class="built_in">moveToEnd</span>();</span><br><span class="line">    list-&gt;<span class="built_in">prev</span>();</span><br><span class="line">    KVpair&lt;Key,E&gt; e = list-&gt;<span class="built_in">remove</span>();</span><br><span class="line">    <span class="keyword">return</span> e.<span class="built_in">value</span>();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Find &quot;k&quot; using sequential search</span></span><br><span class="line">  <span class="function">E <span class="title">find</span><span class="params">(<span class="type">const</span> Key&amp; k)</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(list-&gt;<span class="built_in">moveToStart</span>();</span><br><span class="line">        list-&gt;<span class="built_in">currPos</span>() &lt; list-&gt;<span class="built_in">length</span>(); list-&gt;<span class="built_in">next</span>()) &#123;</span><br><span class="line">      KVpair&lt;Key,E&gt; temp = list-&gt;<span class="built_in">getValue</span>();</span><br><span class="line">      <span class="keyword">if</span> (k == temp.<span class="built_in">key</span>())</span><br><span class="line">        <span class="keyword">return</span> temp.<span class="built_in">value</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>; <span class="comment">// &quot;k&quot; does not appear in dictionary</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">size</span><span class="params">()</span> <span class="comment">// Return list size</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">return</span> list-&gt;<span class="built_in">length</span>(); &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></details>
+<p>  使用有序线性表来实现时，不能直接继承List ADT。这是因为原本的List ADT在插入元素时实际上是在表末添加元素。为了保证有序线性表的有序性，需要重新定义insert函数。其余函数不变，可以直接使用AList中的函数。</p>
+<details class="toggle"><summary class="toggle-button" style>单击此处查看有序顺序表的实现</summary><div class="toggle-content"><p>  下面是从教材中摘录的有序顺序表的实现。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Sorted array-based list</span></span><br><span class="line"><span class="comment">// Inherit from AList as a protected base class</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Key, <span class="keyword">typename</span> E&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SAList</span>: <span class="keyword">protected</span> AList&lt;KVpair&lt;Key,E&gt; &gt; &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">SAList</span>(<span class="type">int</span> size=defaultSize) :</span><br><span class="line">    AList&lt;KVpair&lt;Key,E&gt; &gt;(size) &#123;&#125;</span><br><span class="line"></span><br><span class="line">  ~<span class="built_in">SAList</span>() &#123;&#125;                    <span class="comment">// Destructor</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// Redefine insert function to keep values sorted</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">insert</span><span class="params">(KVpair&lt;Key,E&gt;&amp; it)</span> </span>&#123; <span class="comment">// Insert at right</span></span><br><span class="line">    KVpair&lt;Key,E&gt; curr;</span><br><span class="line">    <span class="keyword">for</span> (<span class="built_in">moveToStart</span>(); <span class="built_in">currPos</span>() &lt; <span class="built_in">length</span>(); <span class="built_in">next</span>()) &#123;</span><br><span class="line">      curr = <span class="built_in">getValue</span>();</span><br><span class="line">      <span class="keyword">if</span>(curr.<span class="built_in">key</span>() &gt; it.<span class="built_in">key</span>())</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    AList&lt;KVpair&lt;Key,E&gt; &gt;::<span class="built_in">insert</span>(it); <span class="comment">// Do AList insert</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// With the exception of append, all remaining methods are</span></span><br><span class="line">  <span class="comment">// exposed from AList. Append is not available to SAlist</span></span><br><span class="line">  <span class="comment">// class users since it has not been explicitly exposed.</span></span><br><span class="line">  AList&lt;KVpair&lt;Key,E&gt; &gt;::clear;</span><br><span class="line">  AList&lt;KVpair&lt;Key,E&gt; &gt;::remove;</span><br><span class="line">  AList&lt;KVpair&lt;Key,E&gt; &gt;::moveToStart;</span><br><span class="line">  AList&lt;KVpair&lt;Key,E&gt; &gt;::moveToEnd;</span><br><span class="line">  AList&lt;KVpair&lt;Key,E&gt; &gt;::prev;</span><br><span class="line">  AList&lt;KVpair&lt;Key,E&gt; &gt;::next;</span><br><span class="line">  AList&lt;KVpair&lt;Key,E&gt; &gt;::length;</span><br><span class="line">  AList&lt;KVpair&lt;Key,E&gt; &gt;::currPos;</span><br><span class="line">  AList&lt;KVpair&lt;Key,E&gt; &gt;::moveToPos;</span><br><span class="line">  AList&lt;KVpair&lt;Key,E&gt; &gt;::getValue;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></details>
+<details class="toggle"><summary class="toggle-button" style>单击此处查看使用有序顺序表实现的字典的实现</summary><div class="toggle-content"><p>  下面是从教材中摘录的使用有序顺序表实现的字典的实现。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Dictionary implemented with a sorted array-based list</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Key, <span class="keyword">typename</span> E&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SALdict</span> : <span class="keyword">public</span> Dictionary&lt;Key, E&gt; &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  SAList&lt;Key,E&gt;* list;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">SALdict</span>(<span class="type">int</span> size=defaultSize)   <span class="comment">// Constructor</span></span><br><span class="line">    &#123; list = <span class="keyword">new</span> <span class="built_in">SAList</span>&lt;Key,E&gt;(size); &#125;</span><br><span class="line">  ~<span class="built_in">SALdict</span>() &#123; <span class="keyword">delete</span> list; &#125;         <span class="comment">// Destructor</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">clear</span><span class="params">()</span> </span>&#123; list-&gt;<span class="built_in">clear</span>(); &#125;     <span class="comment">// Reinitialize</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// Insert an element: Keep elements sorted</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">insert</span><span class="params">(<span class="type">const</span> Key&amp;k, <span class="type">const</span> E&amp; e)</span> </span>&#123;</span><br><span class="line">    <span class="function">KVpair&lt;Key,E&gt; <span class="title">temp</span><span class="params">(k, e)</span></span>;</span><br><span class="line">    list-&gt;<span class="built_in">insert</span>(temp);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Use sequential search to find the element to remove</span></span><br><span class="line">  <span class="function">E <span class="title">remove</span><span class="params">(<span class="type">const</span> Key&amp; k)</span> </span>&#123;</span><br><span class="line">    E temp = <span class="built_in">find</span>(k);</span><br><span class="line">    <span class="keyword">if</span> (temp != <span class="literal">NULL</span>) list-&gt;<span class="built_in">remove</span>();</span><br><span class="line">    <span class="keyword">return</span> temp;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function">E <span class="title">removeAny</span><span class="params">()</span> </span>&#123; <span class="comment">// Remove the last element</span></span><br><span class="line">    <span class="built_in">Assert</span>(<span class="built_in">size</span>() != <span class="number">0</span>, <span class="string">&quot;Dictionary is empty&quot;</span>);</span><br><span class="line">    list-&gt;<span class="built_in">moveToEnd</span>();</span><br><span class="line">    list-&gt;<span class="built_in">prev</span>();</span><br><span class="line">    KVpair&lt;Key,E&gt; e = list-&gt;<span class="built_in">remove</span>();</span><br><span class="line">    <span class="keyword">return</span> e.<span class="built_in">value</span>();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Find &quot;K&quot; using binary search</span></span><br><span class="line">  <span class="function">E <span class="title">find</span><span class="params">(<span class="type">const</span> Key&amp; k)</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> l = <span class="number">-1</span>;</span><br><span class="line">    <span class="type">int</span> r = list-&gt;<span class="built_in">length</span>();</span><br><span class="line">    <span class="keyword">while</span> (l+<span class="number">1</span> != r) &#123; <span class="comment">// Stop when l and r meet</span></span><br><span class="line">      <span class="type">int</span> i = (l+r)/<span class="number">2</span>; <span class="comment">// Check middle of remaining subarray</span></span><br><span class="line">      list-&gt;<span class="built_in">moveToPos</span>(i);</span><br><span class="line">      KVpair&lt;Key,E&gt; temp = list-&gt;<span class="built_in">getValue</span>();</span><br><span class="line">      <span class="keyword">if</span> (k &lt; temp.<span class="built_in">key</span>()) r = i;        <span class="comment">// In left</span></span><br><span class="line">      <span class="keyword">if</span> (k == temp.<span class="built_in">key</span>()) <span class="keyword">return</span> temp.<span class="built_in">value</span>(); <span class="comment">// Found it</span></span><br><span class="line">      <span class="keyword">if</span> (k &gt; temp.<span class="built_in">key</span>()) l = i;        <span class="comment">// In right</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>; <span class="comment">// &quot;k&quot; does not appear in dictionary</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">size</span><span class="params">()</span> <span class="comment">// Return list size</span></span></span><br><span class="line"><span class="function">    </span>&#123; <span class="keyword">return</span> list-&gt;<span class="built_in">length</span>(); &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></details>
+<p>  使用无序顺序表实现字典时，<code>insert</code>和<code>removeAny</code>操作需要常数时间，<code>find</code>和<code>remove</code>操作则需要<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Theta(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">Θ</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>。而使用有序顺序表实现时，注意到<code>insert</code>操作时间代价变为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Theta(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">Θ</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>，<code>find</code>操作时间代价变为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><mi>log</mi><mo>⁡</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Theta(\log n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">Θ</span><span class="mopen">(</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>。这是因为使用有序顺序表实现时，函数<code>find</code>的实现使用了二分法来检索——这种方法相比依次查找效率高得多。因此，<strong>选用哪一种方式实现，取决于插入操作和查询操作的相对次数</strong>。</p>
+<div class="note warning flat"><p>  使用有序顺序表实现字典时，一个比较关键的地方是<strong>对关键码进行比较</strong>。这在关键码是int类型时很容易实现。但是，关键码也可能是字符串指针等等。有以下两个办法解决这个问题：</p>
+<ul>
+<li><strong>使用特殊的比较方法</strong>-重载<code>==</code> <code>&lt;=</code> <code>&gt;=</code>运算符，但是由于它没有体现在接口中，常常被忽略。</li>
+<li><strong>传入一个较泛化的比较函数</strong>-让用户自己定义比较类来比较关键码。该定义作为模板的一个参数，在使用字典时，必须将这个定义传入。这样的设计称为“<strong>策略</strong>”设计模式，因为用户要明确提供做某些操作的策略。</li>
+<li><strong>将关键码与值绑定</strong>-某些情况下，利用比较类从记录中抽取关键码，比存储键值对更合适。博主认为，这是说关键码的确定来源于记录，记录的相对大小（由用户定义）确定了关键码的相对大小（由用户定义），这使得关键码和记录的相对大小总是一致，这样能更好地管理以有序顺序表实现的字典。（若有误，还望在评论区指出，谢谢！）</li>
+</ul>
+</div>]]></content>
+      <categories>
+        <category>数据结构</category>
+      </categories>
+      <tags>
+        <tag>Data Structures</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数据结构 | Huffman编码树</title>
     <url>/post/d476fbe4.html</url>
     <content><![CDATA[<!-- 让表格居中显示的风格 -->
@@ -1330,119 +1330,6 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </tags>
   </entry>
   <entry>
-    <title>数据结构 | 通用树</title>
-    <url>/post/487435bc.html</url>
-    <content><![CDATA[<div class="note info flat"><p><strong>一些术语</strong>：</p>
-<ul>
-<li><strong>通用树</strong>（以下简称<strong>树</strong>）-由一个或一个以上结点组成的<strong>有限集</strong>，其中没有父结点的结点称为根结点。</li>
-<li><strong>最左子结点</strong>-子树从左到右排列，其中最左边的子树的根结点称为最左子结点。</li>
-<li><strong>（结点M的）出度</strong>-（结点M的）子结点数目。</li>
-<li><strong>森林</strong>-一棵或更多棵树的集合。</li>
-</ul>
-</div>
-<div class="note warning flat"><p>  注意到树和二叉树的主要区别：</p>
-<ul>
-<li>二叉树的出度至多为2，但树没有限制；</li>
-<li>二叉树交换左右子结点得到的新树与原树不同，但树交换没有区别。</li>
-</ul>
-</div>
-<h2 id="一-树结点的ADT">一　树结点的ADT</h2>
-<p>  注意到树的出度是没有限制的，那么建立树类时就应该注意找到一种能够处理这种情况的方法。实现它一般来说可以采用数组或链表的形式，后者更为常见。</p>
-<details class="toggle"><summary class="toggle-button" style>单击此处查看树和树结点的类定义</summary><div class="toggle-content"><p>  下面是从教材中摘录的树和树结点的类定义。注意到其中的<code>leftmostChild</code>和<code>rightSibling</code>函数，使用它们可以很好的完成遍历操作。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// General tree node ADT</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt; <span class="keyword">class</span> <span class="title class_">GTNode</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function">E <span class="title">value</span><span class="params">()</span></span>;                    <span class="comment">// Return node&#x27;s value</span></span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">isLeaf</span><span class="params">()</span></span>;                <span class="comment">// True if node is a leaf</span></span><br><span class="line">  <span class="function">GTNode* <span class="title">parent</span><span class="params">()</span></span>;             <span class="comment">// Return parent</span></span><br><span class="line">  <span class="function">GTNode* <span class="title">leftmostChild</span><span class="params">()</span></span>;      <span class="comment">// Return first child</span></span><br><span class="line">  <span class="function">GTNode* <span class="title">rightSibling</span><span class="params">()</span></span>;       <span class="comment">// Return right sibling</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">setValue</span><span class="params">(E&amp;)</span></span>;            <span class="comment">// Set node&#x27;s value</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">insertFirst</span><span class="params">(GTNode&lt;E&gt;*)</span></span>; <span class="comment">// Insert first child</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">insertNext</span><span class="params">(GTNode&lt;E&gt;*)</span></span>;  <span class="comment">// Insert next sibling</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">removeFirst</span><span class="params">()</span></span>;           <span class="comment">// Remove first child</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">removeNext</span><span class="params">()</span></span>;            <span class="comment">// Remove next sibling</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// General tree ADT</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt; <span class="keyword">class</span> <span class="title class_">GenTree</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">clear</span><span class="params">()</span></span>;                               <span class="comment">// Send all nodes to free store</span></span><br><span class="line">  <span class="function">GTNode&lt;E&gt;* <span class="title">root</span><span class="params">()</span></span>;                          <span class="comment">// Return the root of the tree</span></span><br><span class="line">  <span class="comment">// Combine two subtrees</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">newroot</span><span class="params">(E&amp;, GTNode&lt;E&gt;*, GTNode&lt;E&gt;*)</span></span>;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span></span>;                               <span class="comment">// Print a tree</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></details>
-<p>  这就是一种用链表的形式实现的树和树结点的类。</p>
-<hr>
-<h2 id="二-树的遍历">二　树的遍历</h2>
-<p>  树的遍历与<a href="https://www.dawn-of-time.top/post/eb4efb69.html">二叉树</a>类似，分为<strong>前根遍历</strong>、<strong>中根遍历</strong>、<strong>后根遍历</strong>。其中中根遍历因为子结点数目不确定的原因而难以定义，一般也不使用。<br>
-  遍历过程会使用到上面的<code>leftmostChild</code>和<code>rightSibling</code>函数，每当遍历子结点时，总是先调用<code>leftmostChild</code>函数访问最左子结点，然后对其调用<code>rightSibling</code>函数来依次访问最左子结点右边的兄弟结点，直到最右子结点（它右边的兄弟结点是<code>NULL</code>）。</p>
-<hr>
-<h2 id="三-父指针表示法">三　父指针表示法</h2>
-<p>  在解决“<strong>任意给出两个不同的结点，判断它们是否在同一棵树中</strong>”这样的问题时，仅凭上文的方法是无法解决的。一个有效的解决方法是使用<strong>父指针表示法</strong>——只需要顺着父指针链就能追溯到根结点，从而判断给定结点是否在同一棵树中。使用这种方法，每个结点只需要保存一个指针域指向其父结点。</p>
-<div class="note info flat"><p><strong>一些术语</strong>：</p>
-<ul>
-<li><strong>不相交子集</strong>-交集为空的两个集合。对于这样的集合，希望提供<strong>判断两个结点是否在同一集合中</strong>和<strong>归并两个集合</strong>的操作。</li>
-<li><strong>并查算法</strong>（也称<strong>并查集</strong>）-通过合并两个不相交子集来找出两个结点是否在同一个集合的过程。</li>
-</ul>
-</div>
-<p>  并查算法用一棵树表示一个集合。结点通常存储在<strong>数组</strong>中——每个数组元素表示一个结点，并存储该结点的<strong>值</strong>、<strong>父指针</strong>（用于区分不同的树）和<strong>指向子树的指针</strong>（如果有），这样便通过一个数组表示了一组树结构。这一节仅仅将目光聚焦在<strong>父指针</strong>上。</p>
-<details class="toggle"><summary class="toggle-button" style>单击此处查看并查算法的实现</summary><div class="toggle-content"><p>  下面是从教材中摘录的并查算法的实现。注意到其中的<code>UNION</code>函数执行归并操作。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// General tree representation for UNION/FIND</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ParPtrTree</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  <span class="type">int</span>* array;           <span class="comment">// Node array</span></span><br><span class="line">  <span class="type">int</span> size;             <span class="comment">// Size of node array</span></span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">FIND</span><span class="params">(<span class="type">int</span>)</span> <span class="type">const</span></span>;  <span class="comment">// Find root</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">ParPtrTree</span>(<span class="type">int</span>);                    <span class="comment">// Constructor</span></span><br><span class="line">  ~<span class="built_in">ParPtrTree</span>() &#123; <span class="keyword">delete</span> [] array; &#125;  <span class="comment">// Destructor</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">UNION</span><span class="params">(<span class="type">int</span>, <span class="type">int</span>)</span></span>;               <span class="comment">// Merge equivalences</span></span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">differ</span><span class="params">(<span class="type">int</span>, <span class="type">int</span>)</span></span>;              <span class="comment">// True if not in same tree</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">ParPtrTree::FIND</span><span class="params">(<span class="type">int</span> curr)</span> <span class="type">const</span> </span>&#123; <span class="comment">// Find root</span></span><br><span class="line">  <span class="keyword">while</span> (array[curr] != ROOT) curr = array[curr];</span><br><span class="line">  <span class="keyword">return</span> curr;  <span class="comment">// At root</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></details>
-<p>  图F1进一步形象地展示了父结点表示法，在这个数组中容纳了两棵树（实际上，对于有n个结点的集合，它对应的数组可以容纳<strong>至多n棵无关的树</strong>）。为了简明起见，父指针表示为父结点在数组中位置的下标值。树的根结点存储ROOT值，在图F1中表示为斜线。<br>
-<img src="/post/487435bc/data-structures-008-F1.jpg" alt="F1.父指针数组表示法" title="F1.父指针数组表示法"></p>
-<div class="note primary flat"><p>  父指针表示法并非是出于一般性目的的，它总是用来解决一些特定的问题，例如在本节开头提到的“<strong>任意给出两个不同的结点，判断它们是否在同一棵树中</strong>”。上面的实现中已经大致阐述了这个问题的解决思路及其核心算法——并查算法。在这个卡片中，我们要指出这个问题的一个重要应用——<strong>解决等价类问题</strong>。</p>
-<p>  以下给出了一些重要的术语阐释以便在后面的阅读中查阅：</p>
-<ul>
-<li><strong>等价关系</strong>-具有自反性、对称性和传递性的一种关系；</li>
-<li><strong>等价类</strong>-利用等价关系对一个集合进行划分的结果；</li>
-<li><strong>等价对（的表示）</strong>-如果图中某两个结点X，Y之间存在一条通路，就认为这两个结点是等价的，并将等价对表示为(X, Y)。如图F2所示，(A, B) (A, C)等等都是等价对；</li>
-</ul>
-<p><img src="/post/487435bc/data-structures-008-F2.jpg" alt="F2.图示例" title="F2.图示例"></p>
-<p>  以图F2为例，我们来尝试解决一个等价类问题：<strong>已知若干对等价对（如图F2所示），试将其划分为等价类。</strong></p>
-<p>  这个问题的解决步骤是这样的：</p>
-<ol>
-<li>将每一个结点独立（如图F3.a所示）；</li>
-<li>输入一个等价关系（从结果而言，等价关系的输入顺序无关紧要，但是会影响问题处理效率，这里忽略顺序对效率的影响），并使用<code>differ</code>函数检查它们是否在同一等价类（即同一棵树）中。如果是，则不做处理；如果不是，则使用<code>UNION</code>函数归并两个等价类。为了使等价对的处理尽可能高效，每个结点到其相应根结点的距离应该尽可能小，因此，在<strong>归并前</strong>可以采用<strong>路径压缩</strong>、在<strong>归并时</strong>可以采用<strong>加权合并规则</strong>来减少树的高度。</li>
-</ol>
-<blockquote>
-<ul>
-<li>
-<p><strong>路径压缩</strong><br>
-  设根结点为R，则路径压缩把由X到R的路径上每个结点的父指针都设置为直接指向R。路径压缩的代价非常接近<strong>常数</strong>，约为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><mi>n</mi><mi>log</mi><mo>⁡</mo><mo>∗</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Theta(n \log * n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">Θ</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">∗</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>（其中<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>log</mi><mo>⁡</mo><mo>∗</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">\log * n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">∗</span><span class="mord mathnormal">n</span></span></span></span>是指在<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>≥</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n \geq 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7719em;vertical-align:-0.136em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span>之前要对<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span>取对数操作的次数）。因此，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span>个路径压缩的代价非常接近于<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Theta(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">Θ</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>。</p>
-</li>
-<li>
-<p><strong>加权合并规则</strong><br>
-  在把结点较少的一棵树与结点较多的一棵树归并时，把结点较少树的根结点指向结点较多树的根结点。这样可以把树的整体深度限制在<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>log</mi><mo>⁡</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(\log n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>。在图F3.c仅仅运用本方法，在其状态下对等价对(H,E)进行处理，处理结果如图F3.d所示。</p>
-</li>
-</ul>
-</blockquote>
-<p>  应用以上两种方法，在图F3.c的状态下对等价对(H,E)进行处理，处理结果如图F4所示。其过程如下：</p>
-<ol>
-<li>应用路径压缩，在<strong>归并前</strong>使H指向A、E指向F；</li>
-<li>应用加权合并规则，在<strong>归并时</strong>使A指向F。</li>
-</ol>
-<p><img src="/post/487435bc/data-structures-008-F3.jpg" alt="F3.等价类问题处理示例" title="F3.等价类问题处理示例"><br>
-<img src="/post/487435bc/data-structures-008-F4.jpg" alt="F4.加权合并规则和路径压缩的应用示例" title="F4.加权合并规则和路径压缩的应用示例"></p>
-</div>
-<hr>
-<h2 id="四-树的实现">四　树的实现</h2>
-<h3 id="（一）子结点表表示法">（一）子结点表表示法</h3>
-<p>  子结点表表示法中，每个分支结点都存储其子结点形成的一个链表。在数组中，每个结点包括<strong>结点值，一个父指针（或索引）以及一个指向子结点链表的指针</strong>，链表中子结点的顺序从左到右，如图F5.b所示。注意到这种表示法是否能够很好的实现“树和树结点的类定义”抽象数据类型。在实现<code>rightSibling</code>时，本表示法显得过于繁琐。考虑这种情况——如果有一个结点M，并且其父结点为P，那么查找M的兄弟结点就需要沿着结点P的子结点表向右移动，直至找到M，那么其下一个结点就是M的兄弟结点。这个过程较为复杂，最差情况下需要查找全部子结点。</p>
-<h3 id="（二）左子结点-右兄弟结点表示法">（二）左子结点/右兄弟结点表示法</h3>
-<p>  针对子结点表表示法的缺陷，本表示法进行了改进。在数组中，每个结点包括<strong>结点值和指向父结点、最左子结点、右兄弟结点的指针</strong>，如图F5.c所示。这样一来，调用<code>rightSibling</code>时只需要读取结点中的右兄弟结点指针即可。更好的是，在子结点表表示法中，对每个结点分配的空间并不是固定的，而这种方法也很好的解决了此问题。</p>
-<h3 id="（三）动态结点表示法">（三）动态结点表示法</h3>
-<p>  除了使用数组来存储结点，类比二叉树，还可以使用指针来实现树。可以为每个结点分配可变的存储空间（它的可变性体现在对于每一结点，其子结点数目可以不同，该性质的强调是为了与二叉树区分开来，因为二叉树的子结点指针数目总是2），有以下三种方式，：</p>
-<ul>
-<li><strong>将指向子结点的指针数组作为结点的一部分分配给该结点</strong>。这是一种直接的方式，即直接为每个结点分配对应数目的子结点指针数组。这样的方法在子结点数目已知和不变时效果最佳。</li>
-<li><strong>使用一系列可利用空间，每一个可利用空间都对应每一个结点的子结点数组大小</strong>，如图F5.d所示。当某一结点的子结点数目从M变为N时，从可利用空间取出空间为N的链表，然后空间为M的链表返回可利用空间。</li>
-<li><strong>每个结点都存储一条子结点指针链表</strong>。如图F5.e所示。</li>
-</ul>
-<p>  这三种方式的不同之处在于对子结点的处理。第一种方式处理子结点数目不变的情况，第二种方式处理子结点数目变化的情况（注意到这种方式需要提前准备若干不同空间大小的链表），第三种方式的处理更加灵活，它将第二种方式的缺点进行弥补，使得子结点不必再组织在数组中而割裂开来，但它需要更多的空间。</p>
-<h3 id="（四）动态结点左子结点-右兄弟结点表示法">（四）动态结点左子结点/右兄弟结点表示法</h3>
-<p>  本表示法是对动态结点表示法第三种方式的改进，提高了空间效率。在这个方法中，每个结点包括<strong>结点值和指向最左子结点、右兄弟结点的指针</strong>，它本质上是将树转化为二叉树，“左子结点”是最左子结点，“右子结点”是右兄弟结点。<br>
-<img src="/post/487435bc/data-structures-008-F5.jpg" alt="F5.树的实现示例" title="F5.树的实现示例"></p>
-<hr>
-<h2 id="五-顺序表示法">五　顺序表示法</h2>
-<p>  树的顺序表示法也是一种树的实现，但与前面树的实现方法有着本质上的区别。它的目的是存储结点的值，其中包含了<strong>尽可能少、但对于重建树结构必不可少的信息</strong>。因此，这种表示法适合用于将树结构压缩在磁盘上，以备以后使用时重建；也可以用来<strong>序列化树结构</strong>（序列化是指把一个对象以一系列字节形式存储的过程，以便这种数据结构在计算机之间传输）。<br>
-  在研究树的顺序表示法前，不妨从二叉树开始探究。</p>
-<h3 id="（一）二叉树的顺序表示法">（一）二叉树的顺序表示法</h3>
-<p>  对二叉树而言，每一个结点或者是叶结点，或者是具有两个子结点（其一可能为空）的分支结点。那么应注重对叶结点和分支结点的区分，以及对空结点的表达。方法如下：</p>
-<ul>
-<li>区分叶结点和分支结点：<strong>采用位向量表示法标记</strong>。例如<code>1</code>表示分支结点，<code>0</code>表示树结点。</li>
-<li>空结点的表达：<strong>使用某一标记</strong>，例如<code>/</code>。</li>
-</ul>
-<p>  比如对于图F6而言，顺序表示法的结果是<code>AB/DCEG/FHI</code>（位向量是<code>11001100100</code>）。<br>
-<img src="/post/487435bc/data-structures-008-F6.jpg" alt="F6.二叉树的顺序表示法示例" title="F6.二叉树的顺序表示法示例"></p>
-<h3 id="（二）树的顺序表示法">（二）树的顺序表示法</h3>
-<p>  注意到树和二叉树的主要区别（见本文开头），我们需要解决如何表达子结点数目信息的问题，同时不必关注<strong>空结点</strong>（因为树不存在空结点的定义）。一种有效的方式是直接使用某个标记表示子结点表的结束，例如<code>)</code>，这样就不必再标记叶结点或分支结点了——所有叶结点后都有该标记，因为叶结点没有子结点。比如对图F5.a的树，其顺序表示法的结果是<code>RAC)D)E))BF)))</code>。但是这种方法不能使用在二叉树上，因为二叉树需要区分左右子结点。如果使用此法，譬如对图F6的二叉树而言，将无法区分D是B的左子结点还是右子结点。</p>
-]]></content>
-      <categories>
-        <category>数据结构</category>
-      </categories>
-      <tags>
-        <tag>Data Structures</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>数据结构 | 内排序：交换排序算法</title>
     <url>/post/cf471eaa.html</url>
     <content><![CDATA[<style>
@@ -1558,6 +1445,119 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
 </div>
 <p align="center">T1.三种交换排序算法的渐进复杂度比较</p>
 <p>  它们的共性在于它们都依赖数组中所有记录移动到“正确”位置所要求的总步数，即<strong>逆置</strong>。对于一个含有n个元素的序列L而言，其中有<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>C</mi><mi>n</mi><mn>2</mn></msubsup><mo>=</mo><mfrac><mrow><mi>n</mi><mo stretchy="false">(</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><mn>2</mn></mfrac></mrow><annotation encoding="application/x-tex">C^2_n=\frac{n(n-1)}{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0611em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-2.453em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.355em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.485em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mopen mtight">(</span><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>对不同的元素。那么最差情况下就有<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>n</mi><mo stretchy="false">(</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><mn>2</mn></mfrac></mrow><annotation encoding="application/x-tex">\frac{n(n-1)}{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.355em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.485em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mopen mtight">(</span><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>对逆置，平均情况下就有<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>n</mi><mo stretchy="false">(</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><mn>4</mn></mfrac></mrow><annotation encoding="application/x-tex">\frac{n(n-1)}{4}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.355em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">4</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.485em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mopen mtight">(</span><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>对逆置。因此，<strong>可以说任何一种将比较限制在相邻两个元素之间进行的交换算法的平均时间代价至少是</strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>n</mi><mo stretchy="false">(</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><mn>4</mn></mfrac><mo>=</mo><mi mathvariant="normal">Ω</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\frac{n(n-1)}{4}=\Omega(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.355em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">4</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.485em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mopen mtight">(</span><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord">Ω</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>。</p>
+]]></content>
+      <categories>
+        <category>数据结构</category>
+      </categories>
+      <tags>
+        <tag>Data Structures</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据结构 | 通用树</title>
+    <url>/post/487435bc.html</url>
+    <content><![CDATA[<div class="note info flat"><p><strong>一些术语</strong>：</p>
+<ul>
+<li><strong>通用树</strong>（以下简称<strong>树</strong>）-由一个或一个以上结点组成的<strong>有限集</strong>，其中没有父结点的结点称为根结点。</li>
+<li><strong>最左子结点</strong>-子树从左到右排列，其中最左边的子树的根结点称为最左子结点。</li>
+<li><strong>（结点M的）出度</strong>-（结点M的）子结点数目。</li>
+<li><strong>森林</strong>-一棵或更多棵树的集合。</li>
+</ul>
+</div>
+<div class="note warning flat"><p>  注意到树和二叉树的主要区别：</p>
+<ul>
+<li>二叉树的出度至多为2，但树没有限制；</li>
+<li>二叉树交换左右子结点得到的新树与原树不同，但树交换没有区别。</li>
+</ul>
+</div>
+<h2 id="一-树结点的ADT">一　树结点的ADT</h2>
+<p>  注意到树的出度是没有限制的，那么建立树类时就应该注意找到一种能够处理这种情况的方法。实现它一般来说可以采用数组或链表的形式，后者更为常见。</p>
+<details class="toggle"><summary class="toggle-button" style>单击此处查看树和树结点的类定义</summary><div class="toggle-content"><p>  下面是从教材中摘录的树和树结点的类定义。注意到其中的<code>leftmostChild</code>和<code>rightSibling</code>函数，使用它们可以很好的完成遍历操作。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// General tree node ADT</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt; <span class="keyword">class</span> <span class="title class_">GTNode</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function">E <span class="title">value</span><span class="params">()</span></span>;                    <span class="comment">// Return node&#x27;s value</span></span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">isLeaf</span><span class="params">()</span></span>;                <span class="comment">// True if node is a leaf</span></span><br><span class="line">  <span class="function">GTNode* <span class="title">parent</span><span class="params">()</span></span>;             <span class="comment">// Return parent</span></span><br><span class="line">  <span class="function">GTNode* <span class="title">leftmostChild</span><span class="params">()</span></span>;      <span class="comment">// Return first child</span></span><br><span class="line">  <span class="function">GTNode* <span class="title">rightSibling</span><span class="params">()</span></span>;       <span class="comment">// Return right sibling</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">setValue</span><span class="params">(E&amp;)</span></span>;            <span class="comment">// Set node&#x27;s value</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">insertFirst</span><span class="params">(GTNode&lt;E&gt;*)</span></span>; <span class="comment">// Insert first child</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">insertNext</span><span class="params">(GTNode&lt;E&gt;*)</span></span>;  <span class="comment">// Insert next sibling</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">removeFirst</span><span class="params">()</span></span>;           <span class="comment">// Remove first child</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">removeNext</span><span class="params">()</span></span>;            <span class="comment">// Remove next sibling</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// General tree ADT</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt; <span class="keyword">class</span> <span class="title class_">GenTree</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">clear</span><span class="params">()</span></span>;                               <span class="comment">// Send all nodes to free store</span></span><br><span class="line">  <span class="function">GTNode&lt;E&gt;* <span class="title">root</span><span class="params">()</span></span>;                          <span class="comment">// Return the root of the tree</span></span><br><span class="line">  <span class="comment">// Combine two subtrees</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">newroot</span><span class="params">(E&amp;, GTNode&lt;E&gt;*, GTNode&lt;E&gt;*)</span></span>;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span></span>;                               <span class="comment">// Print a tree</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></details>
+<p>  这就是一种用链表的形式实现的树和树结点的类。</p>
+<hr>
+<h2 id="二-树的遍历">二　树的遍历</h2>
+<p>  树的遍历与<a href="https://www.dawn-of-time.top/post/eb4efb69.html">二叉树</a>类似，分为<strong>前根遍历</strong>、<strong>中根遍历</strong>、<strong>后根遍历</strong>。其中中根遍历因为子结点数目不确定的原因而难以定义，一般也不使用。<br>
+  遍历过程会使用到上面的<code>leftmostChild</code>和<code>rightSibling</code>函数，每当遍历子结点时，总是先调用<code>leftmostChild</code>函数访问最左子结点，然后对其调用<code>rightSibling</code>函数来依次访问最左子结点右边的兄弟结点，直到最右子结点（它右边的兄弟结点是<code>NULL</code>）。</p>
+<hr>
+<h2 id="三-父指针表示法">三　父指针表示法</h2>
+<p>  在解决“<strong>任意给出两个不同的结点，判断它们是否在同一棵树中</strong>”这样的问题时，仅凭上文的方法是无法解决的。一个有效的解决方法是使用<strong>父指针表示法</strong>——只需要顺着父指针链就能追溯到根结点，从而判断给定结点是否在同一棵树中。使用这种方法，每个结点只需要保存一个指针域指向其父结点。</p>
+<div class="note info flat"><p><strong>一些术语</strong>：</p>
+<ul>
+<li><strong>不相交子集</strong>-交集为空的两个集合。对于这样的集合，希望提供<strong>判断两个结点是否在同一集合中</strong>和<strong>归并两个集合</strong>的操作。</li>
+<li><strong>并查算法</strong>（也称<strong>并查集</strong>）-通过合并两个不相交子集来找出两个结点是否在同一个集合的过程。</li>
+</ul>
+</div>
+<p>  并查算法用一棵树表示一个集合。结点通常存储在<strong>数组</strong>中——每个数组元素表示一个结点，并存储该结点的<strong>值</strong>、<strong>父指针</strong>（用于区分不同的树）和<strong>指向子树的指针</strong>（如果有），这样便通过一个数组表示了一组树结构。这一节仅仅将目光聚焦在<strong>父指针</strong>上。</p>
+<details class="toggle"><summary class="toggle-button" style>单击此处查看并查算法的实现</summary><div class="toggle-content"><p>  下面是从教材中摘录的并查算法的实现。注意到其中的<code>UNION</code>函数执行归并操作。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// General tree representation for UNION/FIND</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ParPtrTree</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  <span class="type">int</span>* array;           <span class="comment">// Node array</span></span><br><span class="line">  <span class="type">int</span> size;             <span class="comment">// Size of node array</span></span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">FIND</span><span class="params">(<span class="type">int</span>)</span> <span class="type">const</span></span>;  <span class="comment">// Find root</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">ParPtrTree</span>(<span class="type">int</span>);                    <span class="comment">// Constructor</span></span><br><span class="line">  ~<span class="built_in">ParPtrTree</span>() &#123; <span class="keyword">delete</span> [] array; &#125;  <span class="comment">// Destructor</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">UNION</span><span class="params">(<span class="type">int</span>, <span class="type">int</span>)</span></span>;               <span class="comment">// Merge equivalences</span></span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">differ</span><span class="params">(<span class="type">int</span>, <span class="type">int</span>)</span></span>;              <span class="comment">// True if not in same tree</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">ParPtrTree::FIND</span><span class="params">(<span class="type">int</span> curr)</span> <span class="type">const</span> </span>&#123; <span class="comment">// Find root</span></span><br><span class="line">  <span class="keyword">while</span> (array[curr] != ROOT) curr = array[curr];</span><br><span class="line">  <span class="keyword">return</span> curr;  <span class="comment">// At root</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></details>
+<p>  图F1进一步形象地展示了父结点表示法，在这个数组中容纳了两棵树（实际上，对于有n个结点的集合，它对应的数组可以容纳<strong>至多n棵无关的树</strong>）。为了简明起见，父指针表示为父结点在数组中位置的下标值。树的根结点存储ROOT值，在图F1中表示为斜线。<br>
+<img src="/post/487435bc/data-structures-008-F1.jpg" alt="F1.父指针数组表示法" title="F1.父指针数组表示法"></p>
+<div class="note primary flat"><p>  父指针表示法并非是出于一般性目的的，它总是用来解决一些特定的问题，例如在本节开头提到的“<strong>任意给出两个不同的结点，判断它们是否在同一棵树中</strong>”。上面的实现中已经大致阐述了这个问题的解决思路及其核心算法——并查算法。在这个卡片中，我们要指出这个问题的一个重要应用——<strong>解决等价类问题</strong>。</p>
+<p>  以下给出了一些重要的术语阐释以便在后面的阅读中查阅：</p>
+<ul>
+<li><strong>等价关系</strong>-具有自反性、对称性和传递性的一种关系；</li>
+<li><strong>等价类</strong>-利用等价关系对一个集合进行划分的结果；</li>
+<li><strong>等价对（的表示）</strong>-如果图中某两个结点X，Y之间存在一条通路，就认为这两个结点是等价的，并将等价对表示为(X, Y)。如图F2所示，(A, B) (A, C)等等都是等价对；</li>
+</ul>
+<p><img src="/post/487435bc/data-structures-008-F2.jpg" alt="F2.图示例" title="F2.图示例"></p>
+<p>  以图F2为例，我们来尝试解决一个等价类问题：<strong>已知若干对等价对（如图F2所示），试将其划分为等价类。</strong></p>
+<p>  这个问题的解决步骤是这样的：</p>
+<ol>
+<li>将每一个结点独立（如图F3.a所示）；</li>
+<li>输入一个等价关系（从结果而言，等价关系的输入顺序无关紧要，但是会影响问题处理效率，这里忽略顺序对效率的影响），并使用<code>differ</code>函数检查它们是否在同一等价类（即同一棵树）中。如果是，则不做处理；如果不是，则使用<code>UNION</code>函数归并两个等价类。为了使等价对的处理尽可能高效，每个结点到其相应根结点的距离应该尽可能小，因此，在<strong>归并前</strong>可以采用<strong>路径压缩</strong>、在<strong>归并时</strong>可以采用<strong>加权合并规则</strong>来减少树的高度。</li>
+</ol>
+<blockquote>
+<ul>
+<li>
+<p><strong>路径压缩</strong><br>
+  设根结点为R，则路径压缩把由X到R的路径上每个结点的父指针都设置为直接指向R。路径压缩的代价非常接近<strong>常数</strong>，约为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><mi>n</mi><mi>log</mi><mo>⁡</mo><mo>∗</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Theta(n \log * n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">Θ</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">∗</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>（其中<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>log</mi><mo>⁡</mo><mo>∗</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">\log * n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">∗</span><span class="mord mathnormal">n</span></span></span></span>是指在<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>≥</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n \geq 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7719em;vertical-align:-0.136em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span>之前要对<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span>取对数操作的次数）。因此，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span>个路径压缩的代价非常接近于<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Theta(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">Θ</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>。</p>
+</li>
+<li>
+<p><strong>加权合并规则</strong><br>
+  在把结点较少的一棵树与结点较多的一棵树归并时，把结点较少树的根结点指向结点较多树的根结点。这样可以把树的整体深度限制在<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>log</mi><mo>⁡</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(\log n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>。在图F3.c仅仅运用本方法，在其状态下对等价对(H,E)进行处理，处理结果如图F3.d所示。</p>
+</li>
+</ul>
+</blockquote>
+<p>  应用以上两种方法，在图F3.c的状态下对等价对(H,E)进行处理，处理结果如图F4所示。其过程如下：</p>
+<ol>
+<li>应用路径压缩，在<strong>归并前</strong>使H指向A、E指向F；</li>
+<li>应用加权合并规则，在<strong>归并时</strong>使A指向F。</li>
+</ol>
+<p><img src="/post/487435bc/data-structures-008-F3.jpg" alt="F3.等价类问题处理示例" title="F3.等价类问题处理示例"><br>
+<img src="/post/487435bc/data-structures-008-F4.jpg" alt="F4.加权合并规则和路径压缩的应用示例" title="F4.加权合并规则和路径压缩的应用示例"></p>
+</div>
+<hr>
+<h2 id="四-树的实现">四　树的实现</h2>
+<h3 id="（一）子结点表表示法">（一）子结点表表示法</h3>
+<p>  子结点表表示法中，每个分支结点都存储其子结点形成的一个链表。在数组中，每个结点包括<strong>结点值，一个父指针（或索引）以及一个指向子结点链表的指针</strong>，链表中子结点的顺序从左到右，如图F5.b所示。注意到这种表示法是否能够很好的实现“树和树结点的类定义”抽象数据类型。在实现<code>rightSibling</code>时，本表示法显得过于繁琐。考虑这种情况——如果有一个结点M，并且其父结点为P，那么查找M的兄弟结点就需要沿着结点P的子结点表向右移动，直至找到M，那么其下一个结点就是M的兄弟结点。这个过程较为复杂，最差情况下需要查找全部子结点。</p>
+<h3 id="（二）左子结点-右兄弟结点表示法">（二）左子结点/右兄弟结点表示法</h3>
+<p>  针对子结点表表示法的缺陷，本表示法进行了改进。在数组中，每个结点包括<strong>结点值和指向父结点、最左子结点、右兄弟结点的指针</strong>，如图F5.c所示。这样一来，调用<code>rightSibling</code>时只需要读取结点中的右兄弟结点指针即可。更好的是，在子结点表表示法中，对每个结点分配的空间并不是固定的，而这种方法也很好的解决了此问题。</p>
+<h3 id="（三）动态结点表示法">（三）动态结点表示法</h3>
+<p>  除了使用数组来存储结点，类比二叉树，还可以使用指针来实现树。可以为每个结点分配可变的存储空间（它的可变性体现在对于每一结点，其子结点数目可以不同，该性质的强调是为了与二叉树区分开来，因为二叉树的子结点指针数目总是2），有以下三种方式，：</p>
+<ul>
+<li><strong>将指向子结点的指针数组作为结点的一部分分配给该结点</strong>。这是一种直接的方式，即直接为每个结点分配对应数目的子结点指针数组。这样的方法在子结点数目已知和不变时效果最佳。</li>
+<li><strong>使用一系列可利用空间，每一个可利用空间都对应每一个结点的子结点数组大小</strong>，如图F5.d所示。当某一结点的子结点数目从M变为N时，从可利用空间取出空间为N的链表，然后空间为M的链表返回可利用空间。</li>
+<li><strong>每个结点都存储一条子结点指针链表</strong>。如图F5.e所示。</li>
+</ul>
+<p>  这三种方式的不同之处在于对子结点的处理。第一种方式处理子结点数目不变的情况，第二种方式处理子结点数目变化的情况（注意到这种方式需要提前准备若干不同空间大小的链表），第三种方式的处理更加灵活，它将第二种方式的缺点进行弥补，使得子结点不必再组织在数组中而割裂开来，但它需要更多的空间。</p>
+<h3 id="（四）动态结点左子结点-右兄弟结点表示法">（四）动态结点左子结点/右兄弟结点表示法</h3>
+<p>  本表示法是对动态结点表示法第三种方式的改进，提高了空间效率。在这个方法中，每个结点包括<strong>结点值和指向最左子结点、右兄弟结点的指针</strong>，它本质上是将树转化为二叉树，“左子结点”是最左子结点，“右子结点”是右兄弟结点。<br>
+<img src="/post/487435bc/data-structures-008-F5.jpg" alt="F5.树的实现示例" title="F5.树的实现示例"></p>
+<hr>
+<h2 id="五-顺序表示法">五　顺序表示法</h2>
+<p>  树的顺序表示法也是一种树的实现，但与前面树的实现方法有着本质上的区别。它的目的是存储结点的值，其中包含了<strong>尽可能少、但对于重建树结构必不可少的信息</strong>。因此，这种表示法适合用于将树结构压缩在磁盘上，以备以后使用时重建；也可以用来<strong>序列化树结构</strong>（序列化是指把一个对象以一系列字节形式存储的过程，以便这种数据结构在计算机之间传输）。<br>
+  在研究树的顺序表示法前，不妨从二叉树开始探究。</p>
+<h3 id="（一）二叉树的顺序表示法">（一）二叉树的顺序表示法</h3>
+<p>  对二叉树而言，每一个结点或者是叶结点，或者是具有两个子结点（其一可能为空）的分支结点。那么应注重对叶结点和分支结点的区分，以及对空结点的表达。方法如下：</p>
+<ul>
+<li>区分叶结点和分支结点：<strong>采用位向量表示法标记</strong>。例如<code>1</code>表示分支结点，<code>0</code>表示树结点。</li>
+<li>空结点的表达：<strong>使用某一标记</strong>，例如<code>/</code>。</li>
+</ul>
+<p>  比如对于图F6而言，顺序表示法的结果是<code>AB/DCEG/FHI</code>（位向量是<code>11001100100</code>）。<br>
+<img src="/post/487435bc/data-structures-008-F6.jpg" alt="F6.二叉树的顺序表示法示例" title="F6.二叉树的顺序表示法示例"></p>
+<h3 id="（二）树的顺序表示法">（二）树的顺序表示法</h3>
+<p>  注意到树和二叉树的主要区别（见本文开头），我们需要解决如何表达子结点数目信息的问题，同时不必关注<strong>空结点</strong>（因为树不存在空结点的定义）。一种有效的方式是直接使用某个标记表示子结点表的结束，例如<code>)</code>，这样就不必再标记叶结点或分支结点了——所有叶结点后都有该标记，因为叶结点没有子结点。比如对图F5.a的树，其顺序表示法的结果是<code>RAC)D)E))BF)))</code>。但是这种方法不能使用在二叉树上，因为二叉树需要区分左右子结点。如果使用此法，譬如对图F6的二叉树而言，将无法区分D是B的左子结点还是右子结点。</p>
 ]]></content>
       <categories>
         <category>数据结构</category>
