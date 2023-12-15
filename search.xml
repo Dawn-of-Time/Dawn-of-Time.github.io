@@ -365,65 +365,6 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </tags>
   </entry>
   <entry>
-    <title>C语言 | 递归实践：汉诺塔问题 青蛙跳台阶问题</title>
-    <url>/post/6290815e.html</url>
-    <content><![CDATA[<h2 id="一-递归的含义及其两个必要条件">一　递归的含义及其两个必要条件</h2>
-<h3 id="（一）递归的含义">（一）递归的含义</h3>
-<p>  递归，是指一种通过重复将问题分解为同类的子问题而解决问题的方法。它将大事化小，能够大大减少程序的代码量。</p>
-<h3 id="（二）递归的两个必要条件">（二）递归的两个必要条件</h3>
-<ol>
-<li>存在限制条件，当满足这个限制条件的时候，递归便不再继续；</li>
-<li>每次递归调用之后越来越接近这个限制条件。</li>
-</ol>
-<hr>
-<h2 id="二-汉诺塔问题">二　汉诺塔问题</h2>
-<h3 id="（一）问题内容">（一）问题内容</h3>
-<div class="note info flat"><ul>
-<li><strong>BASE</strong>-在一块铜板装置上，有三根杆(编号A、B、C)，在A杆自下而上、由大到小按顺序放置若干个金盘。（如图F1所示）</li>
-<li><strong>GOAL</strong>-把A杆上的金盘全部移到C杆上，并仍保持原有顺序叠好。</li>
-<li><strong>RULE</strong>-每次只能移动一个盘子，并且在移动过程中三根杆上都始终保持大盘在下，小盘在上，操作过程中盘子可以置于A、B、C任一杆上。</li>
-</ul>
-</div>
-<p><img src="/post/6290815e/C-Language-005-F1.jpg" alt="F1.汉诺塔问题" title="F1.汉诺塔问题"></p>
-<h3 id="（二）解决思路">（二）解决思路</h3>
-<p>  为了满足<strong>大盘在下，小盘在上</strong>的规则，当金盘进入C杆时，其顺序也应当是<strong>先大盘，后小盘</strong>。以4个金盘为例，不妨基于C杆考察此问题：<br>
-  <strong>第1轮转移</strong> 当第一个金盘进入C杆时，其余盘应按照从小到大置于B杆；（如图F2.a所示）<br>
-  <strong>第2轮转移</strong> 当第二个金盘进入C杆时，其余盘应按照从小到大置于A杆；（如图F2.b所示）<br>
-  <strong>第3轮转移</strong> 当第三个金盘进入C杆时，其余盘应按照从小到大置于B杆；（如图F2.c所示）<br>
-  <strong>第4轮转移</strong> 当第四个金盘进入C杆时，达到目标。（如图F2.d所示）<br>
-<img src="/post/6290815e/C-Language-005-F2.jpg" alt="F2.汉诺塔问题" title="F2.汉诺塔问题操作流程示例"><br>
-  注意到，总是需要将A杆（或B杆）上的n个金盘中的n-1个转移到B杆（或A杆），然后将第n个金盘转移到C杆。并且在转移n-1个金盘的过程中，也同样遵循上述规律，即将A杆（或B杆）上的n-1个金盘中的n-2个转移到C杆，然后将第n-1金盘转移到B杆（或A杆）。这样一来，不难发现该问题可以分解为同类的子类问题，并且符合递归的必要条件——其限制条件是转移前A杆和B杆的金盘数目都为0；并且每轮结束时，金盘数目都<strong>减1</strong>，越来越接近限制条件。<br>
-  基于以上思路进行程序设计。</p>
-<h3 id="（三）解决办法">（三）解决办法</h3>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//函数的传入参数n是A杆放置的金盘数目。</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">TOH</span><span class="params">(<span class="type">int</span> n)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//定义返回结果为操作次数。</span></span><br><span class="line">	<span class="type">static</span> <span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//1.递归限制条件：</span></span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">0</span>)</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//2.递归部分：</span></span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//2.1.将A杆（或B杆）最底盘之上的n-1个盘子移动至B杆（或A杆）上。</span></span><br><span class="line">		ret += TOH(n - <span class="number">1</span>);</span><br><span class="line">		<span class="comment">//2.2.将最底盘移动至C杆上。</span></span><br><span class="line">		ret += <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">return</span> ret;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="三-青蛙跳台阶问题">三　青蛙跳台阶问题</h2>
-<h3 id="（一）问题内容-2">（一）问题内容</h3>
-<div class="note info flat"><ul>
-<li><strong>BASE</strong>-有一只青蛙处于若干阶台阶底层。</li>
-<li><strong>GOAL</strong>-青蛙恰好到达台阶顶层。</li>
-<li><strong>RULE</strong>-青蛙每次跳跃的台阶数仅能为1或2。</li>
-</ul>
-</div>
-<h3 id="（二）解决思路-2">（二）解决思路</h3>
-<p>  注意到<strong>青蛙每次跳跃的台阶数仅能为1或2</strong>，设跳跃的次数为M，台阶数为N，那么当进行第M次跳跃时，也仅能跳跃1阶或2阶；当进行第M-1次跳跃时，已经跳跃的台阶数是N-1或N-2。类似地，当进行第M-2次跳跃时，已经跳跃的台阶数是N-1-1或N-1-2或N-2-1或N-2-2。据此就可以知道，<strong>跳跃N(N≥3)阶台阶的跳法总是跳跃N-1阶台阶的跳法与跳跃N-2阶台阶的跳法之和</strong>：</p>
-<ul>
-<li>当N=1时，仅有1种跳法；</li>
-<li>当N=2时，仅有2种跳法。</li>
-</ul>
-<p>  这便符合了递归的必要条件——其限制条件是跳跃前剩余台阶数为1或2；并且每次跳跃结束时，台阶数目都<strong>减1</strong>或<strong>减2</strong>，越来越接近限制条件。<br>
-  基于以上思路进行程序设计。</p>
-<h3 id="（三）解决办法-2">（三）解决办法</h3>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//函数的传入参数n是台阶数目。</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">CS</span><span class="params">(<span class="type">int</span> n)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//定义返回结果为跳法数目。</span></span><br><span class="line">	<span class="type">static</span> <span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//1.递归限制条件：</span></span><br><span class="line">	<span class="comment">//1.1.台阶数为1时，有1种跳法。</span></span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//1.2.台阶数为2时，有2种跳法。</span></span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (n == <span class="number">2</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//2.递归部分：</span></span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//跳跃n阶台阶的跳法总是跳跃n-1阶台阶的跳法与跳跃n-2阶台阶的跳法之和。</span></span><br><span class="line">		ret = CS(n - <span class="number">1</span>) + CS(n - <span class="number">2</span>);</span><br><span class="line">		<span class="keyword">return</span> ret;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>C语言</category>
-      </categories>
-      <tags>
-        <tag>C</tag>
-        <tag>Exploration</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>C语言 | 函数scanf的使用</title>
     <url>/post/13be382b.html</url>
     <content><![CDATA[<h2 id="一-函数scanf的基本含义">一　函数scanf的基本含义</h2>
@@ -516,6 +457,65 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </categories>
       <tags>
         <tag>ORC</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C语言 | 递归实践：汉诺塔问题 青蛙跳台阶问题</title>
+    <url>/post/6290815e.html</url>
+    <content><![CDATA[<h2 id="一-递归的含义及其两个必要条件">一　递归的含义及其两个必要条件</h2>
+<h3 id="（一）递归的含义">（一）递归的含义</h3>
+<p>  递归，是指一种通过重复将问题分解为同类的子问题而解决问题的方法。它将大事化小，能够大大减少程序的代码量。</p>
+<h3 id="（二）递归的两个必要条件">（二）递归的两个必要条件</h3>
+<ol>
+<li>存在限制条件，当满足这个限制条件的时候，递归便不再继续；</li>
+<li>每次递归调用之后越来越接近这个限制条件。</li>
+</ol>
+<hr>
+<h2 id="二-汉诺塔问题">二　汉诺塔问题</h2>
+<h3 id="（一）问题内容">（一）问题内容</h3>
+<div class="note info flat"><ul>
+<li><strong>BASE</strong>-在一块铜板装置上，有三根杆(编号A、B、C)，在A杆自下而上、由大到小按顺序放置若干个金盘。（如图F1所示）</li>
+<li><strong>GOAL</strong>-把A杆上的金盘全部移到C杆上，并仍保持原有顺序叠好。</li>
+<li><strong>RULE</strong>-每次只能移动一个盘子，并且在移动过程中三根杆上都始终保持大盘在下，小盘在上，操作过程中盘子可以置于A、B、C任一杆上。</li>
+</ul>
+</div>
+<p><img src="/post/6290815e/C-Language-005-F1.jpg" alt="F1.汉诺塔问题" title="F1.汉诺塔问题"></p>
+<h3 id="（二）解决思路">（二）解决思路</h3>
+<p>  为了满足<strong>大盘在下，小盘在上</strong>的规则，当金盘进入C杆时，其顺序也应当是<strong>先大盘，后小盘</strong>。以4个金盘为例，不妨基于C杆考察此问题：<br>
+  <strong>第1轮转移</strong> 当第一个金盘进入C杆时，其余盘应按照从小到大置于B杆；（如图F2.a所示）<br>
+  <strong>第2轮转移</strong> 当第二个金盘进入C杆时，其余盘应按照从小到大置于A杆；（如图F2.b所示）<br>
+  <strong>第3轮转移</strong> 当第三个金盘进入C杆时，其余盘应按照从小到大置于B杆；（如图F2.c所示）<br>
+  <strong>第4轮转移</strong> 当第四个金盘进入C杆时，达到目标。（如图F2.d所示）<br>
+<img src="/post/6290815e/C-Language-005-F2.jpg" alt="F2.汉诺塔问题" title="F2.汉诺塔问题操作流程示例"><br>
+  注意到，总是需要将A杆（或B杆）上的n个金盘中的n-1个转移到B杆（或A杆），然后将第n个金盘转移到C杆。并且在转移n-1个金盘的过程中，也同样遵循上述规律，即将A杆（或B杆）上的n-1个金盘中的n-2个转移到C杆，然后将第n-1金盘转移到B杆（或A杆）。这样一来，不难发现该问题可以分解为同类的子类问题，并且符合递归的必要条件——其限制条件是转移前A杆和B杆的金盘数目都为0；并且每轮结束时，金盘数目都<strong>减1</strong>，越来越接近限制条件。<br>
+  基于以上思路进行程序设计。</p>
+<h3 id="（三）解决办法">（三）解决办法</h3>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//函数的传入参数n是A杆放置的金盘数目。</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">TOH</span><span class="params">(<span class="type">int</span> n)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//定义返回结果为操作次数。</span></span><br><span class="line">	<span class="type">static</span> <span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//1.递归限制条件：</span></span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">0</span>)</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//2.递归部分：</span></span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//2.1.将A杆（或B杆）最底盘之上的n-1个盘子移动至B杆（或A杆）上。</span></span><br><span class="line">		ret += TOH(n - <span class="number">1</span>);</span><br><span class="line">		<span class="comment">//2.2.将最底盘移动至C杆上。</span></span><br><span class="line">		ret += <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">return</span> ret;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="三-青蛙跳台阶问题">三　青蛙跳台阶问题</h2>
+<h3 id="（一）问题内容-2">（一）问题内容</h3>
+<div class="note info flat"><ul>
+<li><strong>BASE</strong>-有一只青蛙处于若干阶台阶底层。</li>
+<li><strong>GOAL</strong>-青蛙恰好到达台阶顶层。</li>
+<li><strong>RULE</strong>-青蛙每次跳跃的台阶数仅能为1或2。</li>
+</ul>
+</div>
+<h3 id="（二）解决思路-2">（二）解决思路</h3>
+<p>  注意到<strong>青蛙每次跳跃的台阶数仅能为1或2</strong>，设跳跃的次数为M，台阶数为N，那么当进行第M次跳跃时，也仅能跳跃1阶或2阶；当进行第M-1次跳跃时，已经跳跃的台阶数是N-1或N-2。类似地，当进行第M-2次跳跃时，已经跳跃的台阶数是N-1-1或N-1-2或N-2-1或N-2-2。据此就可以知道，<strong>跳跃N(N≥3)阶台阶的跳法总是跳跃N-1阶台阶的跳法与跳跃N-2阶台阶的跳法之和</strong>：</p>
+<ul>
+<li>当N=1时，仅有1种跳法；</li>
+<li>当N=2时，仅有2种跳法。</li>
+</ul>
+<p>  这便符合了递归的必要条件——其限制条件是跳跃前剩余台阶数为1或2；并且每次跳跃结束时，台阶数目都<strong>减1</strong>或<strong>减2</strong>，越来越接近限制条件。<br>
+  基于以上思路进行程序设计。</p>
+<h3 id="（三）解决办法-2">（三）解决办法</h3>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//函数的传入参数n是台阶数目。</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">CS</span><span class="params">(<span class="type">int</span> n)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//定义返回结果为跳法数目。</span></span><br><span class="line">	<span class="type">static</span> <span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//1.递归限制条件：</span></span><br><span class="line">	<span class="comment">//1.1.台阶数为1时，有1种跳法。</span></span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//1.2.台阶数为2时，有2种跳法。</span></span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (n == <span class="number">2</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//2.递归部分：</span></span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//跳跃n阶台阶的跳法总是跳跃n-1阶台阶的跳法与跳跃n-2阶台阶的跳法之和。</span></span><br><span class="line">		ret = CS(n - <span class="number">1</span>) + CS(n - <span class="number">2</span>);</span><br><span class="line">		<span class="keyword">return</span> ret;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>C语言</category>
+      </categories>
+      <tags>
+        <tag>C</tag>
+        <tag>Exploration</tag>
       </tags>
   </entry>
   <entry>
@@ -1072,110 +1072,6 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </tags>
   </entry>
   <entry>
-    <title>数据结构 | Huffman编码树</title>
-    <url>/post/d476fbe4.html</url>
-    <content><![CDATA[<!-- 让表格居中显示的风格 -->
-<style>
-.center 
-{
-  width: auto;
-  display: table;
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>
-<h2 id="一-建立Huffman编码树">一　建立Huffman编码树</h2>
-<p>  <strong>Huffman编码</strong>将为字符分配代码。代码长度取决于<strong>对应字母的相对使用频率或者“权重”</strong>，因此它是一种<strong>变长编码</strong>。它的得到源于称为<strong>Huffman编码树</strong>的<strong>满二叉树</strong>。这棵树的每个叶结点对应一个字母，叶结点的权重就是对应字母的出现频率——这样设计的目的是按照最小外部路径权重建立一棵树，亦即对于给定叶结点集合具有加权路径长度（<strong>叶结点的权重乘以深度</strong>）之和最小的二叉树。简单地说，<strong>权重大的叶结点深度小</strong>。</p>
-<p>  建立n个结点的Huffman树很简单：</p>
-<ul>
-<li>创建n个初始的Huffman树，每棵树包含单一的叶结点；</li>
-<li>将这n棵树按照权重由小到大排为一列；</li>
-<li>把前两棵树（权重最小的两棵树）标记为Huffman树的叶结点，并标记为一个分支结点（这个结点的权重是这两个叶结点权重之和）的两个子结点，将形成的新树置于序列中适当的位置，使序列始终为升序。重复本步骤直至序列中只剩下一个元素。</li>
-</ul>
-<p>  图F1展示了一个建立过程（局部）。<br>
-<img src="/post/d476fbe4/data-structures-007-F1.jpg" alt="F1.建立Huffman树（局部）示例" title="F1.建立Huffman树（局部）示例"></p>
-<details class="toggle"><summary class="toggle-button" style>单击此处查看Huffman树结点的实现</summary><div class="toggle-content"><p>  下面是从教材中摘录的Huffman树结点的实现。在这个实现中有两个子类——叶结点类和分支结点类。将其分类是因为这两种结点的构造不一致。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Huffman tree node abstract base class</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt; <span class="keyword">class</span> <span class="title class_">HuffNode</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="keyword">virtual</span> ~<span class="built_in">HuffNode</span>() &#123;&#125;                <span class="comment">// Base destructor</span></span><br><span class="line">  <span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">weight</span><span class="params">()</span> </span>= <span class="number">0</span>;             <span class="comment">// Return frequency</span></span><br><span class="line">  <span class="function"><span class="keyword">virtual</span> <span class="type">bool</span> <span class="title">isLeaf</span><span class="params">()</span> </span>= <span class="number">0</span>;            <span class="comment">// Determine type</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt;   <span class="comment">// Internal node subclass</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">IntlNode</span> : <span class="keyword">public</span> HuffNode&lt;E&gt; &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  HuffNode&lt;E&gt;* lc;   <span class="comment">// Left child</span></span><br><span class="line">  HuffNode&lt;E&gt;* rc;   <span class="comment">// Right child</span></span><br><span class="line">  <span class="type">int</span> wgt;              <span class="comment">// Subtree weight</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">IntlNode</span>(HuffNode&lt;E&gt;* l, HuffNode&lt;E&gt;* r)</span><br><span class="line">    &#123; wgt = l-&gt;<span class="built_in">weight</span>() + r-&gt;<span class="built_in">weight</span>(); lc = l; rc = r; &#125;</span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">weight</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> wgt; &#125;</span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">isLeaf</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="literal">false</span>; &#125;</span><br><span class="line">  <span class="function">HuffNode&lt;E&gt;* <span class="title">left</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> lc; &#125;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">setLeft</span><span class="params">(HuffNode&lt;E&gt;* b)</span></span></span><br><span class="line"><span class="function">    </span>&#123; lc = (HuffNode&lt;E&gt;*)b; &#125;</span><br><span class="line">  <span class="function">HuffNode&lt;E&gt;* <span class="title">right</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> rc; &#125;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">setRight</span><span class="params">(HuffNode&lt;E&gt;* b)</span></span></span><br><span class="line"><span class="function">    </span>&#123; rc = (HuffNode&lt;E&gt;*)b; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt;   <span class="comment">// Leaf node subclass</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">LeafNode</span> : <span class="keyword">public</span> HuffNode&lt;E&gt; &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  E it;			<span class="comment">// Value</span></span><br><span class="line">  <span class="type">int</span> wgt;		<span class="comment">// Weight</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">LeafNode</span>(<span class="type">const</span> E&amp; val, <span class="type">int</span> freq)   <span class="comment">// Constructor</span></span><br><span class="line">    &#123; it = val; wgt = freq; &#125;</span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">weight</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> wgt; &#125;</span><br><span class="line">  <span class="function">E <span class="title">val</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> it; &#125;</span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">isLeaf</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="literal">true</span>; &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></details>
-<details class="toggle"><summary class="toggle-button" style>单击此处查看Huffman树的类说明</summary><div class="toggle-content"><p>  下面是从教材中摘录的Huffman树的类说明。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// HuffTree is a template of two parameters: the element</span></span><br><span class="line"><span class="comment">//  type being coded and a comparator for two such elements.</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">HuffTree</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  HuffNode&lt;E&gt;* Root;         <span class="comment">// Tree root</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">HuffTree</span>(E&amp; val, <span class="type">int</span> freq) <span class="comment">// Leaf constructor</span></span><br><span class="line">    &#123; Root = <span class="keyword">new</span> <span class="built_in">LeafNode</span>&lt;E&gt;(val, freq); &#125;</span><br><span class="line">  <span class="comment">// Internal node constructor</span></span><br><span class="line">  <span class="built_in">HuffTree</span>(HuffTree&lt;E&gt;* l, HuffTree&lt;E&gt;* r)</span><br><span class="line">    &#123; Root = <span class="keyword">new</span> <span class="built_in">IntlNode</span>&lt;E&gt;(l-&gt;<span class="built_in">root</span>(), r-&gt;<span class="built_in">root</span>()); &#125;</span><br><span class="line">  ~<span class="built_in">HuffTree</span>() &#123;&#125;                          <span class="comment">// Destructor</span></span><br><span class="line">  <span class="function">HuffNode&lt;E&gt;* <span class="title">root</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> Root; &#125;    <span class="comment">// Get root</span></span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">weight</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> Root-&gt;<span class="built_in">weight</span>(); &#125; <span class="comment">// Root weight</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></details>
-<details class="toggle"><summary class="toggle-button" style>单击此处查看Huffman树构造函数的实现</summary><div class="toggle-content"><p>  下面是从教材中摘录的Huffman树构造函数的实现。注意传入的参数中<code>HuffTree&lt;E&gt;** TreeArray</code>是一个数组（的首元素）——这个数组的内容是之前提到过的<strong>初始的Huffman树，每棵树包含单一的叶结点</strong>。</p>
-<p>  Huffman树的建立方法是<strong>贪心算法</strong>（总是做出在当前看来是最好的选择，不从整体最优上加以考虑的算法）的一个例子。它总是选择当前权重最小的两棵子树相结合，简化了算法。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Build a Huffman tree from a collection of frequencies</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt; <span class="function">HuffTree&lt;E&gt;*</span></span><br><span class="line"><span class="function"><span class="title">buildHuff</span><span class="params">(HuffTree&lt;E&gt;** TreeArray, <span class="type">int</span> count)</span> </span>&#123;</span><br><span class="line">  heap&lt;HuffTree&lt;E&gt;*,minTreeComp&gt;* forest =</span><br><span class="line">    <span class="keyword">new</span> heap&lt;HuffTree&lt;E&gt;*, minTreeComp&gt;(TreeArray,</span><br><span class="line">                                        count, count); </span><br><span class="line">  HuffTree&lt;<span class="type">char</span>&gt; *temp1, *temp2, *temp3 = <span class="literal">NULL</span>;</span><br><span class="line">  <span class="keyword">while</span> (forest-&gt;<span class="built_in">size</span>() &gt; <span class="number">1</span>) &#123;</span><br><span class="line">    temp1 = forest-&gt;<span class="built_in">removefirst</span>();   <span class="comment">// Pull first two trees  </span></span><br><span class="line">    temp2 = forest-&gt;<span class="built_in">removefirst</span>();   <span class="comment">//   off the list</span></span><br><span class="line">    temp3 = <span class="keyword">new</span> <span class="built_in">HuffTree</span>&lt;E&gt;(temp1, temp2);</span><br><span class="line">    forest-&gt;<span class="built_in">insert</span>(temp3);  <span class="comment">// Put the new tree back on list</span></span><br><span class="line">    <span class="keyword">delete</span> temp1;        <span class="comment">// Must delete the remnants</span></span><br><span class="line">    <span class="keyword">delete</span> temp2;        <span class="comment">//   of the trees we created</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> temp3;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></details>
-<hr>
-<h2 id="二-Huffman编码">二　Huffman编码</h2>
-<p>  从根结点开始，分别把<code>0</code>或者<code>1</code>标于树的每条边上——其中，<code>0</code>对应于连接左子结点的那条边，<code>1</code>对应于连接右子结点的那条边。例如对图F1，它的被标记的Huffman树如图F2所示，并可以得到字母编码如表T1所示。<br>
-<img src="/post/d476fbe4/data-structures-007-F2.jpg" alt="F2.被标记的Huffman树示例" title="F2.被标记的Huffman树示例"></p>
-<div class="center">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">字母</th>
-<th style="text-align:center">频率</th>
-<th style="text-align:center">编码</th>
-<th style="text-align:center">位</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">C</td>
-<td style="text-align:center">32</td>
-<td style="text-align:center">1110</td>
-<td style="text-align:center">4</td>
-</tr>
-<tr>
-<td style="text-align:center">D</td>
-<td style="text-align:center">42</td>
-<td style="text-align:center">101</td>
-<td style="text-align:center">3</td>
-</tr>
-<tr>
-<td style="text-align:center">E</td>
-<td style="text-align:center">120</td>
-<td style="text-align:center">0</td>
-<td style="text-align:center">1</td>
-</tr>
-<tr>
-<td style="text-align:center">K</td>
-<td style="text-align:center">7</td>
-<td style="text-align:center">111101</td>
-<td style="text-align:center">6</td>
-</tr>
-<tr>
-<td style="text-align:center">L</td>
-<td style="text-align:center">42</td>
-<td style="text-align:center">110</td>
-<td style="text-align:center">3</td>
-</tr>
-<tr>
-<td style="text-align:center">M</td>
-<td style="text-align:center">24</td>
-<td style="text-align:center">11111</td>
-<td style="text-align:center">5</td>
-</tr>
-<tr>
-<td style="text-align:center">U</td>
-<td style="text-align:center">37</td>
-<td style="text-align:center">100</td>
-<td style="text-align:center">3</td>
-</tr>
-<tr>
-<td style="text-align:center">Z</td>
-<td style="text-align:center">2</td>
-<td style="text-align:center">111100</td>
-<td style="text-align:center">6</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p align="center">T1.对应于图F2字母的Huffman编码</p>]]></content>
-      <categories>
-        <category>数据结构</category>
-      </categories>
-      <tags>
-        <tag>Data Structures</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>数据结构 | 二叉树</title>
     <url>/post/eb4efb69.html</url>
     <content><![CDATA[<h2 id="一-二叉树的定义与特性">一　二叉树的定义与特性</h2>
@@ -1322,6 +1218,223 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Find a node with the given key value</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Key, <span class="keyword">typename</span> E&gt;</span><br><span class="line">E BST&lt;Key, E&gt;::<span class="built_in">findhelp</span>(BSTNode&lt;Key, E&gt;* root,</span><br><span class="line">                              <span class="type">const</span> Key&amp; k) <span class="type">const</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (root == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;          <span class="comment">// Empty tree</span></span><br><span class="line">  <span class="keyword">if</span> (k &lt; root-&gt;<span class="built_in">key</span>())</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">findhelp</span>(root-&gt;<span class="built_in">left</span>(), k);   <span class="comment">// Check left</span></span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (k &gt; root-&gt;<span class="built_in">key</span>())</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">findhelp</span>(root-&gt;<span class="built_in">right</span>(), k);  <span class="comment">// Check right</span></span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">return</span> root-&gt;<span class="built_in">element</span>();  <span class="comment">// Found it</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><code>printhelp</code><strong>函数</strong>：</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Print out a BST</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Key, <span class="keyword">typename</span> E&gt;</span><br><span class="line"><span class="type">void</span> BST&lt;Key, E&gt;::</span><br><span class="line"><span class="built_in">printhelp</span>(BSTNode&lt;Key, E&gt;* root, <span class="type">int</span> level) <span class="type">const</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (root == <span class="literal">NULL</span>) <span class="keyword">return</span>;           <span class="comment">// Empty tree</span></span><br><span class="line">  <span class="built_in">printhelp</span>(root-&gt;<span class="built_in">left</span>(), level+<span class="number">1</span>);   <span class="comment">// Do left subtree</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>; i&lt;level; i++)         <span class="comment">// Indent to level</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;  &quot;</span>;</span><br><span class="line">  cout &lt;&lt; root-&gt;<span class="built_in">key</span>() &lt;&lt; <span class="string">&quot;\n&quot;</span>;        <span class="comment">// Print node value</span></span><br><span class="line">  <span class="built_in">printhelp</span>(root-&gt;<span class="built_in">right</span>(), level+<span class="number">1</span>);  <span class="comment">// Do right subtree</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>数据结构</category>
+      </categories>
+      <tags>
+        <tag>Data Structures</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据结构 | Huffman编码树</title>
+    <url>/post/d476fbe4.html</url>
+    <content><![CDATA[<!-- 让表格居中显示的风格 -->
+<style>
+.center 
+{
+  width: auto;
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+<h2 id="一-建立Huffman编码树">一　建立Huffman编码树</h2>
+<p>  <strong>Huffman编码</strong>将为字符分配代码。代码长度取决于<strong>对应字母的相对使用频率或者“权重”</strong>，因此它是一种<strong>变长编码</strong>。它的得到源于称为<strong>Huffman编码树</strong>的<strong>满二叉树</strong>。这棵树的每个叶结点对应一个字母，叶结点的权重就是对应字母的出现频率——这样设计的目的是按照最小外部路径权重建立一棵树，亦即对于给定叶结点集合具有加权路径长度（<strong>叶结点的权重乘以深度</strong>）之和最小的二叉树。简单地说，<strong>权重大的叶结点深度小</strong>。</p>
+<p>  建立n个结点的Huffman树很简单：</p>
+<ul>
+<li>创建n个初始的Huffman树，每棵树包含单一的叶结点；</li>
+<li>将这n棵树按照权重由小到大排为一列；</li>
+<li>把前两棵树（权重最小的两棵树）标记为Huffman树的叶结点，并标记为一个分支结点（这个结点的权重是这两个叶结点权重之和）的两个子结点，将形成的新树置于序列中适当的位置，使序列始终为升序。重复本步骤直至序列中只剩下一个元素。</li>
+</ul>
+<p>  图F1展示了一个建立过程（局部）。<br>
+<img src="/post/d476fbe4/data-structures-007-F1.jpg" alt="F1.建立Huffman树（局部）示例" title="F1.建立Huffman树（局部）示例"></p>
+<details class="toggle"><summary class="toggle-button" style>单击此处查看Huffman树结点的实现</summary><div class="toggle-content"><p>  下面是从教材中摘录的Huffman树结点的实现。在这个实现中有两个子类——叶结点类和分支结点类。将其分类是因为这两种结点的构造不一致。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Huffman tree node abstract base class</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt; <span class="keyword">class</span> <span class="title class_">HuffNode</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="keyword">virtual</span> ~<span class="built_in">HuffNode</span>() &#123;&#125;                <span class="comment">// Base destructor</span></span><br><span class="line">  <span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">weight</span><span class="params">()</span> </span>= <span class="number">0</span>;             <span class="comment">// Return frequency</span></span><br><span class="line">  <span class="function"><span class="keyword">virtual</span> <span class="type">bool</span> <span class="title">isLeaf</span><span class="params">()</span> </span>= <span class="number">0</span>;            <span class="comment">// Determine type</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt;   <span class="comment">// Internal node subclass</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">IntlNode</span> : <span class="keyword">public</span> HuffNode&lt;E&gt; &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  HuffNode&lt;E&gt;* lc;   <span class="comment">// Left child</span></span><br><span class="line">  HuffNode&lt;E&gt;* rc;   <span class="comment">// Right child</span></span><br><span class="line">  <span class="type">int</span> wgt;              <span class="comment">// Subtree weight</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">IntlNode</span>(HuffNode&lt;E&gt;* l, HuffNode&lt;E&gt;* r)</span><br><span class="line">    &#123; wgt = l-&gt;<span class="built_in">weight</span>() + r-&gt;<span class="built_in">weight</span>(); lc = l; rc = r; &#125;</span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">weight</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> wgt; &#125;</span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">isLeaf</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="literal">false</span>; &#125;</span><br><span class="line">  <span class="function">HuffNode&lt;E&gt;* <span class="title">left</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> lc; &#125;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">setLeft</span><span class="params">(HuffNode&lt;E&gt;* b)</span></span></span><br><span class="line"><span class="function">    </span>&#123; lc = (HuffNode&lt;E&gt;*)b; &#125;</span><br><span class="line">  <span class="function">HuffNode&lt;E&gt;* <span class="title">right</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> rc; &#125;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">setRight</span><span class="params">(HuffNode&lt;E&gt;* b)</span></span></span><br><span class="line"><span class="function">    </span>&#123; rc = (HuffNode&lt;E&gt;*)b; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt;   <span class="comment">// Leaf node subclass</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">LeafNode</span> : <span class="keyword">public</span> HuffNode&lt;E&gt; &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  E it;			<span class="comment">// Value</span></span><br><span class="line">  <span class="type">int</span> wgt;		<span class="comment">// Weight</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">LeafNode</span>(<span class="type">const</span> E&amp; val, <span class="type">int</span> freq)   <span class="comment">// Constructor</span></span><br><span class="line">    &#123; it = val; wgt = freq; &#125;</span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">weight</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> wgt; &#125;</span><br><span class="line">  <span class="function">E <span class="title">val</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> it; &#125;</span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">isLeaf</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="literal">true</span>; &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></details>
+<details class="toggle"><summary class="toggle-button" style>单击此处查看Huffman树的类说明</summary><div class="toggle-content"><p>  下面是从教材中摘录的Huffman树的类说明。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// HuffTree is a template of two parameters: the element</span></span><br><span class="line"><span class="comment">//  type being coded and a comparator for two such elements.</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">HuffTree</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  HuffNode&lt;E&gt;* Root;         <span class="comment">// Tree root</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">HuffTree</span>(E&amp; val, <span class="type">int</span> freq) <span class="comment">// Leaf constructor</span></span><br><span class="line">    &#123; Root = <span class="keyword">new</span> <span class="built_in">LeafNode</span>&lt;E&gt;(val, freq); &#125;</span><br><span class="line">  <span class="comment">// Internal node constructor</span></span><br><span class="line">  <span class="built_in">HuffTree</span>(HuffTree&lt;E&gt;* l, HuffTree&lt;E&gt;* r)</span><br><span class="line">    &#123; Root = <span class="keyword">new</span> <span class="built_in">IntlNode</span>&lt;E&gt;(l-&gt;<span class="built_in">root</span>(), r-&gt;<span class="built_in">root</span>()); &#125;</span><br><span class="line">  ~<span class="built_in">HuffTree</span>() &#123;&#125;                          <span class="comment">// Destructor</span></span><br><span class="line">  <span class="function">HuffNode&lt;E&gt;* <span class="title">root</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> Root; &#125;    <span class="comment">// Get root</span></span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">weight</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> Root-&gt;<span class="built_in">weight</span>(); &#125; <span class="comment">// Root weight</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></details>
+<details class="toggle"><summary class="toggle-button" style>单击此处查看Huffman树构造函数的实现</summary><div class="toggle-content"><p>  下面是从教材中摘录的Huffman树构造函数的实现。注意传入的参数中<code>HuffTree&lt;E&gt;** TreeArray</code>是一个数组（的首元素）——这个数组的内容是之前提到过的<strong>初始的Huffman树，每棵树包含单一的叶结点</strong>。</p>
+<p>  Huffman树的建立方法是<strong>贪心算法</strong>（总是做出在当前看来是最好的选择，不从整体最优上加以考虑的算法）的一个例子。它总是选择当前权重最小的两棵子树相结合，简化了算法。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Build a Huffman tree from a collection of frequencies</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt; <span class="function">HuffTree&lt;E&gt;*</span></span><br><span class="line"><span class="function"><span class="title">buildHuff</span><span class="params">(HuffTree&lt;E&gt;** TreeArray, <span class="type">int</span> count)</span> </span>&#123;</span><br><span class="line">  heap&lt;HuffTree&lt;E&gt;*,minTreeComp&gt;* forest =</span><br><span class="line">    <span class="keyword">new</span> heap&lt;HuffTree&lt;E&gt;*, minTreeComp&gt;(TreeArray,</span><br><span class="line">                                        count, count); </span><br><span class="line">  HuffTree&lt;<span class="type">char</span>&gt; *temp1, *temp2, *temp3 = <span class="literal">NULL</span>;</span><br><span class="line">  <span class="keyword">while</span> (forest-&gt;<span class="built_in">size</span>() &gt; <span class="number">1</span>) &#123;</span><br><span class="line">    temp1 = forest-&gt;<span class="built_in">removefirst</span>();   <span class="comment">// Pull first two trees  </span></span><br><span class="line">    temp2 = forest-&gt;<span class="built_in">removefirst</span>();   <span class="comment">//   off the list</span></span><br><span class="line">    temp3 = <span class="keyword">new</span> <span class="built_in">HuffTree</span>&lt;E&gt;(temp1, temp2);</span><br><span class="line">    forest-&gt;<span class="built_in">insert</span>(temp3);  <span class="comment">// Put the new tree back on list</span></span><br><span class="line">    <span class="keyword">delete</span> temp1;        <span class="comment">// Must delete the remnants</span></span><br><span class="line">    <span class="keyword">delete</span> temp2;        <span class="comment">//   of the trees we created</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> temp3;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></details>
+<hr>
+<h2 id="二-Huffman编码">二　Huffman编码</h2>
+<p>  从根结点开始，分别把<code>0</code>或者<code>1</code>标于树的每条边上——其中，<code>0</code>对应于连接左子结点的那条边，<code>1</code>对应于连接右子结点的那条边。例如对图F1，它的被标记的Huffman树如图F2所示，并可以得到字母编码如表T1所示。<br>
+<img src="/post/d476fbe4/data-structures-007-F2.jpg" alt="F2.被标记的Huffman树示例" title="F2.被标记的Huffman树示例"></p>
+<div class="center">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">字母</th>
+<th style="text-align:center">频率</th>
+<th style="text-align:center">编码</th>
+<th style="text-align:center">位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">C</td>
+<td style="text-align:center">32</td>
+<td style="text-align:center">1110</td>
+<td style="text-align:center">4</td>
+</tr>
+<tr>
+<td style="text-align:center">D</td>
+<td style="text-align:center">42</td>
+<td style="text-align:center">101</td>
+<td style="text-align:center">3</td>
+</tr>
+<tr>
+<td style="text-align:center">E</td>
+<td style="text-align:center">120</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">K</td>
+<td style="text-align:center">7</td>
+<td style="text-align:center">111101</td>
+<td style="text-align:center">6</td>
+</tr>
+<tr>
+<td style="text-align:center">L</td>
+<td style="text-align:center">42</td>
+<td style="text-align:center">110</td>
+<td style="text-align:center">3</td>
+</tr>
+<tr>
+<td style="text-align:center">M</td>
+<td style="text-align:center">24</td>
+<td style="text-align:center">11111</td>
+<td style="text-align:center">5</td>
+</tr>
+<tr>
+<td style="text-align:center">U</td>
+<td style="text-align:center">37</td>
+<td style="text-align:center">100</td>
+<td style="text-align:center">3</td>
+</tr>
+<tr>
+<td style="text-align:center">Z</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">111100</td>
+<td style="text-align:center">6</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p align="center">T1.对应于图F2字母的Huffman编码</p>]]></content>
+      <categories>
+        <category>数据结构</category>
+      </categories>
+      <tags>
+        <tag>Data Structures</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据结构 | 通用树</title>
+    <url>/post/487435bc.html</url>
+    <content><![CDATA[<div class="note info flat"><p><strong>一些术语</strong>：</p>
+<ul>
+<li><strong>通用树</strong>（以下简称<strong>树</strong>）-由一个或一个以上结点组成的<strong>有限集</strong>，其中没有父结点的结点称为根结点。</li>
+<li><strong>最左子结点</strong>-子树从左到右排列，其中最左边的子树的根结点称为最左子结点。</li>
+<li><strong>（结点M的）出度</strong>-（结点M的）子结点数目。</li>
+<li><strong>森林</strong>-一棵或更多棵树的集合。</li>
+</ul>
+</div>
+<div class="note warning flat"><p>  注意到树和二叉树的主要区别：</p>
+<ul>
+<li>二叉树的出度至多为2，但树没有限制；</li>
+<li>二叉树交换左右子结点得到的新树与原树不同，但树交换没有区别。</li>
+</ul>
+</div>
+<h2 id="一-树结点的ADT">一　树结点的ADT</h2>
+<p>  注意到树的出度是没有限制的，那么建立树类时就应该注意找到一种能够处理这种情况的方法。实现它一般来说可以采用数组或链表的形式，后者更为常见。</p>
+<details class="toggle"><summary class="toggle-button" style>单击此处查看树和树结点的类定义</summary><div class="toggle-content"><p>  下面是从教材中摘录的树和树结点的类定义。注意到其中的<code>leftmostChild</code>和<code>rightSibling</code>函数，使用它们可以很好的完成遍历操作。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// General tree node ADT</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt; <span class="keyword">class</span> <span class="title class_">GTNode</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function">E <span class="title">value</span><span class="params">()</span></span>;                    <span class="comment">// Return node&#x27;s value</span></span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">isLeaf</span><span class="params">()</span></span>;                <span class="comment">// True if node is a leaf</span></span><br><span class="line">  <span class="function">GTNode* <span class="title">parent</span><span class="params">()</span></span>;             <span class="comment">// Return parent</span></span><br><span class="line">  <span class="function">GTNode* <span class="title">leftmostChild</span><span class="params">()</span></span>;      <span class="comment">// Return first child</span></span><br><span class="line">  <span class="function">GTNode* <span class="title">rightSibling</span><span class="params">()</span></span>;       <span class="comment">// Return right sibling</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">setValue</span><span class="params">(E&amp;)</span></span>;            <span class="comment">// Set node&#x27;s value</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">insertFirst</span><span class="params">(GTNode&lt;E&gt;*)</span></span>; <span class="comment">// Insert first child</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">insertNext</span><span class="params">(GTNode&lt;E&gt;*)</span></span>;  <span class="comment">// Insert next sibling</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">removeFirst</span><span class="params">()</span></span>;           <span class="comment">// Remove first child</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">removeNext</span><span class="params">()</span></span>;            <span class="comment">// Remove next sibling</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// General tree ADT</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt; <span class="keyword">class</span> <span class="title class_">GenTree</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">clear</span><span class="params">()</span></span>;                               <span class="comment">// Send all nodes to free store</span></span><br><span class="line">  <span class="function">GTNode&lt;E&gt;* <span class="title">root</span><span class="params">()</span></span>;                          <span class="comment">// Return the root of the tree</span></span><br><span class="line">  <span class="comment">// Combine two subtrees</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">newroot</span><span class="params">(E&amp;, GTNode&lt;E&gt;*, GTNode&lt;E&gt;*)</span></span>;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span></span>;                               <span class="comment">// Print a tree</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></details>
+<p>  这就是一种用链表的形式实现的树和树结点的类。</p>
+<hr>
+<h2 id="二-树的遍历">二　树的遍历</h2>
+<p>  树的遍历与<a href="https://www.dawn-of-time.top/post/eb4efb69.html">二叉树</a>类似，分为<strong>前根遍历</strong>、<strong>中根遍历</strong>、<strong>后根遍历</strong>。其中中根遍历因为子结点数目不确定的原因而难以定义，一般也不使用。<br>
+  遍历过程会使用到上面的<code>leftmostChild</code>和<code>rightSibling</code>函数，每当遍历子结点时，总是先调用<code>leftmostChild</code>函数访问最左子结点，然后对其调用<code>rightSibling</code>函数来依次访问最左子结点右边的兄弟结点，直到最右子结点（它右边的兄弟结点是<code>NULL</code>）。</p>
+<hr>
+<h2 id="三-父指针表示法">三　父指针表示法</h2>
+<p>  在解决“<strong>任意给出两个不同的结点，判断它们是否在同一棵树中</strong>”这样的问题时，仅凭上文的方法是无法解决的。一个有效的解决方法是使用<strong>父指针表示法</strong>——只需要顺着父指针链就能追溯到根结点，从而判断给定结点是否在同一棵树中。使用这种方法，每个结点只需要保存一个指针域指向其父结点。</p>
+<div class="note info flat"><p><strong>一些术语</strong>：</p>
+<ul>
+<li><strong>不相交子集</strong>-交集为空的两个集合。对于这样的集合，希望提供<strong>判断两个结点是否在同一集合中</strong>和<strong>归并两个集合</strong>的操作。</li>
+<li><strong>并查算法</strong>（也称<strong>并查集</strong>）-通过合并两个不相交子集来找出两个结点是否在同一个集合的过程。</li>
+</ul>
+</div>
+<p>  并查算法用一棵树表示一个集合。结点通常存储在<strong>数组</strong>中——每个数组元素表示一个结点，并存储该结点的<strong>值</strong>、<strong>父指针</strong>（用于区分不同的树）和<strong>指向子树的指针</strong>（如果有），这样便通过一个数组表示了一组树结构。这一节仅仅将目光聚焦在<strong>父指针</strong>上。</p>
+<details class="toggle"><summary class="toggle-button" style>单击此处查看并查算法的实现</summary><div class="toggle-content"><p>  下面是从教材中摘录的并查算法的实现。注意到其中的<code>UNION</code>函数执行归并操作。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// General tree representation for UNION/FIND</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ParPtrTree</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  <span class="type">int</span>* array;           <span class="comment">// Node array</span></span><br><span class="line">  <span class="type">int</span> size;             <span class="comment">// Size of node array</span></span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">FIND</span><span class="params">(<span class="type">int</span>)</span> <span class="type">const</span></span>;  <span class="comment">// Find root</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">ParPtrTree</span>(<span class="type">int</span>);                    <span class="comment">// Constructor</span></span><br><span class="line">  ~<span class="built_in">ParPtrTree</span>() &#123; <span class="keyword">delete</span> [] array; &#125;  <span class="comment">// Destructor</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">UNION</span><span class="params">(<span class="type">int</span>, <span class="type">int</span>)</span></span>;               <span class="comment">// Merge equivalences</span></span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">differ</span><span class="params">(<span class="type">int</span>, <span class="type">int</span>)</span></span>;              <span class="comment">// True if not in same tree</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">ParPtrTree::FIND</span><span class="params">(<span class="type">int</span> curr)</span> <span class="type">const</span> </span>&#123; <span class="comment">// Find root</span></span><br><span class="line">  <span class="keyword">while</span> (array[curr] != ROOT) curr = array[curr];</span><br><span class="line">  <span class="keyword">return</span> curr;  <span class="comment">// At root</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></details>
+<p>  图F1进一步形象地展示了父结点表示法，在这个数组中容纳了两棵树（实际上，对于有n个结点的集合，它对应的数组可以容纳<strong>至多n棵无关的树</strong>）。为了简明起见，父指针表示为父结点在数组中位置的下标值。树的根结点存储ROOT值，在图F1中表示为斜线。<br>
+<img src="/post/487435bc/data-structures-008-F1.jpg" alt="F1.父指针数组表示法" title="F1.父指针数组表示法"></p>
+<div class="note primary flat"><p>  父指针表示法并非是出于一般性目的的，它总是用来解决一些特定的问题，例如在本节开头提到的“<strong>任意给出两个不同的结点，判断它们是否在同一棵树中</strong>”。上面的实现中已经大致阐述了这个问题的解决思路及其核心算法——并查算法。在这个卡片中，我们要指出这个问题的一个重要应用——<strong>解决等价类问题</strong>。</p>
+<p>  以下给出了一些重要的术语阐释以便在后面的阅读中查阅：</p>
+<ul>
+<li><strong>等价关系</strong>-具有自反性、对称性和传递性的一种关系；</li>
+<li><strong>等价类</strong>-利用等价关系对一个集合进行划分的结果；</li>
+<li><strong>等价对（的表示）</strong>-如果图中某两个结点X，Y之间存在一条通路，就认为这两个结点是等价的，并将等价对表示为(X, Y)。如图F2所示，(A, B) (A, C)等等都是等价对；</li>
+</ul>
+<p><img src="/post/487435bc/data-structures-008-F2.jpg" alt="F2.图示例" title="F2.图示例"></p>
+<p>  以图F2为例，我们来尝试解决一个等价类问题：<strong>已知若干对等价对（如图F2所示），试将其划分为等价类。</strong></p>
+<p>  这个问题的解决步骤是这样的：</p>
+<ol>
+<li>将每一个结点独立（如图F3.a所示）；</li>
+<li>输入一个等价关系（从结果而言，等价关系的输入顺序无关紧要，但是会影响问题处理效率，这里忽略顺序对效率的影响），并使用<code>differ</code>函数检查它们是否在同一等价类（即同一棵树）中。如果是，则不做处理；如果不是，则使用<code>UNION</code>函数归并两个等价类。为了使等价对的处理尽可能高效，每个结点到其相应根结点的距离应该尽可能小，因此，在<strong>归并前</strong>可以采用<strong>路径压缩</strong>、在<strong>归并时</strong>可以采用<strong>加权合并规则</strong>来减少树的高度。</li>
+</ol>
+<blockquote>
+<ul>
+<li>
+<p><strong>路径压缩</strong><br>
+  设根结点为R，则路径压缩把由X到R的路径上每个结点的父指针都设置为直接指向R。路径压缩的代价非常接近<strong>常数</strong>，约为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><mi>n</mi><mi>log</mi><mo>⁡</mo><mo>∗</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Theta(n \log * n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">Θ</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">∗</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>（其中<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>log</mi><mo>⁡</mo><mo>∗</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">\log * n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">∗</span><span class="mord mathnormal">n</span></span></span></span>是指在<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>≥</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n \geq 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7719em;vertical-align:-0.136em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span>之前要对<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span>取对数操作的次数）。因此，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span>个路径压缩的代价非常接近于<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Theta(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">Θ</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>。</p>
+</li>
+<li>
+<p><strong>加权合并规则</strong><br>
+  在把结点较少的一棵树与结点较多的一棵树归并时，把结点较少树的根结点指向结点较多树的根结点。这样可以把树的整体深度限制在<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>log</mi><mo>⁡</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(\log n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>。在图F3.c仅仅运用本方法，在其状态下对等价对(H,E)进行处理，处理结果如图F3.d所示。</p>
+</li>
+</ul>
+</blockquote>
+<p>  应用以上两种方法，在图F3.c的状态下对等价对(H,E)进行处理，处理结果如图F4所示。其过程如下：</p>
+<ol>
+<li>应用路径压缩，在<strong>归并前</strong>使H指向A、E指向F；</li>
+<li>应用加权合并规则，在<strong>归并时</strong>使A指向F。</li>
+</ol>
+<p><img src="/post/487435bc/data-structures-008-F3.jpg" alt="F3.等价类问题处理示例" title="F3.等价类问题处理示例"><br>
+<img src="/post/487435bc/data-structures-008-F4.jpg" alt="F4.加权合并规则和路径压缩的应用示例" title="F4.加权合并规则和路径压缩的应用示例"></p>
+</div>
+<hr>
+<h2 id="四-树的实现">四　树的实现</h2>
+<h3 id="（一）子结点表表示法">（一）子结点表表示法</h3>
+<p>  子结点表表示法中，每个分支结点都存储其子结点形成的一个链表。在数组中，每个结点包括<strong>结点值，一个父指针（或索引）以及一个指向子结点链表的指针</strong>，链表中子结点的顺序从左到右，如图F5.b所示。注意到这种表示法是否能够很好的实现“树和树结点的类定义”抽象数据类型。在实现<code>rightSibling</code>时，本表示法显得过于繁琐。考虑这种情况——如果有一个结点M，并且其父结点为P，那么查找M的兄弟结点就需要沿着结点P的子结点表向右移动，直至找到M，那么其下一个结点就是M的兄弟结点。这个过程较为复杂，最差情况下需要查找全部子结点。</p>
+<h3 id="（二）左子结点-右兄弟结点表示法">（二）左子结点/右兄弟结点表示法</h3>
+<p>  针对子结点表表示法的缺陷，本表示法进行了改进。在数组中，每个结点包括<strong>结点值和指向父结点、最左子结点、右兄弟结点的指针</strong>，如图F5.c所示。这样一来，调用<code>rightSibling</code>时只需要读取结点中的右兄弟结点指针即可。更好的是，在子结点表表示法中，对每个结点分配的空间并不是固定的，而这种方法也很好的解决了此问题。</p>
+<h3 id="（三）动态结点表示法">（三）动态结点表示法</h3>
+<p>  除了使用数组来存储结点，类比二叉树，还可以使用指针来实现树。可以为每个结点分配可变的存储空间（它的可变性体现在对于每一结点，其子结点数目可以不同，该性质的强调是为了与二叉树区分开来，因为二叉树的子结点指针数目总是2），有以下三种方式，：</p>
+<ul>
+<li><strong>将指向子结点的指针数组作为结点的一部分分配给该结点</strong>。这是一种直接的方式，即直接为每个结点分配对应数目的子结点指针数组。这样的方法在子结点数目已知和不变时效果最佳。</li>
+<li><strong>使用一系列可利用空间，每一个可利用空间都对应每一个结点的子结点数组大小</strong>，如图F5.d所示。当某一结点的子结点数目从M变为N时，从可利用空间取出空间为N的链表，然后空间为M的链表返回可利用空间。</li>
+<li><strong>每个结点都存储一条子结点指针链表</strong>。如图F5.e所示。</li>
+</ul>
+<p>  这三种方式的不同之处在于对子结点的处理。第一种方式处理子结点数目不变的情况，第二种方式处理子结点数目变化的情况（注意到这种方式需要提前准备若干不同空间大小的链表），第三种方式的处理更加灵活，它将第二种方式的缺点进行弥补，使得子结点不必再组织在数组中而割裂开来，但它需要更多的空间。</p>
+<h3 id="（四）动态结点左子结点-右兄弟结点表示法">（四）动态结点左子结点/右兄弟结点表示法</h3>
+<p>  本表示法是对动态结点表示法第三种方式的改进，提高了空间效率。在这个方法中，每个结点包括<strong>结点值和指向最左子结点、右兄弟结点的指针</strong>，它本质上是将树转化为二叉树，“左子结点”是最左子结点，“右子结点”是右兄弟结点。<br>
+<img src="/post/487435bc/data-structures-008-F5.jpg" alt="F5.树的实现示例" title="F5.树的实现示例"></p>
+<hr>
+<h2 id="五-顺序表示法">五　顺序表示法</h2>
+<p>  树的顺序表示法也是一种树的实现，但与前面树的实现方法有着本质上的区别。它的目的是存储结点的值，其中包含了<strong>尽可能少、但对于重建树结构必不可少的信息</strong>。因此，这种表示法适合用于将树结构压缩在磁盘上，以备以后使用时重建；也可以用来<strong>序列化树结构</strong>（序列化是指把一个对象以一系列字节形式存储的过程，以便这种数据结构在计算机之间传输）。<br>
+  在研究树的顺序表示法前，不妨从二叉树开始探究。</p>
+<h3 id="（一）二叉树的顺序表示法">（一）二叉树的顺序表示法</h3>
+<p>  对二叉树而言，每一个结点或者是叶结点，或者是具有两个子结点（其一可能为空）的分支结点。那么应注重对叶结点和分支结点的区分，以及对空结点的表达。方法如下：</p>
+<ul>
+<li>区分叶结点和分支结点：<strong>采用位向量表示法标记</strong>。例如<code>1</code>表示分支结点，<code>0</code>表示树结点。</li>
+<li>空结点的表达：<strong>使用某一标记</strong>，例如<code>/</code>。</li>
+</ul>
+<p>  比如对于图F6而言，顺序表示法的结果是<code>AB/DCEG/FHI</code>（位向量是<code>11001100100</code>）。<br>
+<img src="/post/487435bc/data-structures-008-F6.jpg" alt="F6.二叉树的顺序表示法示例" title="F6.二叉树的顺序表示法示例"></p>
+<h3 id="（二）树的顺序表示法">（二）树的顺序表示法</h3>
+<p>  注意到树和二叉树的主要区别（见本文开头），我们需要解决如何表达子结点数目信息的问题，同时不必关注<strong>空结点</strong>（因为树不存在空结点的定义）。一种有效的方式是直接使用某个标记表示子结点表的结束，例如<code>)</code>，这样就不必再标记叶结点或分支结点了——所有叶结点后都有该标记，因为叶结点没有子结点。比如对图F5.a的树，其顺序表示法的结果是<code>RAC)D)E))BF)))</code>。但是这种方法不能使用在二叉树上，因为二叉树需要区分左右子结点。如果使用此法，譬如对图F6的二叉树而言，将无法区分D是B的左子结点还是右子结点。</p>
+]]></content>
       <categories>
         <category>数据结构</category>
       </categories>
@@ -1540,119 +1653,6 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
       </categories>
       <tags>
         <tag>Update</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数据结构 | 通用树</title>
-    <url>/post/487435bc.html</url>
-    <content><![CDATA[<div class="note info flat"><p><strong>一些术语</strong>：</p>
-<ul>
-<li><strong>通用树</strong>（以下简称<strong>树</strong>）-由一个或一个以上结点组成的<strong>有限集</strong>，其中没有父结点的结点称为根结点。</li>
-<li><strong>最左子结点</strong>-子树从左到右排列，其中最左边的子树的根结点称为最左子结点。</li>
-<li><strong>（结点M的）出度</strong>-（结点M的）子结点数目。</li>
-<li><strong>森林</strong>-一棵或更多棵树的集合。</li>
-</ul>
-</div>
-<div class="note warning flat"><p>  注意到树和二叉树的主要区别：</p>
-<ul>
-<li>二叉树的出度至多为2，但树没有限制；</li>
-<li>二叉树交换左右子结点得到的新树与原树不同，但树交换没有区别。</li>
-</ul>
-</div>
-<h2 id="一-树结点的ADT">一　树结点的ADT</h2>
-<p>  注意到树的出度是没有限制的，那么建立树类时就应该注意找到一种能够处理这种情况的方法。实现它一般来说可以采用数组或链表的形式，后者更为常见。</p>
-<details class="toggle"><summary class="toggle-button" style>单击此处查看树和树结点的类定义</summary><div class="toggle-content"><p>  下面是从教材中摘录的树和树结点的类定义。注意到其中的<code>leftmostChild</code>和<code>rightSibling</code>函数，使用它们可以很好的完成遍历操作。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// General tree node ADT</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt; <span class="keyword">class</span> <span class="title class_">GTNode</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function">E <span class="title">value</span><span class="params">()</span></span>;                    <span class="comment">// Return node&#x27;s value</span></span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">isLeaf</span><span class="params">()</span></span>;                <span class="comment">// True if node is a leaf</span></span><br><span class="line">  <span class="function">GTNode* <span class="title">parent</span><span class="params">()</span></span>;             <span class="comment">// Return parent</span></span><br><span class="line">  <span class="function">GTNode* <span class="title">leftmostChild</span><span class="params">()</span></span>;      <span class="comment">// Return first child</span></span><br><span class="line">  <span class="function">GTNode* <span class="title">rightSibling</span><span class="params">()</span></span>;       <span class="comment">// Return right sibling</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">setValue</span><span class="params">(E&amp;)</span></span>;            <span class="comment">// Set node&#x27;s value</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">insertFirst</span><span class="params">(GTNode&lt;E&gt;*)</span></span>; <span class="comment">// Insert first child</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">insertNext</span><span class="params">(GTNode&lt;E&gt;*)</span></span>;  <span class="comment">// Insert next sibling</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">removeFirst</span><span class="params">()</span></span>;           <span class="comment">// Remove first child</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">removeNext</span><span class="params">()</span></span>;            <span class="comment">// Remove next sibling</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// General tree ADT</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt; <span class="keyword">class</span> <span class="title class_">GenTree</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">clear</span><span class="params">()</span></span>;                               <span class="comment">// Send all nodes to free store</span></span><br><span class="line">  <span class="function">GTNode&lt;E&gt;* <span class="title">root</span><span class="params">()</span></span>;                          <span class="comment">// Return the root of the tree</span></span><br><span class="line">  <span class="comment">// Combine two subtrees</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">newroot</span><span class="params">(E&amp;, GTNode&lt;E&gt;*, GTNode&lt;E&gt;*)</span></span>;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span></span>;                               <span class="comment">// Print a tree</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></details>
-<p>  这就是一种用链表的形式实现的树和树结点的类。</p>
-<hr>
-<h2 id="二-树的遍历">二　树的遍历</h2>
-<p>  树的遍历与<a href="https://www.dawn-of-time.top/post/eb4efb69.html">二叉树</a>类似，分为<strong>前根遍历</strong>、<strong>中根遍历</strong>、<strong>后根遍历</strong>。其中中根遍历因为子结点数目不确定的原因而难以定义，一般也不使用。<br>
-  遍历过程会使用到上面的<code>leftmostChild</code>和<code>rightSibling</code>函数，每当遍历子结点时，总是先调用<code>leftmostChild</code>函数访问最左子结点，然后对其调用<code>rightSibling</code>函数来依次访问最左子结点右边的兄弟结点，直到最右子结点（它右边的兄弟结点是<code>NULL</code>）。</p>
-<hr>
-<h2 id="三-父指针表示法">三　父指针表示法</h2>
-<p>  在解决“<strong>任意给出两个不同的结点，判断它们是否在同一棵树中</strong>”这样的问题时，仅凭上文的方法是无法解决的。一个有效的解决方法是使用<strong>父指针表示法</strong>——只需要顺着父指针链就能追溯到根结点，从而判断给定结点是否在同一棵树中。使用这种方法，每个结点只需要保存一个指针域指向其父结点。</p>
-<div class="note info flat"><p><strong>一些术语</strong>：</p>
-<ul>
-<li><strong>不相交子集</strong>-交集为空的两个集合。对于这样的集合，希望提供<strong>判断两个结点是否在同一集合中</strong>和<strong>归并两个集合</strong>的操作。</li>
-<li><strong>并查算法</strong>（也称<strong>并查集</strong>）-通过合并两个不相交子集来找出两个结点是否在同一个集合的过程。</li>
-</ul>
-</div>
-<p>  并查算法用一棵树表示一个集合。结点通常存储在<strong>数组</strong>中——每个数组元素表示一个结点，并存储该结点的<strong>值</strong>、<strong>父指针</strong>（用于区分不同的树）和<strong>指向子树的指针</strong>（如果有），这样便通过一个数组表示了一组树结构。这一节仅仅将目光聚焦在<strong>父指针</strong>上。</p>
-<details class="toggle"><summary class="toggle-button" style>单击此处查看并查算法的实现</summary><div class="toggle-content"><p>  下面是从教材中摘录的并查算法的实现。注意到其中的<code>UNION</code>函数执行归并操作。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// General tree representation for UNION/FIND</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ParPtrTree</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  <span class="type">int</span>* array;           <span class="comment">// Node array</span></span><br><span class="line">  <span class="type">int</span> size;             <span class="comment">// Size of node array</span></span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">FIND</span><span class="params">(<span class="type">int</span>)</span> <span class="type">const</span></span>;  <span class="comment">// Find root</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">ParPtrTree</span>(<span class="type">int</span>);                    <span class="comment">// Constructor</span></span><br><span class="line">  ~<span class="built_in">ParPtrTree</span>() &#123; <span class="keyword">delete</span> [] array; &#125;  <span class="comment">// Destructor</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">UNION</span><span class="params">(<span class="type">int</span>, <span class="type">int</span>)</span></span>;               <span class="comment">// Merge equivalences</span></span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">differ</span><span class="params">(<span class="type">int</span>, <span class="type">int</span>)</span></span>;              <span class="comment">// True if not in same tree</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">ParPtrTree::FIND</span><span class="params">(<span class="type">int</span> curr)</span> <span class="type">const</span> </span>&#123; <span class="comment">// Find root</span></span><br><span class="line">  <span class="keyword">while</span> (array[curr] != ROOT) curr = array[curr];</span><br><span class="line">  <span class="keyword">return</span> curr;  <span class="comment">// At root</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></details>
-<p>  图F1进一步形象地展示了父结点表示法，在这个数组中容纳了两棵树（实际上，对于有n个结点的集合，它对应的数组可以容纳<strong>至多n棵无关的树</strong>）。为了简明起见，父指针表示为父结点在数组中位置的下标值。树的根结点存储ROOT值，在图F1中表示为斜线。<br>
-<img src="/post/487435bc/data-structures-008-F1.jpg" alt="F1.父指针数组表示法" title="F1.父指针数组表示法"></p>
-<div class="note primary flat"><p>  父指针表示法并非是出于一般性目的的，它总是用来解决一些特定的问题，例如在本节开头提到的“<strong>任意给出两个不同的结点，判断它们是否在同一棵树中</strong>”。上面的实现中已经大致阐述了这个问题的解决思路及其核心算法——并查算法。在这个卡片中，我们要指出这个问题的一个重要应用——<strong>解决等价类问题</strong>。</p>
-<p>  以下给出了一些重要的术语阐释以便在后面的阅读中查阅：</p>
-<ul>
-<li><strong>等价关系</strong>-具有自反性、对称性和传递性的一种关系；</li>
-<li><strong>等价类</strong>-利用等价关系对一个集合进行划分的结果；</li>
-<li><strong>等价对（的表示）</strong>-如果图中某两个结点X，Y之间存在一条通路，就认为这两个结点是等价的，并将等价对表示为(X, Y)。如图F2所示，(A, B) (A, C)等等都是等价对；</li>
-</ul>
-<p><img src="/post/487435bc/data-structures-008-F2.jpg" alt="F2.图示例" title="F2.图示例"></p>
-<p>  以图F2为例，我们来尝试解决一个等价类问题：<strong>已知若干对等价对（如图F2所示），试将其划分为等价类。</strong></p>
-<p>  这个问题的解决步骤是这样的：</p>
-<ol>
-<li>将每一个结点独立（如图F3.a所示）；</li>
-<li>输入一个等价关系（从结果而言，等价关系的输入顺序无关紧要，但是会影响问题处理效率，这里忽略顺序对效率的影响），并使用<code>differ</code>函数检查它们是否在同一等价类（即同一棵树）中。如果是，则不做处理；如果不是，则使用<code>UNION</code>函数归并两个等价类。为了使等价对的处理尽可能高效，每个结点到其相应根结点的距离应该尽可能小，因此，在<strong>归并前</strong>可以采用<strong>路径压缩</strong>、在<strong>归并时</strong>可以采用<strong>加权合并规则</strong>来减少树的高度。</li>
-</ol>
-<blockquote>
-<ul>
-<li>
-<p><strong>路径压缩</strong><br>
-  设根结点为R，则路径压缩把由X到R的路径上每个结点的父指针都设置为直接指向R。路径压缩的代价非常接近<strong>常数</strong>，约为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><mi>n</mi><mi>log</mi><mo>⁡</mo><mo>∗</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Theta(n \log * n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">Θ</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">∗</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>（其中<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>log</mi><mo>⁡</mo><mo>∗</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">\log * n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">∗</span><span class="mord mathnormal">n</span></span></span></span>是指在<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>≥</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n \geq 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7719em;vertical-align:-0.136em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span>之前要对<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span>取对数操作的次数）。因此，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span>个路径压缩的代价非常接近于<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Theta(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">Θ</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>。</p>
-</li>
-<li>
-<p><strong>加权合并规则</strong><br>
-  在把结点较少的一棵树与结点较多的一棵树归并时，把结点较少树的根结点指向结点较多树的根结点。这样可以把树的整体深度限制在<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>log</mi><mo>⁡</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(\log n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>。在图F3.c仅仅运用本方法，在其状态下对等价对(H,E)进行处理，处理结果如图F3.d所示。</p>
-</li>
-</ul>
-</blockquote>
-<p>  应用以上两种方法，在图F3.c的状态下对等价对(H,E)进行处理，处理结果如图F4所示。其过程如下：</p>
-<ol>
-<li>应用路径压缩，在<strong>归并前</strong>使H指向A、E指向F；</li>
-<li>应用加权合并规则，在<strong>归并时</strong>使A指向F。</li>
-</ol>
-<p><img src="/post/487435bc/data-structures-008-F3.jpg" alt="F3.等价类问题处理示例" title="F3.等价类问题处理示例"><br>
-<img src="/post/487435bc/data-structures-008-F4.jpg" alt="F4.加权合并规则和路径压缩的应用示例" title="F4.加权合并规则和路径压缩的应用示例"></p>
-</div>
-<hr>
-<h2 id="四-树的实现">四　树的实现</h2>
-<h3 id="（一）子结点表表示法">（一）子结点表表示法</h3>
-<p>  子结点表表示法中，每个分支结点都存储其子结点形成的一个链表。在数组中，每个结点包括<strong>结点值，一个父指针（或索引）以及一个指向子结点链表的指针</strong>，链表中子结点的顺序从左到右，如图F5.b所示。注意到这种表示法是否能够很好的实现“树和树结点的类定义”抽象数据类型。在实现<code>rightSibling</code>时，本表示法显得过于繁琐。考虑这种情况——如果有一个结点M，并且其父结点为P，那么查找M的兄弟结点就需要沿着结点P的子结点表向右移动，直至找到M，那么其下一个结点就是M的兄弟结点。这个过程较为复杂，最差情况下需要查找全部子结点。</p>
-<h3 id="（二）左子结点-右兄弟结点表示法">（二）左子结点/右兄弟结点表示法</h3>
-<p>  针对子结点表表示法的缺陷，本表示法进行了改进。在数组中，每个结点包括<strong>结点值和指向父结点、最左子结点、右兄弟结点的指针</strong>，如图F5.c所示。这样一来，调用<code>rightSibling</code>时只需要读取结点中的右兄弟结点指针即可。更好的是，在子结点表表示法中，对每个结点分配的空间并不是固定的，而这种方法也很好的解决了此问题。</p>
-<h3 id="（三）动态结点表示法">（三）动态结点表示法</h3>
-<p>  除了使用数组来存储结点，类比二叉树，还可以使用指针来实现树。可以为每个结点分配可变的存储空间（它的可变性体现在对于每一结点，其子结点数目可以不同，该性质的强调是为了与二叉树区分开来，因为二叉树的子结点指针数目总是2），有以下三种方式，：</p>
-<ul>
-<li><strong>将指向子结点的指针数组作为结点的一部分分配给该结点</strong>。这是一种直接的方式，即直接为每个结点分配对应数目的子结点指针数组。这样的方法在子结点数目已知和不变时效果最佳。</li>
-<li><strong>使用一系列可利用空间，每一个可利用空间都对应每一个结点的子结点数组大小</strong>，如图F5.d所示。当某一结点的子结点数目从M变为N时，从可利用空间取出空间为N的链表，然后空间为M的链表返回可利用空间。</li>
-<li><strong>每个结点都存储一条子结点指针链表</strong>。如图F5.e所示。</li>
-</ul>
-<p>  这三种方式的不同之处在于对子结点的处理。第一种方式处理子结点数目不变的情况，第二种方式处理子结点数目变化的情况（注意到这种方式需要提前准备若干不同空间大小的链表），第三种方式的处理更加灵活，它将第二种方式的缺点进行弥补，使得子结点不必再组织在数组中而割裂开来，但它需要更多的空间。</p>
-<h3 id="（四）动态结点左子结点-右兄弟结点表示法">（四）动态结点左子结点/右兄弟结点表示法</h3>
-<p>  本表示法是对动态结点表示法第三种方式的改进，提高了空间效率。在这个方法中，每个结点包括<strong>结点值和指向最左子结点、右兄弟结点的指针</strong>，它本质上是将树转化为二叉树，“左子结点”是最左子结点，“右子结点”是右兄弟结点。<br>
-<img src="/post/487435bc/data-structures-008-F5.jpg" alt="F5.树的实现示例" title="F5.树的实现示例"></p>
-<hr>
-<h2 id="五-顺序表示法">五　顺序表示法</h2>
-<p>  树的顺序表示法也是一种树的实现，但与前面树的实现方法有着本质上的区别。它的目的是存储结点的值，其中包含了<strong>尽可能少、但对于重建树结构必不可少的信息</strong>。因此，这种表示法适合用于将树结构压缩在磁盘上，以备以后使用时重建；也可以用来<strong>序列化树结构</strong>（序列化是指把一个对象以一系列字节形式存储的过程，以便这种数据结构在计算机之间传输）。<br>
-  在研究树的顺序表示法前，不妨从二叉树开始探究。</p>
-<h3 id="（一）二叉树的顺序表示法">（一）二叉树的顺序表示法</h3>
-<p>  对二叉树而言，每一个结点或者是叶结点，或者是具有两个子结点（其一可能为空）的分支结点。那么应注重对叶结点和分支结点的区分，以及对空结点的表达。方法如下：</p>
-<ul>
-<li>区分叶结点和分支结点：<strong>采用位向量表示法标记</strong>。例如<code>1</code>表示分支结点，<code>0</code>表示树结点。</li>
-<li>空结点的表达：<strong>使用某一标记</strong>，例如<code>/</code>。</li>
-</ul>
-<p>  比如对于图F6而言，顺序表示法的结果是<code>AB/DCEG/FHI</code>（位向量是<code>11001100100</code>）。<br>
-<img src="/post/487435bc/data-structures-008-F6.jpg" alt="F6.二叉树的顺序表示法示例" title="F6.二叉树的顺序表示法示例"></p>
-<h3 id="（二）树的顺序表示法">（二）树的顺序表示法</h3>
-<p>  注意到树和二叉树的主要区别（见本文开头），我们需要解决如何表达子结点数目信息的问题，同时不必关注<strong>空结点</strong>（因为树不存在空结点的定义）。一种有效的方式是直接使用某个标记表示子结点表的结束，例如<code>)</code>，这样就不必再标记叶结点或分支结点了——所有叶结点后都有该标记，因为叶结点没有子结点。比如对图F5.a的树，其顺序表示法的结果是<code>RAC)D)E))BF)))</code>。但是这种方法不能使用在二叉树上，因为二叉树需要区分左右子结点。如果使用此法，譬如对图F6的二叉树而言，将无法区分D是B的左子结点还是右子结点。</p>
-]]></content>
-      <categories>
-        <category>数据结构</category>
-      </categories>
-      <tags>
-        <tag>Data Structures</tag>
       </tags>
   </entry>
 </search>
