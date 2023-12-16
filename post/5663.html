@@ -248,16 +248,18 @@ D_0 &amp; = 2^{15} + 2^{15-y} + 2^{-y}(d + d_1)\\
     //-   path: window.location.pathname,
     //-   comment: true,
     //- }, null))
-    import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
-
-    init({
-      el: '#waline',
-      serverURL: 'https://waline.dawn-of-time.top/',
-      pageview: false,
-      dark: 'html[data-theme="dark"]',
-      path: window.location.pathname,
-      comment: true,
-    }, null))
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://unpkg.com/@waline/client@v2/dist/waline.js';
+    script.onload = () => {
+      const waline = Waline.init({
+        el: '#waline',
+        serverURL: 'https://waline.dawn-of-time.top/',
+        pageview: false,
+        dark: 'html[data-theme="dark"]',
+        path: window.location.pathname,
+        comment: true,
+      }, null))
   }
 
   const loadWaline = async () => {
