@@ -179,7 +179,17 @@
   })
 })()</script><script>(() => {
   const initWaline = () => {
-    const waline = init(Object.assign({
+    //- const waline = Waline.init(Object.assign({
+    //-   el: '#waline',
+    //-   serverURL: 'https://waline.dawn-of-time.top/',
+    //-   pageview: false,
+    //-   dark: 'html[data-theme="dark"]',
+    //-   path: window.location.pathname,
+    //-   comment: true,
+    //- }, null))
+    import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+
+    init({
       el: '#waline',
       serverURL: 'https://waline.dawn-of-time.top/',
       pageview: false,
