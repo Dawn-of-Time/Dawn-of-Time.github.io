@@ -220,8 +220,8 @@
   const loadWaline = async () => {
     if (typeof Waline === 'object') initWaline()
     else {
-      await getCSS('https://unpkg.com/@waline/client/dist/waline.css')
-      await getScript('https://unpkg.com/@waline/client/dist/waline.js')
+      await getCSS('https://unpkg.com/@waline/client@v2/dist/waline.css')
+      await getScript('https://unpkg.com/@waline/client@v2/dist/waline.mjs')
       initWaline()
     }
   }
