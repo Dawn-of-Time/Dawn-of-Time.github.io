@@ -317,8 +317,8 @@
   const loadWaline = async () => {
     if (typeof Waline === 'object') initWaline()
     else {
-      await getCSS('https://unpkg.com/@waline/client@v2/dist/waline.css')
-      await getScript('https://unpkg.com/@waline/client@v2/dist/waline.mjs')
+      await getCSS('https://cdn.jsdelivr.net/npm/@waline/client@3.0.0-alpha.2/dist/waline.min.css')
+      await getScript('https://cdn.jsdelivr.net/npm/@waline/client@3.0.0-alpha.2/dist/waline.min.js')
       initWaline()
     }
   }
